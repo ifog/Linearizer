@@ -1,0 +1,27 @@
+{
+  "contractive": {
+    "success_rate": 0.02,
+    "avg_steps_on_success": 5.0,
+    "n_maps": 100
+  },
+  "unconstrained": {
+    "success_rate": 0.05,
+    "avg_steps_on_success": 3.6,
+    "n_maps": 100
+  },
+  "mlp": {
+    "success_rate": 0.05,
+    "avg_steps_on_success": 2.6,
+    "n_maps": 100
+  },
+  "vin": {
+    "success_rate": 0.11,
+    "avg_steps_on_success": 2.727272727272727,
+    "n_maps": 100
+  },
+  "oracle_V*": {
+    "success_rate": 0.98,
+    "avg_steps_on_success": 7.479591836734694,
+    "n_maps": 100
+  }
+}

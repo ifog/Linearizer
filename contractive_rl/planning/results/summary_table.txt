@@ -1,0 +1,37 @@
+===========================================================================
+CONTRACTIVE LINEARIZER — PLANNING EXPERIMENT SUMMARY
+===========================================================================
+
+--- Exp A: Convergence (RMSE at K=0 and K=50) ---
+Model                        Init RMSE    K=50 RMSE   Reduction%
+-----------------------------------------------------------------
+contractive                     4.5249       5.4444       -20.3%
+unconstrained                   4.5249       5.2505       -16.0%
+iterative_mlp                   4.5249       3.8993        13.8%
+vin                             4.5249       4.9067        -8.4%
+
+--- Exp B: Fast Iteration vs Loop ---
+    K    MSE(loop vs fast)    MaxAbsErr    Loop ms    Fast ms   Speedup
+----------------------------------------------------------------------
+    1             0.00e+00     0.00e+00      1.837      1.711      1.07x
+    5             4.52e-14     1.91e-06      8.038      1.904      4.22x
+   10             8.51e-15     7.15e-07     16.931      1.690     10.02x
+   20             8.06e-15     4.77e-07     47.087      3.759     12.53x
+   50             7.66e-15     4.77e-07    161.335      3.786     42.61x
+
+--- Exp C: Planning Quality (success rate at K=30) ---
+Model                       Success Rate    Avg Steps
+-------------------------------------------------------
+contractive                        0.010          1.5
+unconstrained                      0.025          1.6
+iterative_mlp                      0.045          2.3
+vin                                0.210          3.5
+oracle_V*                          0.985          7.1
+
+--- Exp D: Generalization (10x10 -> 20x20) ---
+Model                         Mean MSE      Std MSE
+---------------------------------------------------
+contractive                        nan          nan
+vin                                nan          nan
+
+===========================================================================

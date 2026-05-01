@@ -1,0 +1,14 @@
+{
+  "contractive": {
+    "mean_mse_20x20": NaN,
+    "std_mse_20x20": NaN,
+    "n_valid": 0,
+    "note": "Zero-padded V from 100 to 400 dims; context via AdaptiveAvgPool (handles 20x20 maps). Partial generalization expected."
+  },
+  "vin": {
+    "mean_mse_20x20": NaN,
+    "std_mse_20x20": NaN,
+    "n_valid": 0,
+    "note": "Zero-padded V from 100 to 400 dims; context via AdaptiveAvgPool (handles 20x20 maps). Partial generalization expected."
+  }
+}

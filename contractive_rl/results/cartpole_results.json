@@ -1,0 +1,17 @@
+{
+  "standard": {
+    "final_mean_return": 430.46000000000004,
+    "final_std_return": 85.57386516922091,
+    "q_value_variance": 964.0959648103635
+  },
+  "double": {
+    "final_mean_return": 388.5,
+    "final_std_return": 92.617708889823,
+    "q_value_variance": 683.5983839155704
+  },
+  "contractive": {
+    "final_mean_return": 151.34,
+    "final_std_return": 181.08207641840204,
+    "q_value_variance": 444.6197857105611
+  }
+}

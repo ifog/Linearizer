@@ -1,0 +1,12 @@
+{
+  "standard": {
+    "final_max_q_mean": 3895755.2108691535,
+    "final_max_q_std": 5509415.972546946,
+    "diverged": true
+  },
+  "contractive": {
+    "final_max_q_mean": 11.810929934183756,
+    "final_max_q_std": 0.9721589370290301,
+    "diverged": false
+  }
+}
