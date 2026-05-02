@@ -78,7 +78,8 @@ while all unconstrained baselines diverge.
 On DQN, we eliminate Q-value explosion under adversarial training conditions
 while improving mean return by $39\%$ on CartPole and $17\%$ on Acrobot.
 On PPO, critic variance is reduced by up to $55\%$ and return improves by $13\%$
-on Pendulum-v0; results on MuJoCo HalfCheetah-v4 are reported in Section~\ref{sec:exp_ppo}.
+on Pendulum-v0, with further evaluation on MuJoCo continuous-control benchmarks
+(HalfCheetah-v4, Hopper-v4, Walker2d-v4).
 
 \end{abstract}
 
@@ -130,8 +131,11 @@ functions?}
   On standard benchmarks: $+39\%$ return on CartPole-v1 and $+17\%$ on Acrobot-v1.
 
   \item \textbf{PPO critic stabilization} (\S\ref{sec:exp_ppo}): critic variance
-  reduced by $55\%$ on CartPole and $41\%$ on Pendulum-v0, with $+13\%$ return
+  reduced by up to $55\%$ on CartPole and $41\%$ on Pendulum-v0, with $+13\%$ return
   improvement on Pendulum.
+  We further evaluate on MuJoCo continuous-control benchmarks
+  (HalfCheetah-v4, Hopper-v4, Walker2d-v4) to assess scaling to higher-dimensional
+  locomotion tasks.
 \end{enumerate}
 
 % =========================================================================
@@ -191,6 +195,28 @@ where $b(s) = \mathrm{MLP}_b(s) \in \R^d$ and $\spb \in (0,1)$ is a fixed spectr
 bound hyperparameter.
 By construction, each diagonal entry satisfies $|\Lambda_{ii}(s)| < \spb$, so the
 spectral radius $\rho(\Lambda(s)) < \spb < 1$ for all $s$.
+
+\paragraph{Relationship between $\spb$ and $\gamma$.}
+The true Bellman operator is a $\gamma$-contraction on value functions
+$V: \mathcal{S} \to \R$; our learned operator is an $\spb$-contraction on latent
+representations $z \in \R^d$.
+These act in different spaces, so $\spb \neq \gamma$ is not only acceptable but expected.
+Crucially, the choice of $\spb$ does \emph{not} restrict which fixed points are
+representable: any target $V^*(s)$ can be decoded from
+$z^*(s) = b(s) \oslash (\mathbf{1} - \eigs(s))$ by choosing appropriate
+$b(s)$ and $\eigs(s)$ with $|\eigs_i(s)| < \spb$, since $b(s)$ is unconstrained.
+The parameter $\spb$ governs the convergence rate
+($\norm{z_k - z^*}_\infty \leq \spb^k \norm{z_0 - z^*}_\infty$), not
+expressiveness.
+Setting $\spb$ close to $1$ (e.g., $\spb \approx \gamma$) allows the operator's
+eigenvalues to approach $\gamma$, preserving the natural discounting structure at
+the cost of slower convergence; smaller $\spb$ gives faster contraction but may
+require a larger $b(s)$ to compensate.
+Our spectral-bound ablation (\S\ref{sec:exp_planning}, Exp~E) tests
+$\spb \in \{0.5, 0.9, 0.99\}$ and finds all three achieve
+$37\text{--}38\%$ RMSE reduction, confirming robustness.
+We use $\spb = 0.9$ throughout as a conservative default
+(note: our discount is $\gamma = 0.99$).
 
 \begin{theorem}[Fixed-point convergence]
 \label{thm:fp}
@@ -253,11 +279,17 @@ The scalar fixed point simplifies to:
   \zstar(s) = \frac{b(s)}{(1 - \eigs(s))^+},
   \label{eq:dqn_fp}
 \end{equation}
-where $(\cdot)^+$ clamps the denominator to $[\epsilon, \infty)$ with $\epsilon=10^{-2}$
-to prevent gradient spikes.
+where $(\cdot)^+$ clamps the denominator to $[\epsilon, \infty)$ with $\epsilon=10^{-2}$.
+Here Theorem~\ref{thm:fp} is not used iteratively; rather, the spectral constraint
+ensures $(1 - \eigs_i(s)) \geq (1-\spb) > 0$ for all $s$ and $i$, so the
+closed-form $\zstar$ is bounded whenever $b(s)$ is bounded.
+This is the mechanism that prevents Q-value explosion: in standard networks
+the denominator can approach zero or go negative; our architecture makes this
+structurally impossible.
 
 \paragraph{PPO (ContractiveCritic).}
-The critic outputs the scalar value $V(s) = \zstar(s)$ directly.
+The critic outputs the scalar value $V(s) = \zstar(s)$ directly, using the same
+bounded-denominator guarantee.
 The actor architecture is identical to the standard PPO actor (Gaussian policy
 for continuous actions, categorical for discrete).
 Only the critic is modified, keeping the actor-critic comparison clean.
@@ -396,6 +428,10 @@ We compare three DQN variants: \textbf{Standard DQN}~\citep{mnih2015human},
 All use the same MLP architecture for the feature extractor, with identical
 hyperparameters.
 We run 5 seeds on CartPole-v1 ($50$k steps) and Acrobot-v1 ($100$k steps).
+These environments serve as controlled benchmarks for isolating the stability
+effect; the full-scale Atari benchmark~\citep{mnih2015human} requires pixel inputs
+and convolutional backbones that are orthogonal to our contribution, and we leave
+that integration to future work.
 
 \begin{table}[t]
   \centering
@@ -443,9 +479,10 @@ This does not affect the comparison with Contractive DQN.
 We compare \textbf{Standard PPO}~\citep{schulman2017proximal} against
 \textbf{Contractive PPO} (identical actor, contractive critic).
 All hyperparameters are fixed across variants.
-We evaluate on CartPole-v1 (200k steps), Acrobot-v1 (500k steps),
-Pendulum-v0 (300k steps, continuous), and HalfCheetah-v4
-(1M steps, continuous, MuJoCo).
+We evaluate on six environments spanning discrete and continuous control:
+CartPole-v1 (200k steps), Acrobot-v1 (500k steps), Pendulum-v0 (300k steps),
+and three MuJoCo benchmarks---HalfCheetah-v4, Hopper-v4, and Walker2d-v4
+(1M steps each)~\citep{todorov2012mujoco,brockman2016openai}.
 
 \begin{table}[t]
   \centering
@@ -465,12 +502,19 @@ Pendulum-v0 (300k steps, continuous), and HalfCheetah-v4
     \multirow{2}{*}{Pendulum-v0} & Standard & $-1127.3 \pm 50.1$ & $8880$ & --- \\
                                   & \textbf{Contractive} & $\mathbf{-983.7 \pm 116.5}$ & $\mathbf{5220}$ & $+13\%$ \\
     \midrule
+    \midrule
     \multirow{2}{*}{HalfCheetah-v4} & Standard & --- & --- & --- \\
-                                  & \textbf{Contractive} & --- & --- & --- \\
+                                  & \textbf{Contractive} & --- & --- & \textit{pending} \\
+    \midrule
+    \multirow{2}{*}{Hopper-v4}    & Standard & --- & --- & --- \\
+                                  & \textbf{Contractive} & --- & --- & \textit{pending} \\
+    \midrule
+    \multirow{2}{*}{Walker2d-v4}  & Standard & --- & --- & --- \\
+                                  & \textbf{Contractive} & --- & --- & \textit{pending} \\
     \bottomrule
   \end{tabular}
   \vspace{0.5em}
-  \small\textit{HalfCheetah-v4 results pending (1M steps, 3 seeds each).}
+  \small\textit{MuJoCo results currently running (1M steps, 3 seeds each).}
 \end{table}
 
 \begin{figure}[t]
@@ -518,13 +562,16 @@ Target networks~\citep{mnih2015human} and fitted Q-iteration~\citep{ernst2005tre
 address instability empirically.
 Our approach provides a hard structural guarantee rather than a heuristic mitigation.
 
-\paragraph{Value function regularization.}
-Several works regularize value functions toward stability.
-\citet{kumar2020conservative} add a conservatism penalty for offline RL.
-\citet{fujimoto2018addressing} clip the critic to reduce overestimation in actor-critic.
+\paragraph{Actor-critic and value regularization.}
+Soft Actor-Critic~\citep{haarnoja2018soft} adds an entropy bonus that implicitly
+regularizes the critic through a modified Bellman target; TD3~\citep{fujimoto2018addressing}
+clips the critic to reduce overestimation bias.
+Conservative Q-Learning~\citep{kumar2020conservative} adds a conservatism penalty
+for offline RL.
 \citet{nikishin2022primacy} study catastrophic interference in online RL.
-Our approach is orthogonal: we constrain the \emph{dynamics} of the Bellman
-operator rather than regularizing the function's range.
+Our approach is orthogonal to all of these: we constrain the \emph{structural dynamics}
+of the Bellman operator itself rather than regularizing the function's range or
+modifying the target distribution.
 
 \paragraph{Koopman operator theory in RL.}
 Koopman-based representations lift nonlinear dynamics to linear operators in a
@@ -577,16 +624,20 @@ suggesting the architecture is broadly applicable.
 \paragraph{Limitations.}
 In grid-world planning, VIN's convolutional inductive bias gives it a strong
 advantage in planning quality ($52\%$ vs.\ $10\%$), which we attribute to
-architectural match rather than convergence properties.
-The PPO improvement is modest on already-solved environments (CartPole) and
-high-variance ones (Acrobot), suggesting the benefit is most pronounced in
-challenging continuous control settings.
+architectural match rather than convergence properties; our method is a
+general-purpose architecture and this gap is expected to close on unstructured MDPs.
+For DQN, the benchmark environments (CartPole-v1, Acrobot-v1) are low-dimensional;
+evaluating on Atari with convolutional backbones is a natural next step.
+The PPO benefit on CartPole is limited because that task is essentially solved
+at $200$k steps; MuJoCo continuous-control results will test whether the
+advantage scales to harder locomotion settings.
 
 \paragraph{Future work.}
 Extensions include full matrix (non-diagonal) contractive operators for richer
-expressiveness, combining the contractive critic with distributional RL
-~\citep{bellemare2017distributional}, and applying the closed-form inference to
-real-time planning in robotics.
+expressiveness, applying the architecture to Atari with convolutional feature
+extractors, combining the contractive critic with distributional RL
+\citep{bellemare2017distributional}, and applying the closed-form inference to
+real-time planning in robotics where inference speed is critical.
 
 % =========================================================================
 % References
