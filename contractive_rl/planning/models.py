@@ -79,16 +79,13 @@ class MapEncoder(nn.Module):
 
 class ContractiveLinearizer(nn.Module):
     """
-    V_{k+1} = g^{-1}(A(c) * g(V_k))
+    V_{k+1} = g^{-1}(A(c) * g(V_k) + b(c))
 
-    where:
-      g = AffineCouplingNet(dim=state_dim, n_coupling_layers=6)  [truly invertible]
-      A(c) = DiagonalContractiveOp(context_dim=128, spectral_bound<1)
-      c = MapEncoder(map)  [CNN context]
+    Affine contractive map with context-dependent bias b(c).
+    Fixed point: g(V*) = (I - A(c))^{-1} * b(c), which varies per map context c.
+    Spectral radius of A bounded by spectral_bound < 1 → unique fixed point per c.
 
-    Fast iteration: iterate_fast(V0, c, K) uses A^K in O(1) instead of O(K) passes.
-    Since g is truly invertible, the fast and loop methods give identical results
-    (up to floating-point precision).
+    Fast iteration: iterate_fast(V0, c, K) computes T^K in O(1) via affine formula.
     """
 
     def __init__(
@@ -108,21 +105,19 @@ class ContractiveLinearizer(nn.Module):
                                    hidden_dim=hidden_dim)
         self.A = DiagonalContractiveOp(context_dim=CONTEXT_DIM, latent_dim=state_dim,
                                        spectral_bound=spectral_bound)
+        # Bias: context -> state_dim (latent). Provides context-dependent fixed point.
+        self.b_net = nn.Sequential(
+            nn.Linear(CONTEXT_DIM, 256),
+            nn.ReLU(),
+            nn.Linear(256, state_dim),
+        )
 
     def forward(self, V: torch.Tensor, maps: torch.Tensor) -> torch.Tensor:
-        """
-        One application of T: V_{k+1} = g^{-1}(A(c) * g(V_k)).
-
-        Args:
-            V:    (B, state_dim)
-            maps: (B, 3, H, W)
-
-        Returns:
-            V_next: (B, state_dim)
-        """
+        """One step: V_{k+1} = g^{-1}(A(c)*g(V_k) + b(c))."""
         c = self.map_encoder(maps)
         z = self.g.encode(V)
-        z_next = self.A.apply(z, c)
+        b = self.b_net(c)
+        z_next = self.A.apply(z, c) + b
         return self.g.decode(z_next)
 
     def iterate_loop(self, V0: torch.Tensor, maps: torch.Tensor, K: int) -> torch.Tensor:
@@ -134,14 +129,18 @@ class ContractiveLinearizer(nn.Module):
 
     def iterate_fast(self, V0: torch.Tensor, maps: torch.Tensor, K: int) -> torch.Tensor:
         """
-        Apply T^K using the fast diagonal power trick: z_K = A^K * g(V0).
+        Apply T^K using the affine fast formula: O(1) in K.
 
-        O(1) matrix operations instead of O(K) forward passes.
-        Since g is truly invertible (AffineCouplingNet), MSE vs loop should be ~0.
+        For T(z) = eigs*z + b, after K steps from z0:
+          z_K = eigs^K * (z0 - z*) + z*,  where z* = b / (1 - eigs).
         """
         c = self.map_encoder(maps)
         z0 = self.g.encode(V0)
-        z_K = self.A.apply_power(z0, c, K)
+        b = self.b_net(c)
+        eigs = self.A.get_eigenvalues(c)
+        z_star = b / (1.0 - eigs)             # fixed point in latent space
+        eigs_K = eigs ** K
+        z_K = eigs_K * (z0 - z_star) + z_star
         return self.g.decode(z_K)
 
 
@@ -151,13 +150,13 @@ class ContractiveLinearizer(nn.Module):
 
 class VINBaseline(nn.Module):
     """
-    Standard Value Iteration Network.
+    Standard Value Iteration Network (corrected architecture).
 
     Architecture:
-    - Reward map R(s) predicted from map features via CNN
-    - Q_{k+1}(s,a) = R(s) + gamma * sum_{s'} P(s'|s,a) * V_k(s')
-      implemented as conv operations
+    - R(s) predicted from map features via CNN
+    - Q_{k+1}(s,a) = R(s) + transition_conv(V_k)[s,a]  — V and R are separate
     - V_k(s) = max_a Q_k(s,a)
+    - Obstacle cells zeroed after each step to prevent contamination
 
     forward() = one VIN step (can iterate K times for convergence).
     """
@@ -174,7 +173,7 @@ class VINBaseline(nn.Module):
         self.state_dim = grid_size * grid_size
         self.gamma = gamma
 
-        # Reward prediction: map features -> per-cell reward
+        # Reward prediction: map features -> per-cell reward (1 channel)
         self.reward_net = nn.Sequential(
             nn.Conv2d(map_channels, hidden_dim, kernel_size=3, padding=1),
             nn.ReLU(),
@@ -183,28 +182,26 @@ class VINBaseline(nn.Module):
             nn.Conv2d(hidden_dim, 1, kernel_size=1),
         )
 
-        # Q-value update: [V (1ch), R (1ch)] -> Q for 4 actions
-        # Convolutional kernel encodes transition dynamics (4-connected grid)
-        self.q_conv = nn.Conv2d(2, 4, kernel_size=3, padding=1)
+        # Transition conv: V only -> Q for 4 actions (correct VIN decomposition)
+        # R is added separately, ensuring Q = transition(V) + R
+        self.q_conv = nn.Conv2d(1, 4, kernel_size=3, padding=1)
 
-        # Optional learned gamma scaling per action
-        self.gamma_scale = nn.Parameter(torch.ones(4) * gamma)
-
-    def _one_step(self, V_grid: torch.Tensor, R_grid: torch.Tensor) -> torch.Tensor:
+    def _one_step(self, V_grid: torch.Tensor, R_grid: torch.Tensor,
+                  obstacle_mask: torch.Tensor) -> torch.Tensor:
         """
-        One VIN update step.
+        One VIN update step: Q = transition(V) + R, V = max_a Q, mask obstacles.
 
         Args:
-            V_grid: (B, 1, H, W)
-            R_grid: (B, 1, H, W)
+            V_grid:       (B, 1, H, W)
+            R_grid:       (B, 1, H, W)
+            obstacle_mask:(B, 1, H, W) — 1 at obstacle cells
 
         Returns:
             V_next: (B, 1, H, W)
         """
-        inp = torch.cat([V_grid, R_grid], dim=1)   # (B, 2, H, W)
-        Q = self.q_conv(inp)                        # (B, 4, H, W)
-        V_next = Q.max(dim=1, keepdim=True)[0]      # (B, 1, H, W)
-        return V_next
+        Q = self.q_conv(V_grid) + R_grid    # (B, 4, H, W): transition + reward
+        V_next = Q.max(dim=1, keepdim=True)[0]  # (B, 1, H, W)
+        return V_next * (1.0 - obstacle_mask)   # zero obstacle cells
 
     def forward(self, V: torch.Tensor, maps: torch.Tensor) -> torch.Tensor:
         """
@@ -212,7 +209,7 @@ class VINBaseline(nn.Module):
 
         Args:
             V:    (B, state_dim) flattened value map
-            maps: (B, 3, H, W)
+            maps: (B, 3, H, W)  — channel 0 = obstacles
 
         Returns:
             V_next: (B, state_dim)
@@ -220,7 +217,8 @@ class VINBaseline(nn.Module):
         B = V.size(0)
         V_grid = V.view(B, 1, self.grid_size, self.grid_size)
         R_grid = self.reward_net(maps)
-        V_next = self._one_step(V_grid, R_grid)
+        obstacle_mask = maps[:, 0:1, :, :]          # (B, 1, H, W)
+        V_next = self._one_step(V_grid, R_grid, obstacle_mask)
         return V_next.view(B, self.state_dim)
 
     def iterate_loop(self, V0: torch.Tensor, maps: torch.Tensor, K: int) -> torch.Tensor:
@@ -237,10 +235,11 @@ class VINBaseline(nn.Module):
 
 class UnconstrainedLinearizer(nn.Module):
     """
-    Same as ContractiveLinearizer but A(c) is an unconstrained linear layer.
-    No tanh scaling, so spectral radius can be > 1 → may diverge.
+    Ablation: same architecture as ContractiveLinearizer but no spectral constraint.
+    A(c) is an unconstrained diagonal — spectral radius can exceed 1 → may diverge.
 
-    Key ablation: shows what contraction buys in terms of convergence stability.
+    Has the same bias term b(c) as ContractiveLinearizer for a fair comparison.
+    Only difference: no tanh bounding on eigenvalues.
     """
 
     def __init__(
@@ -256,23 +255,24 @@ class UnconstrainedLinearizer(nn.Module):
         self.map_encoder = MapEncoder(map_channels, out_dim=CONTEXT_DIM)
         self.g = AffineCouplingNet(dim=state_dim, n_coupling_layers=n_coupling_layers,
                                    hidden_dim=hidden_dim)
-        # Unconstrained: just an MLP producing diagonal, no tanh bounding
+        # Unconstrained diagonal: no tanh bounding, spectral radius may exceed 1
         self.A_net = nn.Sequential(
-            nn.Linear(CONTEXT_DIM, 128),
-            nn.ReLU(),
-            nn.Linear(128, 128),
-            nn.ReLU(),
+            nn.Linear(CONTEXT_DIM, 128), nn.ReLU(),
+            nn.Linear(128, 128), nn.ReLU(),
             nn.Linear(128, state_dim),
         )
-
-    def _get_diagonal(self, maps: torch.Tensor) -> torch.Tensor:
-        c = self.map_encoder(maps)
-        return self.A_net(c)  # unconstrained, may have |eig| > 1
+        # Same bias term as ContractiveLinearizer (for fair comparison)
+        self.b_net = nn.Sequential(
+            nn.Linear(CONTEXT_DIM, 256), nn.ReLU(),
+            nn.Linear(256, state_dim),
+        )
 
     def forward(self, V: torch.Tensor, maps: torch.Tensor) -> torch.Tensor:
+        c = self.map_encoder(maps)
         z = self.g.encode(V)
-        diag = self._get_diagonal(maps)
-        z_next = diag * z
+        diag = self.A_net(c)
+        b = self.b_net(c)
+        z_next = diag * z + b
         return self.g.decode(z_next)
 
     def iterate_loop(self, V0: torch.Tensor, maps: torch.Tensor, K: int) -> torch.Tensor:

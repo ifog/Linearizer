@@ -1,0 +1,164 @@
+\begin{thebibliography}{23}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Baird(1995)]{baird1995residual}
+Leemon Baird.
+\newblock Residual algorithms: Reinforcement learning with function
+  approximation.
+\newblock In \emph{Proceedings of the 12th International Conference on Machine
+  Learning (ICML)}, 1995.
+
+\bibitem[Bellemare et~al.(2017)Bellemare, Dabney, and
+  Munos]{bellemare2017distributional}
+Marc~G Bellemare, Will Dabney, and R{\'e}mi Munos.
+\newblock A distributional perspective on reinforcement learning.
+\newblock In \emph{Proceedings of the 34th International Conference on Machine
+  Learning (ICML)}, 2017.
+
+\bibitem[Bellman(1957)]{bellman1957dynamic}
+Richard Bellman.
+\newblock \emph{Dynamic Programming}.
+\newblock Princeton University Press, 1957.
+
+\bibitem[Bjorck et~al.(2021)Bjorck, Gomes, Selman, and
+  Weinberger]{bjorck2021towards}
+Nils Bjorck, Carla~P Gomes, Bart Selman, and Kilian~Q Weinberger.
+\newblock Towards deeper deep reinforcement learning with spectral
+  normalization.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2021.
+
+\bibitem[Budiši{\'c} et~al.(2012)Budiši{\'c}, Mohr, and
+  Mezi{\'c}]{budisic2012applied}
+Marko Budiši{\'c}, Ryan Mohr, and Igor Mezi{\'c}.
+\newblock Applied {K}oopmanism.
+\newblock \emph{Chaos: An Interdisciplinary Journal of Nonlinear Science},
+  22\penalty0 (4):\penalty0 047510, 2012.
+
+\bibitem[Ernst et~al.(2005)Ernst, Geurts, and Wehenkel]{ernst2005tree}
+Damien Ernst, Pierre Geurts, and Louis Wehenkel.
+\newblock Tree-based batch mode reinforcement learning.
+\newblock \emph{Journal of Machine Learning Research}, 6:\penalty0 503--556,
+  2005.
+
+\bibitem[Fujimoto et~al.(2018)Fujimoto, Hoof, and
+  Meger]{fujimoto2018addressing}
+Scott Fujimoto, Herke Hoof, and David Meger.
+\newblock Addressing function approximation error in actor-critic methods.
+\newblock In \emph{Proceedings of the 35th International Conference on Machine
+  Learning (ICML)}, 2018.
+
+\bibitem[Haarnoja et~al.(2018)Haarnoja, Zhou, Abbeel, and
+  Levine]{haarnoja2018soft}
+Tuomas Haarnoja, Aurick Zhou, Pieter Abbeel, and Sergey Levine.
+\newblock Soft actor-critic: Off-policy maximum entropy deep reinforcement
+  learning with a stochastic actor.
+\newblock In \emph{Proceedings of the 35th International Conference on Machine
+  Learning (ICML)}, 2018.
+
+\bibitem[Koopman(1931)]{koopman1931hamiltonian}
+Bernard~O Koopman.
+\newblock Hamiltonian systems and transformation in {H}ilbert space.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 17\penalty0
+  (5):\penalty0 315--318, 1931.
+
+\bibitem[Kumar et~al.(2020)Kumar, Zhou, Tucker, and
+  Levine]{kumar2020conservative}
+Aviral Kumar, Aurick Zhou, George Tucker, and Sergey Levine.
+\newblock Conservative {Q}-learning for offline reinforcement learning.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2020.
+
+\bibitem[Lusch et~al.(2018)Lusch, Kutz, and Brunton]{lusch2018deep}
+Bethany Lusch, J~Nathan Kutz, and Steven~L Brunton.
+\newblock Deep learning for universal linear embeddings of nonlinear dynamics.
+\newblock \emph{Nature Communications}, 9:\penalty0 4950, 2018.
+
+\bibitem[Maei et~al.(2010)Maei, Szepesv{\'a}ri, Bhatnagar, and
+  Sutton]{maei2010toward}
+Hamid~Reza Maei, Csaba Szepesv{\'a}ri, Shalabh Bhatnagar, and Richard~S Sutton.
+\newblock Toward off-policy learning control with function approximation.
+\newblock In \emph{Proceedings of the 27th International Conference on Machine
+  Learning (ICML)}, 2010.
+
+\bibitem[Mezi{\'c}(2005)]{mezic2005spectral}
+Igor Mezi{\'c}.
+\newblock Spectral properties of dynamical systems, model reduction and
+  decompositions.
+\newblock \emph{Nonlinear Dynamics}, 41\penalty0 (1):\penalty0 309--325, 2005.
+
+\bibitem[Miyato et~al.(2018)Miyato, Kataoka, Koyama, and
+  Yoshida]{miyato2018spectral}
+Takeru Miyato, Toshimitsu Kataoka, Masanori Koyama, and Yuichi Yoshida.
+\newblock Spectral normalization for generative adversarial networks.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2018.
+
+\bibitem[Mnih et~al.(2015)Mnih, Kavukcuoglu, Silver, Rusu, Veness, Bellemare,
+  Graves, Riedmiller, Fidjeland, Ostrovski, et~al.]{mnih2015human}
+Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Andrei~A Rusu, Joel Veness,
+  Marc~G Bellemare, Alex Graves, Martin Riedmiller, Andreas~K Fidjeland, Georg
+  Ostrovski, et~al.
+\newblock Human-level control through deep reinforcement learning.
+\newblock \emph{Nature}, 518\penalty0 (7540):\penalty0 529--533, 2015.
+
+\bibitem[Nikishin et~al.(2022)Nikishin, Schwarzer, D'Oro, Bacon, and
+  Courville]{nikishin2022primacy}
+Evgeny Nikishin, Max Schwarzer, Pierluca D'Oro, Pierre-Luc Bacon, and Aaron
+  Courville.
+\newblock The primacy bias in deep reinforcement learning.
+\newblock In \emph{Proceedings of the 39th International Conference on Machine
+  Learning (ICML)}, 2022.
+
+\bibitem[No{\'e} et~al.(2019)No{\'e}, Olsson, K{\"o}hler, and
+  Wu]{noe2019boltzmann}
+Frank No{\'e}, Simon Olsson, Jonas K{\"o}hler, and Hao Wu.
+\newblock Boltzmann generators: Sampling equilibrium states of many-body
+  systems with deep learning.
+\newblock \emph{Science}, 365\penalty0 (6457):\penalty0 eaaw1147, 2019.
+
+\bibitem[Schulman et~al.(2017)Schulman, Wolski, Dhariwal, Radford, and
+  Klimov]{schulman2017proximal}
+John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov.
+\newblock Proximal policy optimization algorithms.
+\newblock \emph{arXiv preprint arXiv:1707.06347}, 2017.
+
+\bibitem[Sutton and Barto(2018)]{sutton2018reinforcement}
+Richard~S Sutton and Andrew~G Barto.
+\newblock \emph{Reinforcement Learning: An Introduction}.
+\newblock MIT Press, 2nd edition, 2018.
+
+\bibitem[Sutton et~al.(2009)Sutton, Maei, Precup, Bhatnagar, Silver,
+  Szepesv{\'a}ri, and Wiewiora]{sutton2009fast}
+Richard~S Sutton, Hamid~Reza Maei, Doina Precup, Shalabh Bhatnagar, David
+  Silver, Csaba Szepesv{\'a}ri, and Eric Wiewiora.
+\newblock Fast gradient-descent methods for temporal-difference learning with
+  linear function approximation.
+\newblock In \emph{Proceedings of the 26th International Conference on Machine
+  Learning (ICML)}, 2009.
+
+\bibitem[Tamar et~al.(2016)Tamar, Wu, Thomas, Levine, and
+  Abbeel]{tamar2016value}
+Aviv Tamar, Yi~Wu, Garrett Thomas, Sergey Levine, and Pieter Abbeel.
+\newblock Value iteration networks.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2016.
+
+\bibitem[Tsitsiklis and Van~Roy(1997)]{tsitsiklis1997analysis}
+John~N Tsitsiklis and Benjamin Van~Roy.
+\newblock An analysis of temporal-difference learning with function
+  approximation.
+\newblock \emph{IEEE Transactions on Automatic Control}, 42\penalty0
+  (5):\penalty0 674--690, 1997.
+
+\bibitem[Van~Hasselt et~al.(2016)Van~Hasselt, Guez, and Silver]{van2016deep}
+Hado Van~Hasselt, Arthur Guez, and David Silver.
+\newblock Deep reinforcement learning with double q-learning.
+\newblock In \emph{Proceedings of the 30th AAAI Conference on Artificial
+  Intelligence}, 2016.
+
+\end{thebibliography}

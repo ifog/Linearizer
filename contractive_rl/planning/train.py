@@ -18,6 +18,9 @@ import numpy as np
 import torch
 import torch.optim as optim
 
+# Single-threaded is faster on CPU for small tensors (avoids thread-spawn overhead)
+torch.set_num_threads(1)
+
 # Ensure imports work regardless of how this script is invoked.
 # Insert _this_dir FIRST to shadow contractive_rl/gridworld.py and models.py.
 _this_dir = os.path.dirname(os.path.abspath(__file__))
@@ -50,7 +53,7 @@ NUM_STEPS = 8000
 LR = 3e-4
 LAMBDA_FP = 0.5
 LAMBDA_MULTI = 0.1
-K_MULTI = 1   # 1-step multi-step consistency (5-step is too slow for AffineCouplingNet on CPU)
+K_MULTI = 5
 POOL_SIZE = 5000
 GRID_SIZE = 10
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -240,8 +243,13 @@ def main():
     parser.add_argument("--steps", type=int, default=NUM_STEPS)
     parser.add_argument("--batch_size", type=int, default=BATCH_SIZE)
     parser.add_argument("--lr", type=float, default=LR)
+    parser.add_argument("--lambda_fp", type=float, default=LAMBDA_FP)
+    parser.add_argument("--k_multi", type=int, default=K_MULTI)
     parser.add_argument("--pool_size", type=int, default=POOL_SIZE)
     parser.add_argument("--seed", type=int, default=SEED)
+    parser.add_argument("--grid_size", type=int, default=GRID_SIZE)
+    parser.add_argument("--hidden_dim", type=int, default=64)
+    parser.add_argument("--n_coupling_layers", type=int, default=4)
     parser.add_argument(
         "--models",
         nargs="+",
@@ -257,36 +265,46 @@ def main():
     )
     args = parser.parse_args()
 
+    state_dim = args.grid_size * args.grid_size
+    ckpt_suffix = f"_{args.grid_size}x{args.grid_size}" if args.grid_size != 10 else ""
+
     print(f"Device: {DEVICE}")
-    print(f"Training {args.steps} steps, batch_size={args.batch_size}")
+    print(f"Training {args.steps} steps, batch_size={args.batch_size}, "
+          f"grid={args.grid_size}x{args.grid_size}, state_dim={state_dim}")
 
     # Pre-generate dataset
     print("\n=== Generating dataset ===")
-    dataset = generate_dataset(pool_size=args.pool_size, seed=args.seed)
+    dataset = generate_dataset(pool_size=args.pool_size, grid_size=args.grid_size,
+                               seed=args.seed)
 
     model_registry = {
-        "contractive": ContractiveLinearizer(spectral_bound=0.99),
-        "unconstrained": UnconstrainedLinearizer(),
-        "iterative_mlp": IterativeMLPBaseline(),
-        "vin": VINBaseline(),
-        "contractive_05": make_contractive(spectral_bound=0.5),
-        "contractive_09": make_contractive(spectral_bound=0.9),
-        "contractive_099": make_contractive(spectral_bound=0.99),
+        "contractive": ContractiveLinearizer(state_dim=state_dim, spectral_bound=0.9,
+                                             n_coupling_layers=args.n_coupling_layers,
+                                             hidden_dim=args.hidden_dim),
+        "unconstrained": UnconstrainedLinearizer(state_dim=state_dim),
+        "iterative_mlp": IterativeMLPBaseline(state_dim=state_dim),
+        "vin": VINBaseline(grid_size=args.grid_size),
+        "contractive_05": make_contractive(state_dim=state_dim, spectral_bound=0.5),
+        "contractive_09": make_contractive(state_dim=state_dim, spectral_bound=0.9),
+        "contractive_099": make_contractive(state_dim=state_dim, spectral_bound=0.99),
     }
 
     for name in args.models:
         if name not in model_registry:
             print(f"Unknown model: {name}, skipping")
             continue
-        print(f"\n=== Training {name} ===")
+        ckpt_name = name + ckpt_suffix
+        print(f"\n=== Training {ckpt_name} ===")
         model = model_registry[name]
         train_model(
             model=model,
-            model_name=name,
+            model_name=ckpt_name,
             dataset=dataset,
             num_steps=args.steps,
             batch_size=args.batch_size,
             lr=args.lr,
+            lambda_fp=args.lambda_fp,
+            k_multi=args.k_multi,
             seed=args.seed,
         )
 

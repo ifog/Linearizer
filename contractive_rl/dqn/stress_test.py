@@ -19,6 +19,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+# Single-threaded is faster on CPU for small tensors (avoids thread-spawn overhead)
+torch.set_num_threads(1)
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from contractive_rl.shared.invertible_net import AffineCouplingNet
 from contractive_rl.shared.contractive_operator import DiagonalContractiveOp

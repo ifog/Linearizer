@@ -1,14 +1,14 @@
 {
   "standard": {
-    "final_mean": 219.83333333333334,
-    "final_std": 132.82214507461555
+    "final_mean": 271.2,
+    "final_std": 104.85726806791538
   },
   "double": {
-    "final_mean": 372.23333333333335,
-    "final_std": 106.61664452086686
+    "final_mean": 198.0,
+    "final_std": 132.0644034805241
   },
   "contractive": {
-    "final_mean": 129.70000000000002,
-    "final_std": 136.219895756824
+    "final_mean": 377.73333333333335,
+    "final_std": 64.06612903000217
   }
 }

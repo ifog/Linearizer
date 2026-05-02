@@ -1,42 +1,42 @@
 {
   "1": {
     "K": 1,
-    "mean_mse_loop_vs_fast": 0.0,
-    "max_abs_error": 0.0,
-    "mean_loop_time_ms": 1.8374460798804648,
-    "mean_fast_time_ms": 1.7108577795443125,
-    "speedup": 1.0739911293479216
+    "mean_mse_loop_vs_fast": 1.1490726457770743e-13,
+    "max_abs_error": 2.86102294921875e-06,
+    "mean_loop_time_ms": 4.00757328083273,
+    "mean_fast_time_ms": 2.562989938305691,
+    "speedup": 1.5636320764951477
   },
   "5": {
     "K": 5,
-    "mean_mse_loop_vs_fast": 4.51951354419884e-14,
-    "max_abs_error": 1.9073486328125e-06,
-    "mean_loop_time_ms": 8.038028940500226,
-    "mean_fast_time_ms": 1.9042978188372217,
-    "speedup": 4.220993616002413
+    "mean_mse_loop_vs_fast": 3.718490389193439e-13,
+    "max_abs_error": 3.814697265625e-06,
+    "mean_loop_time_ms": 18.43815390020609,
+    "mean_fast_time_ms": 3.4418210171861574,
+    "speedup": 5.357092598011681
   },
   "10": {
     "K": 10,
-    "mean_mse_loop_vs_fast": 8.50863491974965e-15,
-    "max_abs_error": 7.152557373046875e-07,
-    "mean_loop_time_ms": 16.930544019851368,
-    "mean_fast_time_ms": 1.689962280797772,
-    "speedup": 10.018296977516417
+    "mean_mse_loop_vs_fast": 2.844750224772173e-13,
+    "max_abs_error": 3.814697265625e-06,
+    "mean_loop_time_ms": 38.916864540660754,
+    "mean_fast_time_ms": 4.371896041557193,
+    "speedup": 8.901598794169326
   },
   "20": {
     "K": 20,
-    "mean_mse_loop_vs_fast": 8.061263982389405e-15,
-    "max_abs_error": 4.76837158203125e-07,
-    "mean_loop_time_ms": 47.08710631879512,
-    "mean_fast_time_ms": 3.758724340586923,
-    "speedup": 12.527416761537525
+    "mean_mse_loop_vs_fast": 3.0159057502342385e-13,
+    "max_abs_error": 3.337860107421875e-06,
+    "mean_loop_time_ms": 75.10744692059234,
+    "mean_fast_time_ms": 3.6997420742409304,
+    "speedup": 20.300725129791992
   },
   "50": {
     "K": 50,
-    "mean_mse_loop_vs_fast": 7.656323339401026e-15,
-    "max_abs_error": 4.76837158203125e-07,
-    "mean_loop_time_ms": 161.3350490591256,
-    "mean_fast_time_ms": 3.7861015397356823,
-    "speedup": 42.612446423657296
+    "mean_mse_loop_vs_fast": 2.9951294808032437e-13,
+    "max_abs_error": 3.814697265625e-06,
+    "mean_loop_time_ms": 162.860341759515,
+    "mean_fast_time_ms": 3.7415433389833197,
+    "speedup": 43.52758393017601
   }
 }

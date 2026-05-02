@@ -1,0 +1,12 @@
+{
+  "standard": {
+    "final_mean": -217.91666666666666,
+    "final_std": 199.4671833215234,
+    "mean_value_variance": 180.36979906974236
+  },
+  "contractive": {
+    "final_mean": -220.28333333333333,
+    "final_std": 197.79297397924822,
+    "mean_value_variance": 174.87477936496472
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "standard": {
+    "final_returns_per_seed": [
+      409.1,
+      451.6,
+      437.9,
+      429.8,
+      258.7
+    ],
+    "mean_return": 397.41999999999996,
+    "std_return": 70.71382891627351,
+    "return_variance": 5000.445600000001,
+    "n_collapses": 0,
+    "collapse_threshold": 50.0
+  },
+  "contractive": {
+    "final_returns_per_seed": [
+      461.4,
+      460.8,
+      140.8,
+      261.4,
+      465.0
+    ],
+    "mean_return": 357.88,
+    "std_return": 133.5782377485195,
+    "return_variance": 17843.1456,
+    "n_collapses": 0,
+    "collapse_threshold": 50.0
+  }
+}

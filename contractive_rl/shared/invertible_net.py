@@ -26,8 +26,8 @@ class _STNet(nn.Module):
             nn.ReLU(),
             nn.Linear(hidden_dim, out_dim * 2),  # s and t stacked
         )
-        # Initialize to near-identity (small scale)
-        nn.init.zeros_(self.net[-1].weight)
+        # Small (not zero) init: zero weight kills gradients in earlier layers
+        nn.init.normal_(self.net[-1].weight, std=0.01)
         nn.init.zeros_(self.net[-1].bias)
 
     def forward(self, x):

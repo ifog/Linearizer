@@ -23,6 +23,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+# Single-threaded is faster on CPU for small tensors (avoids thread-spawn overhead)
+torch.set_num_threads(1)
+
 _this_dir = os.path.dirname(os.path.abspath(__file__))
 _parent_dir = os.path.dirname(_this_dir)
 
@@ -64,6 +67,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 TRAIN_GRID_SIZE = 10
 TEST_GRID_SIZE_SMALL = 10
 TEST_GRID_SIZE_LARGE = 20
+TEST_GRID_SIZE_XL = 50
 
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
@@ -74,12 +78,12 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 
 def load_model(model_instance: torch.nn.Module, checkpoint_name: str,
                device: torch.device = DEVICE) -> torch.nn.Module:
-    """Load a model from checkpoint."""
+    """Load a model from checkpoint. Raises FileNotFoundError or RuntimeError on failure."""
     ckpt_path = os.path.join(CHECKPOINT_DIR, f"{checkpoint_name}.pt")
     if not os.path.exists(ckpt_path):
         raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")
     ckpt = torch.load(ckpt_path, map_location=device)
-    model_instance.load_state_dict(ckpt["model_state_dict"])
+    model_instance.load_state_dict(ckpt["model_state_dict"])  # raises RuntimeError on mismatch
     model_instance.to(device)
     model_instance.eval()
     return model_instance
@@ -323,9 +327,12 @@ def exp_C_planning_quality(models_dict: dict, n_maps: int = 200, K_iter: int = 3
             x = torch.tensor(V0[None], dtype=torch.float32, device=DEVICE)
 
             with torch.no_grad():
-                for _ in range(K_iter):
-                    x = model(x, map_tensor)
-                    x = x.clamp(-1e4, 1e4)
+                if hasattr(model, 'iterate_fast'):
+                    x = model.iterate_fast(x, map_tensor, 1000)
+                else:
+                    for _ in range(K_iter):
+                        x = model(x, map_tensor)
+                        x = x.clamp(-1e4, 1e4)
 
             V_final = x.squeeze(0).cpu().numpy().flatten()
             policy = get_greedy_policy(V_final, obstacles, goal, gamma=GAMMA)
@@ -388,88 +395,82 @@ def exp_C_planning_quality(models_dict: dict, n_maps: int = 200, K_iter: int = 3
 # Exp D: Generalization (10x10 -> 20x20)
 # ---------------------------------------------------------------------------
 
-def exp_D_generalization(contractive_model: torch.nn.Module,
-                          vin_model: torch.nn.Module,
-                          n_maps: int = 100, K_iter: int = 30,
+def exp_D_generalization(n_maps: int = 100, K_iter: int = 30,
                           seed: int = SEED + 3) -> dict:
     """
-    Evaluate models trained on 10x10 on 20x20 maps.
+    Evaluate native 20x20-trained models on 20x20 maps.
 
-    Strategy: zero-pad V from 100 to 400 dims and map the context via the
-    MapEncoder (which uses AdaptiveAvgPool so it handles any H,W).
-
-    The result honestly reflects limitations but demonstrates partial generalization.
+    Loads contractive_20x20.pt and vin_20x20.pt from the checkpoint dir.
+    Run train.py --grid_size 20 --models contractive vin first to produce them.
     """
-    print("\n=== Exp D: Generalization (10x10 -> 20x20) ===")
+    print("\n=== Exp D: Generalization (native 20x20 models) ===")
     rng = np.random.RandomState(seed)
-
     test_data_20 = generate_test_maps(n_maps, grid_size=TEST_GRID_SIZE_LARGE,
-                                       seed=seed + 55555)
+                                      seed=seed + 55555)
+
+    model_configs_20 = [
+        ("contractive_20x20", ContractiveLinearizer(state_dim=400, spectral_bound=0.9)),
+        ("vin_20x20",         VINBaseline(grid_size=20)),
+    ]
 
     results = {}
+    loaded_any = False
 
-    for model_name, model in [("contractive", contractive_model), ("vin", vin_model)]:
+    for ckpt_name, model_inst in model_configs_20:
+        ckpt_path = os.path.join(CHECKPOINT_DIR, f"{ckpt_name}.pt")
+        if not os.path.exists(ckpt_path):
+            print(f"  Skipping {ckpt_name}: checkpoint not found ({ckpt_path})")
+            results[ckpt_name] = {
+                "mean_mse_20x20": float("nan"),
+                "std_mse_20x20": float("nan"),
+                "n_valid": 0,
+                "note": "Checkpoint missing — run train.py --grid_size 20 first.",
+            }
+            continue
+
+        model = load_model(model_inst, ckpt_name)
+        loaded_any = True
         mse_list = []
 
         for td in test_data_20:
             obstacles = td["obstacles"]
             goal = td["goal"]
-            V_star_20 = td["V_star"]   # (400,)
-            map_enc_20 = td["map_enc"]  # (3, 20, 20)
-            grid_size = td["grid_size"]  # 20
+            V_star_20 = td["V_star"]
+            map_enc_20 = td["map_enc"]
 
-            # Random V_init for 20x20
             V0_20 = random_V_init(obstacles, goal, V_star_20, rng)
-
-            map_tensor = torch.tensor(
-                map_enc_20[None], dtype=torch.float32, device=DEVICE
-            )
+            map_tensor = torch.tensor(map_enc_20[None], dtype=torch.float32, device=DEVICE)
             x = torch.tensor(V0_20[None], dtype=torch.float32, device=DEVICE)
             V_star_t = torch.tensor(V_star_20[None], dtype=torch.float32, device=DEVICE)
 
-            # Try zero-padding approach: pad to 400 if model expects 100
-            model_state_dim = getattr(model, "state_dim", 100)
-
-            if model_state_dim != 400:
-                # Zero-pad V from 100 to 400
-                pad_size = 400 - model_state_dim
-                x_padded = torch.nn.functional.pad(x, (0, pad_size))
-                V_star_padded = torch.nn.functional.pad(V_star_t, (0, pad_size))
-            else:
-                x_padded = x
-                V_star_padded = V_star_t
-
             with torch.no_grad():
-                try:
+                if hasattr(model, 'iterate_fast'):
+                    x = model.iterate_fast(x, map_tensor, 1000)
+                else:
                     for _ in range(K_iter):
-                        x_padded = model(x_padded, map_tensor)
-                        x_padded = x_padded.clamp(-1e4, 1e4)
-                    mse = ((x_padded - V_star_padded) ** 2).mean().item()
-                except Exception as e:
-                    mse = float("nan")
-
+                        x = model(x, map_tensor)
+                        x = x.clamp(-1e4, 1e4)
+                mse = ((x - V_star_t) ** 2).mean().item()
             mse_list.append(mse)
 
-        valid_mse = [m for m in mse_list if not np.isnan(m)]
-        avg_mse = float(np.mean(valid_mse)) if valid_mse else float("nan")
-        std_mse = float(np.std(valid_mse)) if valid_mse else float("nan")
-        results[model_name] = {
+        avg_mse = float(np.mean(mse_list))
+        std_mse = float(np.std(mse_list))
+        results[ckpt_name] = {
             "mean_mse_20x20": avg_mse,
             "std_mse_20x20": std_mse,
-            "n_valid": len(valid_mse),
-            "note": (
-                "Zero-padded V from 100 to 400 dims; context via AdaptiveAvgPool "
-                "(handles 20x20 maps). Partial generalization expected."
-            ),
+            "n_valid": len(mse_list),
+            "note": "Native 20x20 model trained and evaluated on 20x20 maps.",
         }
-        print(f"  {model_name}: mean_MSE={avg_mse:.4f} ± {std_mse:.4f} "
-              f"(n_valid={len(valid_mse)}/{n_maps})")
+        print(f"  {ckpt_name}: mean_MSE={avg_mse:.4f} ± {std_mse:.4f} (n={n_maps})")
+
+    if not loaded_any:
+        print("  No 20x20 checkpoints found. Run: python train.py --grid_size 20 "
+              "--models contractive vin")
 
     path = os.path.join(RESULTS_DIR, "generalization_results.json")
     with open(path, "w") as f:
         json.dump(results, f, indent=2)
     print(f"  Saved: {path}")
-    print("  Note: Models trained on 10x10, evaluated on 20x20 via zero-padding trick.")
 
     return results
 
@@ -558,9 +559,93 @@ def exp_E_ablation_spectral(ablation_models: dict, n_maps: int = 200, K: int = 5
 # Summary table
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Exp F: Generalization to 50x50 (native models)
+# ---------------------------------------------------------------------------
+
+def exp_F_generalization_50x50(n_maps: int = 50, K_iter: int = 30,
+                                seed: int = SEED + 5) -> dict:
+    """
+    Evaluate native 50x50-trained models on 50x50 maps.
+
+    Loads contractive_50x50.pt and vin_50x50.pt from the checkpoint dir.
+    Run train.py --grid_size 50 --models contractive vin first to produce them.
+    """
+    print("\n=== Exp F: Generalization (native 50x50 models) ===")
+    rng = np.random.RandomState(seed)
+    test_data_50 = generate_test_maps(n_maps, grid_size=TEST_GRID_SIZE_XL,
+                                      seed=seed + 99999)
+
+    model_configs_50 = [
+        ("contractive_50x50", ContractiveLinearizer(state_dim=2500, spectral_bound=0.9)),
+        ("vin_50x50",         VINBaseline(grid_size=50)),
+    ]
+
+    results = {}
+    loaded_any = False
+
+    for ckpt_name, model_inst in model_configs_50:
+        ckpt_path = os.path.join(CHECKPOINT_DIR, f"{ckpt_name}.pt")
+        if not os.path.exists(ckpt_path):
+            print(f"  Skipping {ckpt_name}: checkpoint not found")
+            results[ckpt_name] = {
+                "mean_mse_50x50": float("nan"),
+                "std_mse_50x50": float("nan"),
+                "n_valid": 0,
+                "note": "Checkpoint missing — run train.py --grid_size 50 first.",
+            }
+            continue
+
+        model = load_model(model_inst, ckpt_name)
+        loaded_any = True
+        mse_list = []
+
+        for td in test_data_50:
+            obstacles = td["obstacles"]
+            goal = td["goal"]
+            V_star_50 = td["V_star"]
+            map_enc_50 = td["map_enc"]
+
+            V0_50 = random_V_init(obstacles, goal, V_star_50, rng)
+            map_tensor = torch.tensor(map_enc_50[None], dtype=torch.float32, device=DEVICE)
+            x = torch.tensor(V0_50[None], dtype=torch.float32, device=DEVICE)
+            V_star_t = torch.tensor(V_star_50[None], dtype=torch.float32, device=DEVICE)
+
+            with torch.no_grad():
+                if hasattr(model, 'iterate_fast'):
+                    x = model.iterate_fast(x, map_tensor, 1000)
+                else:
+                    for _ in range(K_iter):
+                        x = model(x, map_tensor)
+                        x = x.clamp(-1e4, 1e4)
+                mse = ((x - V_star_t) ** 2).mean().item()
+            mse_list.append(mse)
+
+        avg_mse = float(np.mean(mse_list))
+        std_mse = float(np.std(mse_list))
+        results[ckpt_name] = {
+            "mean_mse_50x50": avg_mse,
+            "std_mse_50x50": std_mse,
+            "n_valid": len(mse_list),
+            "note": "Native 50x50 model trained and evaluated on 50x50 maps.",
+        }
+        print(f"  {ckpt_name}: mean_MSE={avg_mse:.4f} ± {std_mse:.4f} (n={n_maps})")
+
+    if not loaded_any:
+        print("  No 50x50 checkpoints found. Run: python train.py --grid_size 50 "
+              "--models contractive vin")
+
+    path = os.path.join(RESULTS_DIR, "generalization_50x50_results.json")
+    with open(path, "w") as f:
+        json.dump(results, f, indent=2)
+    print(f"  Saved: {path}")
+
+    return results
+
+
 def write_summary_table(conv_errors: dict, planning_results: dict,
                         fast_iter_results: dict, gen_results: dict,
-                        K: int = 50) -> str:
+                        gen_50_results: dict = None, K: int = 50) -> str:
     lines = []
     lines.append("=" * 75)
     lines.append("CONTRACTIVE LINEARIZER — PLANNING EXPERIMENT SUMMARY")
@@ -594,11 +679,22 @@ def write_summary_table(conv_errors: dict, planning_results: dict,
             f"{r['avg_steps_on_success']:>12.1f}"
         )
 
-    lines.append("\n--- Exp D: Generalization (10x10 -> 20x20) ---")
+    lines.append("\n--- Exp D: Generalization (native 20x20 models) ---")
     lines.append(f"{'Model':<25} {'Mean MSE':>12} {'Std MSE':>12}")
     lines.append("-" * 51)
     for name, r in gen_results.items():
-        lines.append(f"{name:<25} {r['mean_mse_20x20']:>12.4f} {r['std_mse_20x20']:>12.4f}")
+        mse_val = r.get('mean_mse_20x20', float('nan'))
+        std_val = r.get('std_mse_20x20', float('nan'))
+        lines.append(f"{name:<25} {mse_val:>12.4f} {std_val:>12.4f}")
+
+    if gen_50_results:
+        lines.append("\n--- Exp F: Generalization (native 50x50 models) ---")
+        lines.append(f"{'Model':<25} {'Mean MSE':>12} {'Std MSE':>12}")
+        lines.append("-" * 51)
+        for name, r in gen_50_results.items():
+            mse_val = r.get('mean_mse_50x50', float('nan'))
+            std_val = r.get('std_mse_50x50', float('nan'))
+            lines.append(f"{name:<25} {mse_val:>12.4f} {std_val:>12.4f}")
 
     lines.append("\n" + "=" * 75)
     text = "\n".join(lines)
@@ -625,7 +721,7 @@ def main():
 
     # Load main models
     model_configs = [
-        ("contractive",    ContractiveLinearizer(spectral_bound=0.99)),
+        ("contractive",    ContractiveLinearizer(spectral_bound=0.9)),
         ("unconstrained",  UnconstrainedLinearizer()),
         ("iterative_mlp",  IterativeMLPBaseline()),
         ("vin",            VINBaseline()),
@@ -637,8 +733,8 @@ def main():
             m = load_model(inst, name)
             models_dict[name] = m
             print(f"  Loaded: {name}")
-        except FileNotFoundError as e:
-            print(f"  Warning: {e}")
+        except (FileNotFoundError, RuntimeError) as e:
+            print(f"  Warning: skipping {name}: {e}")
 
     if not models_dict:
         print("No models loaded! Run train.py first.")
@@ -655,8 +751,8 @@ def main():
         try:
             m = load_model(inst, name)
             ablation_models[name] = m
-        except FileNotFoundError as e:
-            print(f"  Warning (ablation): {e}")
+        except (FileNotFoundError, RuntimeError) as e:
+            print(f"  Warning (ablation): skipping {name}: {e}")
 
     # Exp A: Convergence curves
     conv_errors = exp_A_convergence(models_dict, n_maps=200, K=50)
@@ -671,21 +767,20 @@ def main():
     # Exp C: Planning quality
     planning_results = exp_C_planning_quality(models_dict, n_maps=200, K_iter=30)
 
-    # Exp D: Generalization
-    gen_results = {}
-    contractive = models_dict.get("contractive")
-    vin = models_dict.get("vin")
-    if contractive is not None and vin is not None:
-        gen_results = exp_D_generalization(contractive, vin, n_maps=100, K_iter=30)
+    # Exp D: Generalization (20x20)
+    gen_results = exp_D_generalization(n_maps=100, K_iter=30)
 
     # Exp E: Ablation spectral bound
     if ablation_models:
         exp_E_ablation_spectral(ablation_models, n_maps=200, K=50)
 
+    # Exp F: Generalization (50x50) — only if checkpoints exist
+    gen_50_results = exp_F_generalization_50x50(n_maps=50, K_iter=30)
+
     # Summary table
     if fast_iter_results and gen_results:
         write_summary_table(conv_errors, planning_results, fast_iter_results,
-                            gen_results, K=50)
+                            gen_results, gen_50_results, K=50)
 
     print("\n=== Evaluation complete ===")
 

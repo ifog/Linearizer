@@ -1,14 +1,14 @@
 {
-  "contractive": {
-    "mean_mse_20x20": NaN,
-    "std_mse_20x20": NaN,
-    "n_valid": 0,
-    "note": "Zero-padded V from 100 to 400 dims; context via AdaptiveAvgPool (handles 20x20 maps). Partial generalization expected."
+  "contractive_20x20": {
+    "mean_mse_20x20": 16.886853456497192,
+    "std_mse_20x20": 9.115071756814347,
+    "n_valid": 100,
+    "note": "Native 20x20 model trained and evaluated on 20x20 maps."
   },
-  "vin": {
-    "mean_mse_20x20": NaN,
-    "std_mse_20x20": NaN,
-    "n_valid": 0,
-    "note": "Zero-padded V from 100 to 400 dims; context via AdaptiveAvgPool (handles 20x20 maps). Partial generalization expected."
+  "vin_20x20": {
+    "mean_mse_20x20": 8.892135193347931,
+    "std_mse_20x20": 9.705287876810367,
+    "n_valid": 100,
+    "note": "Native 20x20 model trained and evaluated on 20x20 maps."
   }
 }

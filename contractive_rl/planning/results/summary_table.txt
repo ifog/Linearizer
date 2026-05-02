@@ -5,33 +5,39 @@ CONTRACTIVE LINEARIZER — PLANNING EXPERIMENT SUMMARY
 --- Exp A: Convergence (RMSE at K=0 and K=50) ---
 Model                        Init RMSE    K=50 RMSE   Reduction%
 -----------------------------------------------------------------
-contractive                     4.5249       5.4444       -20.3%
-unconstrained                   4.5249       5.2505       -16.0%
-iterative_mlp                   4.5249       3.8993        13.8%
-vin                             4.5249       4.9067        -8.4%
+contractive                     4.5249       2.7908        38.3%
+unconstrained                   4.5249     629.2694    -13806.9%
+iterative_mlp                   4.5249       2.9635        34.5%
+vin                             4.5249      36.4039      -704.5%
 
 --- Exp B: Fast Iteration vs Loop ---
     K    MSE(loop vs fast)    MaxAbsErr    Loop ms    Fast ms   Speedup
 ----------------------------------------------------------------------
-    1             0.00e+00     0.00e+00      1.837      1.711      1.07x
-    5             4.52e-14     1.91e-06      8.038      1.904      4.22x
-   10             8.51e-15     7.15e-07     16.931      1.690     10.02x
-   20             8.06e-15     4.77e-07     47.087      3.759     12.53x
-   50             7.66e-15     4.77e-07    161.335      3.786     42.61x
+    1             1.15e-13     2.86e-06      4.008      2.563      1.56x
+    5             3.72e-13     3.81e-06     18.438      3.442      5.36x
+   10             2.84e-13     3.81e-06     38.917      4.372      8.90x
+   20             3.02e-13     3.34e-06     75.107      3.700     20.30x
+   50             3.00e-13     3.81e-06    162.860      3.742     43.53x
 
 --- Exp C: Planning Quality (success rate at K=30) ---
 Model                       Success Rate    Avg Steps
 -------------------------------------------------------
-contractive                        0.010          1.5
-unconstrained                      0.025          1.6
-iterative_mlp                      0.045          2.3
-vin                                0.210          3.5
+contractive                        0.100          4.5
+unconstrained                      0.005          3.0
+iterative_mlp                      0.085          3.8
+vin                                0.520          5.3
 oracle_V*                          0.985          7.1
 
---- Exp D: Generalization (10x10 -> 20x20) ---
+--- Exp D: Generalization (native 20x20 models) ---
 Model                         Mean MSE      Std MSE
 ---------------------------------------------------
-contractive                        nan          nan
-vin                                nan          nan
+contractive_20x20              16.8869       9.1151
+vin_20x20                       8.8921       9.7053
+
+--- Exp F: Generalization (native 50x50 models) ---
+Model                         Mean MSE      Std MSE
+---------------------------------------------------
+contractive_50x50             335.8536      29.7499
+vin_50x50                          nan          nan
 
 ===========================================================================

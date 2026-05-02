@@ -22,8 +22,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+# Single-threaded is faster on CPU for small tensors (avoids thread-spawn overhead)
+torch.set_num_threads(1)
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-from contractive_rl.shared.invertible_net import AffineCouplingNet
 from contractive_rl.shared.contractive_operator import DiagonalContractiveOp
 
 try:
@@ -118,26 +120,28 @@ class StandardQNet(nn.Module):
 
 class ContractiveQNet(nn.Module):
     """
-    Q(s) = g^{-1}(A(s)^K * g(0))
+    Q(s,a) = head(z*)[a]  where  z* = b(s) / (1 - eigs(s))
 
-    g = AffineCouplingNet on n_actions-dim Q-vector (strict bijection).
-    A(s) = DiagonalContractiveOp with state as context (spectral radius < 0.99).
-    Iterates K=3 steps from q_init=0.
+    Closed-form fixed point of T(z) = eigs(s)*z + b(s).
+    Spectral radius of A bounded by spectral_bound < 1 → unique fixed point.
+    No bijection: z* fed directly to linear head (mirrors ContractiveCritic in PPO).
     """
-    def __init__(self, state_dim, n_actions, K=3, spectral_bound=0.99):
+    def __init__(self, state_dim, n_actions, latent_dim=32, spectral_bound=0.9):
         super().__init__()
         self.n_actions = n_actions
-        self.K = K
-        self.g = AffineCouplingNet(dim=n_actions, n_coupling_layers=4, hidden_dim=32)
-        self.A = DiagonalContractiveOp(context_dim=state_dim, latent_dim=n_actions,
+        self.A = DiagonalContractiveOp(context_dim=state_dim, latent_dim=latent_dim,
                                        spectral_bound=spectral_bound)
+        self.b_net = nn.Sequential(
+            nn.Linear(state_dim, 64), nn.ReLU(),
+            nn.Linear(64, latent_dim),
+        )
+        self.head = nn.Linear(latent_dim, n_actions)
 
     def forward(self, state):
-        B = state.shape[0]
-        z = self.g.encode(torch.zeros(B, self.n_actions, device=state.device))
-        for _ in range(self.K):
-            z = self.A.apply(z, state)
-        return self.g.decode(z)
+        eigs = self.A.get_eigenvalues(state)          # (B, latent_dim)
+        b = self.b_net(state)                          # (B, latent_dim)
+        z_star = b / (1.0 - eigs).clamp(min=1e-2)    # closed-form fixed point
+        return self.head(z_star)
 
 
 # ---------------------------------------------------------------------------
