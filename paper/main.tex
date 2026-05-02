@@ -425,13 +425,14 @@ The convergence guarantee is robust to the choice of $\spb$.
 \paragraph{Setup.}
 We compare three DQN variants: \textbf{Standard DQN}~\citep{mnih2015human},
 \textbf{Double DQN}~\citep{van2016deep}, and \textbf{Contractive DQN} (ours).
-All use the same MLP architecture for the feature extractor, with identical
-hyperparameters.
-We run 5 seeds on CartPole-v1 ($50$k steps) and Acrobot-v1 ($100$k steps).
-These environments serve as controlled benchmarks for isolating the stability
-effect; the full-scale Atari benchmark~\citep{mnih2015human} requires pixel inputs
-and convolutional backbones that are orthogonal to our contribution, and we leave
-that integration to future work.
+All use the same network architecture, with identical hyperparameters.
+We run 5 seeds on CartPole-v1 ($50$k steps) and Acrobot-v1 ($100$k steps), and
+3 seeds on \textbf{Pong} and \textbf{Breakout} ($2$M steps each) using the standard
+pixel-input preprocessing (grayscale $84\times84$, $4$-frame stack, frameskip~$4$,
+reward clipping~$[-1,1]$)~\citep{mnih2015human,brockman2016openai} with the
+Nature CNN backbone~\citep{mnih2015human}.
+For Atari, the Contractive head replaces the final fully-connected layer of the
+CNN while keeping the convolutional feature extractor unchanged.
 
 \begin{table}[t]
   \centering
@@ -446,6 +447,23 @@ that integration to future work.
     Acrobot-v1 (100k)  & $-84.3 \pm 6.3$   & $-87.7 \pm 2.2$   & $\mathbf{-70.3 \pm 5.1}$ \textbf{(+17\%)} \\
     \bottomrule
   \end{tabular}
+\end{table}
+
+\begin{table}[t]
+  \centering
+  \caption{Atari DQN results (mean $\pm$ std across 3 seeds, 2M steps). $\uparrow$ = higher is better.}
+  \label{tab:atari}
+  \small
+  \begin{tabular}{lcc}
+    \toprule
+    Environment & Standard DQN & \textbf{Contractive DQN} (ours) \\
+    \midrule
+    Pong      & ---  & \textit{pending} \\
+    Breakout  & ---  & \textit{pending} \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.3em}
+  \small\textit{Atari results currently running (2M steps, 3 seeds each).}
 \end{table}
 
 \paragraph{Q-value stability.}
@@ -535,14 +553,22 @@ and three MuJoCo benchmarks---HalfCheetah-v4, Hopper-v4, and Walker2d-v4
 \end{figure}
 
 \paragraph{Discussion.}
-The contractive critic consistently reduces value-estimate variance across all
-environments ($-55\%$ on CartPole, $-3\%$ on Acrobot, $-41\%$ on Pendulum).
+We report \emph{value-estimate variance} (variance of $|V(s_t)|$ over a training
+rollout) as an indicator of critic stability: high variance reflects oscillating
+or diverging value estimates, which corrupt the advantage signal and degrade
+policy updates~\citep{fujimoto2018addressing}.
+The contractive critic consistently reduces this variance across all environments
+($-55\%$ on CartPole, $-3\%$ on Acrobot, $-41\%$ on Pendulum).
 Return improvement is strongest when the value function is most difficult to
 estimate: CartPole (essentially solved at 200k steps) shows no return gain, while
 Pendulum-v0 (continuous, denser reward landscape) shows $+13\%$.
 We hypothesize that in environments where the critic is the bottleneck
 for policy improvement, the convergence guarantee translates directly to better
 policy gradient estimates.
+Results on MuJoCo benchmarks (Table~\ref{tab:ppo}) are currently running;
+we report them as soon as training completes.\footnote{%
+  All experiments use 3 random seeds; MuJoCo results are preliminary and
+  additional seeds may be added in the final version.}
 
 Acrobot-v1 exhibits bimodal convergence under PPO (some seeds converge early,
 others do not), yielding high variance ($\pm 199$) that masks any performance
