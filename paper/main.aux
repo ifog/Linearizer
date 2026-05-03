@@ -62,11 +62,9 @@
 \newlabel{thm:fp}{{1}{4}{Fixed-point convergence}{theorem.1}{}}
 \newlabel{eq:fixedpoint}{{8}{4}{Fixed-point convergence}{equation.3.8}{}}
 \newlabel{rem:zspace}{{1}{4}{}{remark.1}{}}
+\newlabel{cor:bounded}{{1}{4}{Bounded values, structurally}{corollary.1}{}}
 \newlabel{prop:universal}{{1}{4}{Universality of the parameterization}{proposition.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{Consequence: the diagonal restriction is not an expressiveness bottleneck.}{4}{section*.11}\protected@file@percent }
-\citation{tamar2016value}
-\citation{tamar2016value}
-\citation{tamar2016value}
+\@writefile{toc}{\contentsline {paragraph}{Consequence: the diagonal restriction is not an expressiveness bottleneck.}{5}{section*.11}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Closed-Form Inference}{5}{subsection.3.4}\protected@file@percent }
 \newlabel{sec:closedform}{{3.4}{5}{Closed-Form Inference}{subsection.3.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Instantiations}{5}{subsection.3.5}\protected@file@percent }
@@ -77,17 +75,20 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Training}{5}{subsection.3.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{5}{section.4}\protected@file@percent }
 \newlabel{sec:experiments}{{4}{5}{Experiments}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Planning: Convergence and Efficiency}{5}{subsection.4.1}\protected@file@percent }
-\newlabel{sec:exp_planning}{{4.1}{5}{Planning: Convergence and Efficiency}{subsection.4.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{Setup.}{5}{section*.15}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {Exp A: Bellman convergence on $10\!\times \!10$ stochastic-obstacle grid worlds.} Mean RMSE of the predicted value $V_k$ against the true $V^*$ (computed by exact value iteration) under $K$ repeated applications of each model's learned operator, starting from a fixed random latent initialization $z_0$ ($\qopname  \relax o{log}_{10}$ y-axis). \leavevmode {\color  {blue}Contractive (ours)}: bounded convergence to a stable fixed point ($-38.3\%$ RMSE; small early non-monotonicity is expected---the guarantee is on the latent $z_k$, not on decoded RMSE; cf.\ Remark\nobreakspace  {}\ref  {rem:zspace}). \leavevmode {\color  {red}Unconstrained} (same architecture without the $\alpha \qopname  \relax o{tanh}$ spectral clamp) and \leavevmode {\color  {orange}VIN}\nobreakspace  {}\citep  {tamar2016value} \emph  {diverge}. \leavevmode {\color  {green!50!black}Iterative MLP} stays bounded but lacks a convergence guarantee.\relax }}{5}{figure.caption.16}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:convergence}{{1}{5}{\textbf {Exp A: Bellman convergence on $10\!\times \!10$ stochastic-obstacle grid worlds.} Mean RMSE of the predicted value $V_k$ against the true $V^*$ (computed by exact value iteration) under $K$ repeated applications of each model's learned operator, starting from a fixed random latent initialization $z_0$ ($\log _{10}$ y-axis). \textcolor {blue}{Contractive (ours)}: bounded convergence to a stable fixed point ($-38.3\%$ RMSE; small early non-monotonicity is expected---the guarantee is on the latent $z_k$, not on decoded RMSE; cf.\ Remark~\ref {rem:zspace}). \textcolor {red}{Unconstrained} (same architecture without the $\spb \tanh $ spectral clamp) and \textcolor {orange}{VIN}~\citep {tamar2016value} \emph {diverge}. \textcolor {green!50!black}{Iterative MLP} stays bounded but lacks a convergence guarantee.\relax }{figure.caption.16}{}}
-\@writefile{toc}{\contentsline {paragraph}{Exp A: Convergence under repeated application.}{5}{section*.17}\protected@file@percent }
+\citation{tamar2016value}
+\citation{tamar2016value}
+\citation{tamar2016value}
 \citation{tamar2016value}
 \citation{tamar2016value}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Planning experiment summary. $\uparrow $ = higher is better.\relax }}{6}{table.caption.18}\protected@file@percent }
 \newlabel{tab:planning}{{1}{6}{Planning experiment summary. $\uparrow $ = higher is better.\relax }{table.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Planning: Convergence and Efficiency}{6}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:exp_planning}{{4.1}{6}{Planning: Convergence and Efficiency}{subsection.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Setup.}{6}{section*.15}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {Exp A: Bellman convergence on $10\!\times \!10$ stochastic-obstacle grid worlds.} Mean RMSE of the predicted value $V_k$ against the true $V^*$ (computed by exact value iteration) under $K$ repeated applications of each model's learned operator, starting from a fixed random latent initialization $z_0$ ($\qopname  \relax o{log}_{10}$ y-axis). \leavevmode {\color  {blue}Contractive (ours)}: bounded convergence to a stable fixed point ($-38.3\%$ RMSE; small early non-monotonicity is expected---the guarantee is on the latent $z_k$, not on decoded RMSE; cf.\ Remark\nobreakspace  {}\ref  {rem:zspace}). \leavevmode {\color  {red}Unconstrained} (same architecture without the $\alpha \qopname  \relax o{tanh}$ spectral clamp) and \leavevmode {\color  {orange}VIN}\nobreakspace  {}\citep  {tamar2016value} \emph  {diverge}. \leavevmode {\color  {green!50!black}Iterative MLP} stays bounded but lacks a convergence guarantee.\relax }}{6}{figure.caption.16}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:convergence}{{1}{6}{\textbf {Exp A: Bellman convergence on $10\!\times \!10$ stochastic-obstacle grid worlds.} Mean RMSE of the predicted value $V_k$ against the true $V^*$ (computed by exact value iteration) under $K$ repeated applications of each model's learned operator, starting from a fixed random latent initialization $z_0$ ($\log _{10}$ y-axis). \textcolor {blue}{Contractive (ours)}: bounded convergence to a stable fixed point ($-38.3\%$ RMSE; small early non-monotonicity is expected---the guarantee is on the latent $z_k$, not on decoded RMSE; cf.\ Remark~\ref {rem:zspace}). \textcolor {red}{Unconstrained} (same architecture without the $\spb \tanh $ spectral clamp) and \textcolor {orange}{VIN}~\citep {tamar2016value} \emph {diverge}. \textcolor {green!50!black}{Iterative MLP} stays bounded but lacks a convergence guarantee.\relax }{figure.caption.16}{}}
+\@writefile{toc}{\contentsline {paragraph}{Exp A: Convergence under repeated application.}{6}{section*.17}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Exp B: Closed-form vs.\ iterative inference.}{6}{section*.19}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Closed-form vs.\ iterative fixed-point computation.\relax }}{6}{table.caption.20}\protected@file@percent }
 \newlabel{tab:speedup}{{2}{6}{Closed-form vs.\ iterative fixed-point computation.\relax }{table.caption.20}{}}
@@ -96,39 +97,35 @@
 \citation{van2016deep}
 \citation{mnih2015human,brockman2016openai}
 \citation{mnih2015human}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces DQN benchmark results (mean $\pm $ std across 5 seeds). $\uparrow $ = higher is better.\relax }}{7}{table.caption.25}\protected@file@percent }
+\newlabel{tab:dqn}{{3}{7}{DQN benchmark results (mean $\pm $ std across 5 seeds). $\uparrow $ = higher is better.\relax }{table.caption.25}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Atari DQN results (mean $\pm $ std across 3 seeds, 2M steps). $\uparrow $ = higher is better.\relax }}{7}{table.caption.26}\protected@file@percent }
+\newlabel{tab:atari}{{4}{7}{Atari DQN results (mean $\pm $ std across 3 seeds, 2M steps). $\uparrow $ = higher is better.\relax }{table.caption.26}{}}
+\@writefile{toc}{\contentsline {paragraph}{Spectral bound ablation (Exp E).}{7}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Structural ablations (Exp F: $\lambda \equiv 0$; Exp G: dense $\Lambda $).}{7}{section*.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}DQN: Q-value Stability and Performance}{7}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:exp_dqn}{{4.2}{7}{DQN: Q-value Stability and Performance}{subsection.4.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Setup.}{7}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Q-value stability.}{7}{section*.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Poisoned replay stress test.}{7}{section*.28}\protected@file@percent }
 \citation{van2016deep}
 \citation{schulman2017proximal}
 \citation{todorov2012mujoco,brockman2016openai}
 \citation{fujimoto2018addressing}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces DQN benchmark results (mean $\pm $ std across 5 seeds). $\uparrow $ = higher is better.\relax }}{7}{table.caption.24}\protected@file@percent }
-\newlabel{tab:dqn}{{3}{7}{DQN benchmark results (mean $\pm $ std across 5 seeds). $\uparrow $ = higher is better.\relax }{table.caption.24}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Atari DQN results (mean $\pm $ std across 3 seeds, 2M steps). $\uparrow $ = higher is better.\relax }}{7}{table.caption.25}\protected@file@percent }
-\newlabel{tab:atari}{{4}{7}{Atari DQN results (mean $\pm $ std across 3 seeds, 2M steps). $\uparrow $ = higher is better.\relax }{table.caption.25}{}}
-\@writefile{toc}{\contentsline {paragraph}{Spectral bound ablation (Exp E).}{7}{section*.22}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}DQN: Q-value Stability and Performance}{7}{subsection.4.2}\protected@file@percent }
-\newlabel{sec:exp_dqn}{{4.2}{7}{DQN: Q-value Stability and Performance}{subsection.4.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{Setup.}{7}{section*.23}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Q-value stability.}{7}{section*.26}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Poisoned replay stress test.}{7}{section*.27}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}PPO: Critic Variance and Return}{7}{subsection.4.3}\protected@file@percent }
-\newlabel{sec:exp_ppo}{{4.3}{7}{PPO: Critic Variance and Return}{subsection.4.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Setup.}{7}{section*.28}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Discussion.}{7}{section*.31}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces PPO benchmark results (mean $\pm $ std, 3 seeds). Value variance lower is better ($\downarrow $).\relax }}{8}{table.caption.30}\protected@file@percent }
+\newlabel{tab:ppo}{{5}{8}{PPO benchmark results (mean $\pm $ std, 3 seeds). Value variance lower is better ($\downarrow $).\relax }{table.caption.30}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces PPO learning curves and critic variance. ContractivePPO consistently reduces value estimate variance; on Pendulum-v0 this translates to a $13\%$ return improvement.\relax }}{8}{figure.caption.31}\protected@file@percent }
+\newlabel{fig:ppo}{{2}{8}{PPO learning curves and critic variance. ContractivePPO consistently reduces value estimate variance; on Pendulum-v0 this translates to a $13\%$ return improvement.\relax }{figure.caption.31}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}PPO: Critic Variance and Return}{8}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:exp_ppo}{{4.3}{8}{PPO: Critic Variance and Return}{subsection.4.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Setup.}{8}{section*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Discussion.}{8}{section*.32}\protected@file@percent }
 \citation{baird1995residual,tsitsiklis1997analysis}
 \citation{sutton2009fast,maei2010toward}
 \citation{mnih2015human}
 \citation{ernst2005tree}
 \citation{vincent2024projected}
 \citation{vincent2025iqn}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces PPO benchmark results (mean $\pm $ std, 3 seeds). Value variance lower is better ($\downarrow $).\relax }}{8}{table.caption.29}\protected@file@percent }
-\newlabel{tab:ppo}{{5}{8}{PPO benchmark results (mean $\pm $ std, 3 seeds). Value variance lower is better ($\downarrow $).\relax }{table.caption.29}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces PPO learning curves and critic variance. ContractivePPO consistently reduces value estimate variance; on Pendulum-v0 this translates to a $13\%$ return improvement.\relax }}{8}{figure.caption.30}\protected@file@percent }
-\newlabel{fig:ppo}{{2}{8}{PPO learning curves and critic variance. ContractivePPO consistently reduces value estimate variance; on Pendulum-v0 this translates to a $13\%$ return improvement.\relax }{figure.caption.30}{}}
-\newlabel{par:reproducibility}{{4.3}{8}{Reproducibility}{section*.32}{}}
-\@writefile{toc}{\contentsline {paragraph}{Reproducibility.}{8}{section*.32}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Related Work}{8}{section.5}\protected@file@percent }
-\newlabel{sec:related}{{5}{8}{Related Work}{section.5}{}}
-\@writefile{toc}{\contentsline {paragraph}{Stable Q-learning and contractive value parameterizations.}{8}{section*.33}\protected@file@percent }
 \citation{haarnoja2018soft}
 \citation{fujimoto2018addressing}
 \citation{kumar2020conservative}
@@ -142,18 +139,19 @@
 \citation{tamar2016value}
 \citation{wang2024scaling}
 \citation{deac2023scaling}
-\citation{miyato2018spectral}
-\citation{anil2019sorting}
-\citation{wang2023direct}
+\citation{miyato2018spectral,anil2019sorting,wang2023direct}
 \citation{bjorck2021towards}
 \citation{bai2019deq}
 \citation{winston2020monotone}
-\@writefile{toc}{\contentsline {paragraph}{Actor-critic and value regularization.}{9}{section*.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Koopman operator theory and successor representations.}{9}{section*.35}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Value iteration networks and differentiable planning.}{9}{section*.36}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Lipschitz and spectral constraints in deep networks.}{9}{section*.37}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Implicit and equilibrium architectures.}{9}{section*.38}\protected@file@percent }
-\citation{bellemare2017distributional}
+\newlabel{par:reproducibility}{{4.3}{9}{Reproducibility}{section*.33}{}}
+\@writefile{toc}{\contentsline {paragraph}{Reproducibility.}{9}{section*.33}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Related Work}{9}{section.5}\protected@file@percent }
+\newlabel{sec:related}{{5}{9}{Related Work}{section.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Stable Q-learning and contractive value parameterizations.}{9}{section*.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Actor-critic and value regularization.}{9}{section*.35}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Koopman operator theory and successor representations.}{9}{section*.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Value iteration networks and differentiable planning.}{9}{section*.37}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Lipschitz constraints and equilibrium architectures.}{9}{section*.38}\protected@file@percent }
 \bibstyle{plainnat}
 \bibdata{references}
 \bibcite{anil2019sorting}{{1}{2019}{{Anil et~al.}}{{Anil, Lucas, and Grosse}}}
@@ -168,10 +166,6 @@
 \bibcite{budisic2012applied}{{10}{2012}{{Budiši{\'c} et~al.}}{{Budiši{\'c}, Mohr, and Mezi{\'c}}}}
 \bibcite{dayan1993successor}{{11}{1993}{{Dayan}}{{}}}
 \bibcite{deac2023scaling}{{12}{2023}{{Deac et~al.}}{{Deac, Weber, Papamakarios, and Battaglia}}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{10}{section.6}\protected@file@percent }
-\newlabel{sec:conclusion}{{6}{10}{Conclusion}{section.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{Limitations.}{10}{section*.39}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Future work.}{10}{section*.40}\protected@file@percent }
 \bibcite{dinh2017density}{{13}{2017}{{Dinh et~al.}}{{Dinh, Sohl-Dickstein, and Bengio}}}
 \bibcite{ernst2005tree}{{14}{2005}{{Ernst et~al.}}{{Ernst, Geurts, and Wehenkel}}}
 \bibcite{fujimoto2018addressing}{{15}{2018}{{Fujimoto et~al.}}{{Fujimoto, Hoof, and Meger}}}
@@ -179,6 +173,8 @@
 \bibcite{hornik1989multilayer}{{17}{1989}{{Hornik et~al.}}{{Hornik, Stinchcombe, and White}}}
 \bibcite{koopman1931hamiltonian}{{18}{1931}{{Koopman}}{{}}}
 \bibcite{kumar2020conservative}{{19}{2020}{{Kumar et~al.}}{{Kumar, Zhou, Tucker, and Levine}}}
+\newlabel{sec:conclusion}{{5}{10}{Conclusion}{section*.39}{}}
+\@writefile{toc}{\contentsline {paragraph}{Conclusion.}{10}{section*.39}\protected@file@percent }
 \bibcite{lusch2018deep}{{20}{2018}{{Lusch et~al.}}{{Lusch, Kutz, and Brunton}}}
 \bibcite{maei2010toward}{{21}{2010}{{Maei et~al.}}{{Maei, Szepesv{\'a}ri, Bhatnagar, and Sutton}}}
 \bibcite{mezic2005spectral}{{22}{2005}{{Mezi{\'c}}}{{}}}
@@ -210,27 +206,31 @@
 \newlabel{app:cl}{{A.2}{13}{Contractive Linearizer module}{subsection.A.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Planning experiment (\S  \ref  {sec:exp_planning})}{13}{subsection.A.3}\protected@file@percent }
 \newlabel{app:planning}{{A.3}{13}{Planning experiment (\S \ref {sec:exp_planning})}{subsection.A.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Environment.}{13}{section*.42}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Architectures.}{13}{section*.43}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Optimization.}{13}{section*.44}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Baselines.}{13}{section*.45}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Compute.}{13}{section*.46}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Environment.}{13}{section*.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Architectures.}{13}{section*.42}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Optimization.}{13}{section*.43}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Baselines.}{13}{section*.44}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Compute.}{13}{section*.45}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.4}DQN experiments (\S  \ref  {sec:exp_dqn})}{13}{subsection.A.4}\protected@file@percent }
 \newlabel{app:dqn}{{A.4}{13}{DQN experiments (\S \ref {sec:exp_dqn})}{subsection.A.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{Classic control (CartPole-v1, Acrobot-v1).}{13}{section*.47}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Atari (Pong, Breakout).}{14}{section*.48}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Stress tests.}{14}{section*.49}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Compute.}{14}{section*.50}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Classic control (CartPole-v1, Acrobot-v1).}{13}{section*.46}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Atari (Pong, Breakout).}{14}{section*.47}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Stress tests.}{14}{section*.48}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Compute.}{14}{section*.49}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.5}PPO experiments (\S  \ref  {sec:exp_ppo})}{14}{subsection.A.5}\protected@file@percent }
 \newlabel{app:ppo}{{A.5}{14}{PPO experiments (\S \ref {sec:exp_ppo})}{subsection.A.5}{}}
-\@writefile{toc}{\contentsline {paragraph}{Architectures.}{14}{section*.51}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Hyperparameters.}{14}{section*.52}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Environments and horizons.}{14}{section*.53}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Compute.}{14}{section*.54}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Architectures.}{14}{section*.50}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Hyperparameters.}{14}{section*.51}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Environments and horizons.}{14}{section*.52}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Compute.}{14}{section*.53}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.6}Random seeds and statistical reporting}{14}{subsection.A.6}\protected@file@percent }
 \newlabel{app:seeds}{{A.6}{14}{Random seeds and statistical reporting}{subsection.A.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Additional notes}{14}{appendix.B}\protected@file@percent }
-\newlabel{app:notes}{{B}{14}{Additional notes}{appendix.B}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Structural ablations (Exp F, Exp G)}{14}{appendix.B}\protected@file@percent }
+\newlabel{app:ablations}{{B}{14}{Structural ablations (Exp F, Exp G)}{appendix.B}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Additional notes}{14}{appendix.C}\protected@file@percent }
+\newlabel{app:notes}{{C}{14}{Additional notes}{appendix.C}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Structural ablations on the planning task. Same setup as Exp\nobreakspace  {}A, 3 seeds, mean $\pm $ std.\relax }}{15}{table.caption.54}\protected@file@percent }
+\newlabel{tab:ablation_struct}{{6}{15}{Structural ablations on the planning task. Same setup as Exp~A, 3 seeds, mean $\pm $ std.\relax }{table.caption.54}{}}
 \citation{brockman2016openai}
 \citation{todorov2012mujoco}
 \citation{mnih2015human}

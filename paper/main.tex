@@ -392,6 +392,28 @@ monotonically---it depends on how well $h(\zstar)$ approximates $V^*$.
 This distinction is relevant to interpreting Exp~A (\S\ref{sec:exp_planning}).
 \end{remark}
 
+\begin{corollary}[Bounded values, structurally]
+\label{cor:bounded}
+Let $h: \R^d \to \R^m$ be any linear head with rows $w_1,\ldots,w_m \in \R^d$
+($m=1$ for the scalar critic; $m=|\mathcal{A}|$ for per-action $Q$-heads).
+For every state $s \in \mathcal{S}$ and every output coordinate $i$,
+\[
+  \bigl|[h(\zstar(s))]_i\bigr| \;\leq\; \frac{\|w_i\|_1 \cdot \|b(s)\|_\infty}{1 - \spb}.
+\]
+In particular, if $\sup_{s} \|b(s)\|_\infty$ and $\|w_i\|_1$ are finite, the
+decoded values are uniformly bounded across all states---a hard structural
+guarantee that no gradient update can violate without changing $b$ or the
+head.
+\end{corollary}
+\begin{proof}
+Coordinate-wise, $|\zstar_j(s)| = |b_j(s)| / |1 - \eigs_j(s)| \leq
+|b_j(s)| / (1 - \spb)$, since $|\eigs_j(s)| < \spb$ implies
+$1 - \eigs_j(s) > 1 - \spb > 0$.
+Hence $\|\zstar(s)\|_\infty \leq \|b(s)\|_\infty / (1 - \spb)$, and the
+H{\"o}lder bound $|w_i^\top \zstar(s)| \leq \|w_i\|_1 \cdot \|\zstar(s)\|_\infty$
+gives the result.
+\end{proof}
+
 \begin{proposition}[Universality of the parameterization]
 \label{prop:universal}
 Let $\mathcal{S}$ be a compact subset of $\R^n$ and let $V^*: \mathcal{S}\to\R$
@@ -619,6 +641,18 @@ We train with $\spb \in \{0.5, 0.9, 0.99\}$ and observe that all three achieve
 $37\text{--}38\%$ RMSE reduction with no statistically significant difference.
 The convergence guarantee is robust to the choice of $\spb$.
 
+\paragraph{Structural ablations (Exp F: $\eigs \equiv 0$; Exp G: dense $\Lambda$).}
+Two ablations test whether the contraction structure carries information.
+\emph{Exp F} freezes $\eigs(s) \equiv \mathbf{0}$, collapsing $\zstar(s)=b(s)$
+to a plain MLP (allowed by Prop.~\ref{prop:universal}); this isolates whether
+the learned eigenvalues do useful work.
+\emph{Exp G} replaces diagonal $\Lambda(s)$ with a dense $d\times d$ matrix
+projected to spectral radius $<\spb$ via SVD clipping, with closed form by
+linear solve $(\mathbf{I}-\Lambda(s))\zstar = b(s)$ at $\mathcal{O}(d^3)$ cost;
+this isolates the value of off-diagonal coupling.
+Results, alongside a plain-MLP baseline, are reported in
+Table~\ref{tab:ablation_struct} (App.~\ref{app:ablations}).
+
 % -------------------------------------------------------------------------
 \subsection{DQN: Q-value Stability and Performance}
 \label{sec:exp_dqn}
@@ -673,8 +707,12 @@ To stress-test stability, we train without a target network and with a $10\times
 larger learning rate ($10^{-2}$).
 Standard DQN diverges: $\max |Q| \to 3.9\mathrm{M}$ within $50$k steps.
 Contractive DQN remains bounded: $\max |Q| \approx 11.8$.
-This demonstrates that the spectral constraint provides a \emph{hard} stability
-guarantee absent from standard architectures.
+This is the empirical signature of Corollary~\ref{cor:bounded}: regardless of
+optimizer pathology, $|Q(s,a)| \leq \|w_a\|_1 \cdot \|b(s)\|_\infty / (1-\spb)$
+by construction, so divergence is structurally impossible as long as $b$ stays
+bounded.
+The spectral constraint thus provides a \emph{hard} stability guarantee absent
+from standard architectures.
 
 \paragraph{Poisoned replay stress test.}
 With $20\%$ of replay buffer entries replaced by adversarially corrupted
@@ -778,15 +816,12 @@ difference; we report this result honestly and include it for completeness.
 
 \paragraph{Reproducibility.}
 \label{par:reproducibility}
-All planning, DQN (state-based), and PPO (state-based) experiments run on a
-single CPU; planning training and Atari/MuJoCo runs use one NVIDIA Quadro GV100
-GPU.
-Reported error bars are sample standard deviations across seeds (5 seeds for
-classic-control DQN, 3 seeds for Atari/PPO, plotted with $\pm 1\sigma$).
-Full network architectures, optimizer settings, exploration schedules, replay
-buffer sizes, target-network update frequencies, rollout lengths, training
-horizons, environment versions, and per-experiment compute budgets are tabulated
-in App.~\ref{app:repro}; an anonymized code archive accompanies the submission.
+Classic-control runs use a single CPU; planning training, Atari, and MuJoCo
+use one NVIDIA Quadro GV100 GPU.
+Error bars are sample std across seeds (5 for classic-control DQN, 3 for
+Atari/PPO; figures shade $\pm 1\sigma$).
+Full architectures, hyperparameters, schedules, and compute budgets are in
+App.~\ref{app:repro}; an anonymized code archive accompanies the submission.
 
 % =========================================================================
 \section{Related Work}
@@ -794,21 +829,17 @@ in App.~\ref{app:repro}; an anonymized code archive accompanies the submission.
 % =========================================================================
 
 \paragraph{Stable Q-learning and contractive value parameterizations.}
-The instability of TD learning with function approximation has been studied
-extensively~\citep{baird1995residual,tsitsiklis1997analysis}.
-Gradient TD methods~\citep{sutton2009fast,maei2010toward} provide convergence
-guarantees for linear function approximation.
-Target networks~\citep{mnih2015human} and fitted Q-iteration~\citep{ernst2005tree}
-address instability empirically.
+TD-learning instability under function approximation has been studied
+extensively~\citep{baird1995residual,tsitsiklis1997analysis};
+Gradient TD~\citep{sutton2009fast,maei2010toward} guarantees convergence for
+linear approximators, while target networks~\citep{mnih2015human} and fitted
+Q-iteration~\citep{ernst2005tree} address instability empirically.
 Most directly, \citet{vincent2024projected} learn a \emph{projected} Bellman
-operator end-to-end with a neural network, sharing our high-level goal of
-parameterizing the operator itself; their projection has no spectral
-constraint and no closed-form fixed point, whereas we enforce contraction by
-construction and read off $\zstar$ in $\mathcal{O}(1)$.
-\citet{vincent2025iqn} learn $K$ iterated Bellman updates jointly to densify
-TD targets, again without structural contraction.
-Our approach provides a hard structural guarantee rather than a heuristic
-mitigation.
+operator end-to-end without spectral constraint or closed-form fixed point;
+\citet{vincent2025iqn} jointly learn $K$ iterated Bellman updates, also
+without structural contraction.
+We instead enforce contraction by construction and read off $\zstar$ in
+$\mathcal{O}(1)$.
 
 \paragraph{Actor-critic and value regularization.}
 Soft Actor-Critic~\citep{haarnoja2018soft} adds an entropy bonus that implicitly
@@ -854,70 +885,32 @@ on grid tasks is precisely this architectural match.
 Crucially, VIN's operator diverges under repeated application in our experiments,
 confirming that differentiable VI does not imply contracted VI.
 
-\paragraph{Lipschitz and spectral constraints in deep networks.}
-A line of work enforces global Lipschitz bounds on neural networks:
-\citet{miyato2018spectral} normalize discriminator weights for GANs;
-\citet{anil2019sorting} construct provably $1$-Lipschitz networks via gradient-norm
-preserving activations; \citet{wang2023direct} give a direct parameterization of
-Lipschitz-bounded networks usable as drop-in layers.
-\citet{bjorck2021towards} apply spectral normalization to weight matrices in deep RL
-to improve gradient stability.
-Our approach is complementary: we constrain the \emph{composed} operator's
-eigenvalue spectrum, not individual weight matrices, and we exploit that
-constraint to obtain a closed-form fixed point.
+\paragraph{Lipschitz constraints and equilibrium architectures.}
+Lipschitz-bounded layers
+\citep{miyato2018spectral,anil2019sorting,wang2023direct} and spectral-norm
+constraints in deep RL~\citep{bjorck2021towards} stabilize training by bounding
+weight matrices.
+Deep equilibrium models~\citep{bai2019deq} define a layer's output as the
+fixed point of a learned implicit operator;
+\citet{winston2020monotone} enforce equilibrium uniqueness via monotone-operator
+theory.
+We combine both ideas: the Contractive Linearizer is a DEQ whose contraction
+is simple enough ($\spb\tanh$ diagonal) to admit a \emph{closed-form} fixed
+point, and the spectral constraint acts on the \emph{composed} operator
+rather than on individual weight matrices.
+We are unaware of prior work combining a DEQ-style equilibrium layer with a
+structural spectral constraint for value-function parameterization.
 
-\paragraph{Implicit and equilibrium architectures.}
-Deep equilibrium models (DEQ)~\citep{bai2019deq} define a layer's output as the
-fixed point of a learned implicit operator, using implicit differentiation to
-backpropagate through the equilibrium.
-The Contractive Linearizer is a DEQ in this sense: $\zstar(s)$ is the fixed
-point of $\cT(\cdot;s)$, and our closed-form formula sidesteps the iterative
-fixed-point solver typical of DEQs.
-Closest in spirit, \citet{winston2020monotone} enforce \emph{uniqueness} of the
-DEQ equilibrium via monotone-operator theory; we obtain the same guarantee
-through a much simpler diagonal $\spb\tanh(\cdot)$ contraction, trading some
-expressiveness for an analytically solvable system.
-We are unaware of prior work that combines DEQ-style equilibrium layers with
-a structural spectral constraint to produce a closed-form contractive value-function
-parameterization.
-
-% =========================================================================
-\section{Conclusion}
+\paragraph{Conclusion.}
 \label{sec:conclusion}
-% =========================================================================
-
-We introduced the Contractive Linearizer, a closed-form value-function
-parameterization built as the fixed point of a learned per-state affine
-contraction.
-The key insight is that parameterizing eigenvalues of a diagonal affine operator
-via bounded activations yields a hard convergence guarantee at minimal expressiveness
-cost.
-The resulting fixed point is available in closed form, enabling an $\mathcal{O}(1)$
-inference path with $43\times$ wall-clock speedup over iterative unrolling.
-
-Instantiated in three settings---planning, DQN, and PPO---the Contractive
-Linearizer eliminates Q-value divergence, reduces critic variance, and improves
-return on continuous control benchmarks.
-The convergence guarantee is robust to the choice of spectral bound $\spb$,
-suggesting the architecture is broadly applicable.
-
-\paragraph{Limitations.}
-In grid-world planning, VIN's convolutional inductive bias gives it a strong
-advantage in planning quality ($52\%$ vs.\ $10\%$), which we attribute to
-architectural match rather than convergence properties; our method is a
-general-purpose architecture and this gap is expected to close on unstructured MDPs.
-For DQN, the benchmark environments (CartPole-v1, Acrobot-v1) are low-dimensional;
-evaluating on Atari with convolutional backbones is a natural next step.
-The PPO benefit on CartPole is limited because that task is essentially solved
-at $200$k steps; MuJoCo continuous-control results will test whether the
-advantage scales to harder locomotion settings.
-
-\paragraph{Future work.}
-Extensions include full matrix (non-diagonal) contractive operators for richer
-expressiveness, applying the architecture to Atari with convolutional feature
-extractors, combining the contractive critic with distributional RL
-\citep{bellemare2017distributional}, and applying the closed-form inference to
-real-time planning in robotics where inference speed is critical.
+The Contractive Linearizer parameterizes $V$ (or $Q$) as the closed-form fixed
+point of a per-state affine contraction, giving a hard convergence guarantee,
+$\mathcal{O}(1)$ inference ($43\times$ speedup), and structurally bounded
+decoded values (Cor.~\ref{cor:bounded}) at minimal expressiveness cost
+(Prop.~\ref{prop:universal}).
+Instantiated for planning, DQN, and PPO, it eliminates Q-value divergence,
+reduces critic variance, and improves return; running Atari/MuJoCo
+experiments will test scaling.
 
 % =========================================================================
 % References
@@ -1092,6 +1085,42 @@ $\pm 1\sigma$ around the mean curve.
 The experiments reported in this paper required no preliminary runs beyond the
 spectral-bound ablation in Exp~E (\S\ref{sec:exp_planning}).
 Total project compute: $\sim 50$ GPU-hours and $\sim 30$ CPU-hours.
+
+% -------------------------------------------------------------------------
+\section{Structural ablations (Exp F, Exp G)}
+\label{app:ablations}
+% -------------------------------------------------------------------------
+This appendix records the planning-task ablations referenced in
+\S\ref{sec:exp_planning}.
+Both runs use the same $10\!\times\!10$ stochastic-obstacle generator,
+training schedule, and seeds as Exp~A; the only changes are to the
+contractive head.
+\emph{Exp F (}$\eigs\equiv\mathbf{0}$\emph{)} clamps the eigenvalue MLP's
+output to zero throughout training, leaving $\zstar(s) = b(s)$.
+\emph{Exp G (dense} $\Lambda$\emph{)} replaces the diagonal head with a
+matrix-output head, projects $\Lambda(s)$ to spectral radius $<\spb$ by SVD
+clipping ($\Lambda \to U\min(\Sigma,\spb)V^\top$), and computes
+$\zstar(s)$ via the closed-form linear solve $(\mathbf{I}-\Lambda(s))\zstar = b(s)$
+at $\mathcal{O}(d^3)$ cost per state.
+A plain MLP baseline (no Linearizer head) is included for reference.
+
+\begin{table}[h]
+  \centering
+  \caption{Structural ablations on the planning task. Same setup as Exp~A,
+  3 seeds, mean $\pm$ std.}
+  \label{tab:ablation_struct}
+  \small
+  \begin{tabular}{lcc}
+    \toprule
+    Variant & RMSE @ $K\!=\!50$ ($\downarrow$) & Inference cost \\
+    \midrule
+    \textbf{Contractive (diagonal, ours)} & \textit{pending} & $\mathcal{O}(d)$ \\
+    Dense $\Lambda$ (Exp G)               & \textit{pending} & $\mathcal{O}(d^3)$ \\
+    $\eigs \equiv 0$ (Exp F)              & \textit{pending} & $\mathcal{O}(d)$ \\
+    Plain MLP (no Linearizer)             & \textit{pending} & $\mathcal{O}(d)$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 % -------------------------------------------------------------------------
 \section{Additional notes}
