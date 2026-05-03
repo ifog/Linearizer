@@ -63,35 +63,34 @@
 \begin{abstract}
 % =========================================================================
 
-Temporal-difference learning with neural function approximators is known to be
-potentially unstable: repeated Bellman application can cause divergence, and
-standard mitigations such as target networks are heuristics without convergence
-guarantees.
-We propose the \textbf{Contractive Linearizer}, a parameterization of the value
-function $V(s)$ (or $Q(s,a)$) as the closed-form fixed point of a state-conditioned
-affine contraction in a learned latent space.
-Constraining the contraction's spectral radius below $\spb < 1$ yields a unique
-fixed point for every state, computable in $\mathcal{O}(1)$ from two MLP outputs
-$b(s)$ and $\eigs(s)$ as $\zstar(s) = b(s) \oslash (\mathbf{1}-\eigs(s))$---%
-eliminating iterative value computation at inference and achieving a $43\times$
+Temporal-difference learning with neural function approximators can be
+unstable: repeated Bellman application sometimes diverges, and target
+networks and similar fixes are heuristics with no convergence guarantee.
+We propose the \textbf{Contractive Linearizer}, which parameterizes the value
+function $V(s)$ (or $Q(s,a)$) as the closed-form fixed point of a
+state-conditioned affine contraction in a learned latent space.
+With the contraction's spectral radius constrained below $\spb < 1$, every
+state has a unique fixed point that can be read off in $\mathcal{O}(1)$ from
+two MLP outputs $b(s)$ and $\eigs(s)$ as
+$\zstar(s) = b(s) \oslash (\mathbf{1}-\eigs(s))$.
+This removes the iteration step at inference, giving a $43\times$
 wall-clock speedup over $K$-step unrolling.
-Our construction extends the \emph{Linearizer} framework of
-\citet{anonymous2026linearizer} from pure-linear to affine maps in induced space;
-we use only its closed-form-collapse property and do not rely on its
-compositional or SVD machinery.
-We instantiate the Contractive Linearizer in three settings:
-(i)~a \emph{planning} model that approximates the value iteration operator on
-grid-world maps;
-(ii)~\emph{DQN}, replacing the unconstrained Q-network with a contraction-
-guaranteed architecture; and
-(iii)~\emph{PPO}, replacing the critic MLP with a contractive value approximator.
-Empirically, only our planning model converges under repeated application of its
-learned operator while all unconstrained baselines diverge.
-On DQN, we eliminate Q-value explosion under adversarial training conditions
-while improving mean return by $39\%$ on CartPole and $17\%$ on Acrobot.
-On PPO, critic variance is reduced by up to $55\%$ and return improves by $13\%$
-on Pendulum-v0, with further evaluation on MuJoCo continuous-control benchmarks
-(HalfCheetah-v4, Hopper-v4, Walker2d-v4).
+The construction extends the \emph{Linearizer} framework of
+\citet{anonymous2026linearizer} from pure-linear to affine maps in induced
+space; we use its closed-form-collapse property and not the compositional or
+SVD machinery.
+We test the Contractive Linearizer in three settings: a \emph{planning}
+model that approximates value iteration on grid-world maps;
+\emph{DQN}, where the contractive head replaces the final Q-network layers;
+and \emph{PPO}, where the critic MLP is swapped for a contractive value
+approximator.
+Only the planning model converges under repeated application of its learned
+operator; the unconstrained baselines all diverge.
+On DQN the contractive variant prevents Q-value explosion in adversarial
+training, and mean return improves by $39\%$ on CartPole and $17\%$ on Acrobot.
+On PPO, critic variance drops by up to $55\%$ and return improves by $13\%$
+on Pendulum-v0; further evaluation on MuJoCo continuous control
+(HalfCheetah-v4, Hopper-v4, Walker2d-v4) is in progress.
 
 \end{abstract}
 
@@ -100,27 +99,24 @@ on Pendulum-v0, with further evaluation on MuJoCo continuous-control benchmarks
 \label{sec:intro}
 % =========================================================================
 
-Reinforcement learning with neural function approximators has achieved remarkable
-empirical success~\citep{mnih2015human,schulman2017proximal,haarnoja2018soft},
-yet the theoretical foundations of value-function learning remain fragile.
-The \emph{deadly triad}~\citep{sutton2018reinforcement}---function approximation,
-bootstrapping, and off-policy data---is well-known to cause divergence even in
-simple settings.
-Practical remedies such as target networks~\citep{mnih2015human}, gradient
-clipping, and replay buffers reduce instability in practice but provide no
-convergence guarantees.
+Deep reinforcement learning works empirically
+\citep{mnih2015human,schulman2017proximal,haarnoja2018soft} but the
+underlying theory of value-function learning is fragile.
+The \emph{deadly triad}~\citep{sutton2018reinforcement} of function
+approximation, bootstrapping, and off-policy data is enough to make TD
+learning diverge in toy settings.
+Target networks~\citep{mnih2015human}, gradient clipping, and replay buffers
+help in practice, but none come with a convergence guarantee.
 
-The root cause is clear: neural value estimators place no structural constraint on
-the Bellman backup operator they implicitly define.
-In tabular MDPs, the Bellman optimality operator $\mathcal{T}$ is a
-$\gamma$-contraction under the sup-norm~\citep{bellman1957dynamic}, guaranteeing
-unique fixed points.
-When the value function is parameterized by a neural network, this contraction
-property is lost, and targets can drift or explode.
+What's missing is structure. In tabular MDPs the Bellman optimality operator
+$\mathcal{T}$ is a $\gamma$-contraction in the sup-norm~\citep{bellman1957dynamic},
+so iteration converges to a unique fixed point. With a neural-network value
+estimator, no such property holds: the implicit Bellman backup is unconstrained
+and targets can drift or explode.
 
-We ask: \emph{can we parameterize a neural value function whose computation is
-provably stable, admits a closed form, and remains expressive enough to
-approximate complex value targets?}
+This raises the question we take up here: can we parameterize a neural value
+function so that its computation is provably stable, has a closed form, and
+remains expressive enough to fit value targets of interest?
 
 \paragraph{Contributions.}
 \begin{enumerate}
@@ -227,17 +223,16 @@ we evaluate $b(s)$ and $\eigs(s)$ in a single forward pass and apply
 Eq.~\eqref{eq:pipeline} directly.
 
 \paragraph{Reading $\cT$ honestly.}
-$\cT(\cdot;s)$ is a per-state contraction in latent space, \emph{not} a Bellman
-operator on value functions: $\Lambda(s)$ and $b(s)$ are evaluated only at $s$,
-with no explicit dependence on values at other states, so iterating $\cT$ at
-fixed $s$ refines $z$ toward $\zstar(s)$ without doing the across-state coupling
-that a textbook Bellman backup would. The across-state coupling instead lives
-in the training signal that shapes $b(\cdot)$ and $\eigs(\cdot)$. We therefore
-think of our construction as a \emph{closed-form parameterization of $V^*$}
-whose specific functional form is the fixed point of an affine contraction,
-rather than as a learned Bellman operator. \S\ref{sec:linearizer_connection}
-formalizes the link to the underlying \emph{Linearizer} framework that
-motivates this functional form.
+$\cT(\cdot;s)$ is a per-state contraction in latent space, not a Bellman
+operator on value functions. $\Lambda(s)$ and $b(s)$ depend only on $s$ and
+make no reference to the value at other states, so iterating $\cT$ at a
+fixed $s$ refines $z$ toward $\zstar(s)$ without doing any across-state
+coupling. That coupling shows up only in the training loss that shapes
+$b(\cdot)$ and $\eigs(\cdot)$. So the construction is best read as a
+closed-form parameterization of $V^*$ whose functional form happens to be the
+fixed point of an affine contraction, not as a learned Bellman operator.
+\S\ref{sec:linearizer_connection} ties this to the underlying \emph{Linearizer}
+framework.
 
 \subsection{Connection to the Linearizer Framework}
 \label{sec:linearizer_connection}
@@ -342,9 +337,10 @@ light (cf.\ Remark~\ref{rem:zspace}).
 The true Bellman operator is a $\gamma$-contraction on value functions
 $V: \mathcal{S} \to \R$; our learned operator is an $\spb$-contraction on latent
 representations $z \in \R^d$.
-These act in different spaces, so $\spb \neq \gamma$ is not only acceptable but expected.
-Crucially, the choice of $\spb$ does \emph{not} restrict which fixed points are
-representable: any target $V^*(s)$ can be decoded from
+These act in different spaces, so it is fine for $\spb$ and $\gamma$ to
+differ.
+The choice of $\spb$ does not restrict which fixed points are representable:
+any target $V^*(s)$ can be decoded from
 $z^*(s) = b(s) \oslash (\mathbf{1} - \eigs(s))$ by choosing appropriate
 $b(s)$ and $\eigs(s)$ with $|\eigs_i(s)| < \spb$, since $b(s)$ is unconstrained.
 The parameter $\spb$ governs the convergence rate
@@ -538,18 +534,16 @@ We compare four architectures: (i)~\textbf{Contractive} (ours),
   \caption{%
     \textbf{Exp A: Bellman convergence on $10\!\times\!10$ stochastic-obstacle
     grid worlds.}
-    Mean RMSE of the predicted value $V_k$ against the true $V^*$ (computed by
-    exact value iteration) under $K$ repeated applications of each model's
-    learned operator, starting from a fixed random latent
-    initialization $z_0$ ($\log_{10}$ y-axis).
-    \textcolor{blue}{Contractive (ours)}: bounded convergence to a stable
-    fixed point ($-38.3\%$ RMSE; small early non-monotonicity is expected---%
-    the guarantee is on the latent $z_k$, not on decoded RMSE; cf.\ %
+    Mean RMSE of the predicted value $V_k$ against the true $V^*$ (from exact
+    value iteration) under $K$ repeated applications of each model's learned
+    operator, started from a fixed random latent $z_0$ ($\log_{10}$ y-axis).
+    \textcolor{blue}{Contractive} (ours) converges to a stable fixed point
+    ($-38.3\%$ RMSE; the small early bump is expected -- Theorem~1
+    guarantees convergence in $z_k$, not in decoded RMSE, see
     Remark~\ref{rem:zspace}).
-    \textcolor{red}{Unconstrained} (same architecture without the
-    $\spb\tanh$ spectral clamp) and \textcolor{orange}{VIN}%
-    ~\citep{tamar2016value} \emph{diverge}.
-    \textcolor{green!50!black}{Iterative MLP} stays bounded but lacks a
+    \textcolor{red}{Unconstrained} (same architecture, no $\spb\tanh$ clamp)
+    and \textcolor{orange}{VIN}~\citep{tamar2016value} both diverge.
+    \textcolor{green!50!black}{Iterative MLP} stays bounded but has no
     convergence guarantee.}
   \label{fig:convergence}
   \vspace{-1em}
@@ -633,8 +627,9 @@ axis: VIN wins on grid-aligned planning success because its inductive bias is
 correct for the task, while our parameterization wins on stability under
 repeated application (Exp~A) and inference cost (Exp~B), and is the one of
 the two that transfers to non-grid RL.
-Notably, VIN's operator \emph{diverges} under repeated application (Exp~A),
-so its single-step success rate does not correspond to a converged fixed point.
+Worth flagging: VIN's operator \emph{diverges} under repeated application
+(Exp~A), so its single-step success rate does not correspond to a converged
+fixed point.
 
 \paragraph{Spectral bound ablation (Exp E).}
 We train with $\spb \in \{0.5, 0.9, 0.99\}$ and observe that all three achieve
@@ -642,15 +637,17 @@ $37\text{--}38\%$ RMSE reduction with no statistically significant difference.
 The convergence guarantee is robust to the choice of $\spb$.
 
 \paragraph{Structural ablations (Exp F: $\eigs \equiv 0$; Exp G: dense $\Lambda$).}
-Two ablations test whether the contraction structure carries information.
-\emph{Exp F} freezes $\eigs(s) \equiv \mathbf{0}$, collapsing $\zstar(s)=b(s)$
-to a plain MLP (allowed by Prop.~\ref{prop:universal}); this isolates whether
-the learned eigenvalues do useful work.
-\emph{Exp G} replaces diagonal $\Lambda(s)$ with a dense $d\times d$ matrix
-projected to spectral radius $<\spb$ via SVD clipping, with closed form by
-linear solve $(\mathbf{I}-\Lambda(s))\zstar = b(s)$ at $\mathcal{O}(d^3)$ cost;
-this isolates the value of off-diagonal coupling.
-Results, alongside a plain-MLP baseline, are reported in
+Two ablations check that the contraction structure pulls its weight.
+Exp F pins $\eigs(s)$ to zero throughout training, which makes
+$\zstar(s)=b(s)$ and reduces the head to a plain MLP -- allowed by
+Prop.~\ref{prop:universal}, and a useful test of whether the learned
+eigenvalues do anything.
+Exp G replaces the diagonal $\Lambda(s)$ with a dense $d\times d$ matrix,
+projects it to spectral radius below $\spb$ by SVD clipping, and computes
+the fixed point as a linear solve $(\mathbf{I}-\Lambda(s))\zstar = b(s)$ at
+$\mathcal{O}(d^3)$ cost; if off-diagonal coupling helps, this is where it
+should show up.
+Results, alongside a plain-MLP baseline, appear in
 Table~\ref{tab:ablation_struct} (App.~\ref{app:ablations}).
 
 % -------------------------------------------------------------------------
@@ -703,16 +700,16 @@ CNN while keeping the convolutional feature extractor unchanged.
 \end{table}
 
 \paragraph{Q-value stability.}
-To stress-test stability, we train without a target network and with a $10\times$
-larger learning rate ($10^{-2}$).
-Standard DQN diverges: $\max |Q| \to 3.9\mathrm{M}$ within $50$k steps.
-Contractive DQN remains bounded: $\max |Q| \approx 11.8$.
-This is the empirical signature of Corollary~\ref{cor:bounded}: regardless of
-optimizer pathology, $|Q(s,a)| \leq \|w_a\|_1 \cdot \|b(s)\|_\infty / (1-\spb)$
-by construction, so divergence is structurally impossible as long as $b$ stays
-bounded.
-The spectral constraint thus provides a \emph{hard} stability guarantee absent
-from standard architectures.
+To stress-test stability, we drop the target network and raise the learning rate
+$10\times$ to $10^{-2}$.
+Standard DQN diverges, with $\max |Q| \to 3.9\mathrm{M}$ within $50$k steps;
+Contractive DQN stays bounded at $\max |Q| \approx 11.8$.
+That is what Corollary~\ref{cor:bounded} predicts: as long as $b(s)$ stays
+bounded the inequality $|Q(s,a)| \leq \|w_a\|_1 \cdot \|b(s)\|_\infty / (1-\spb)$
+holds regardless of how the optimizer behaves, so a Q-value blow-up cannot
+happen without changing $b$ or the head.
+The spectral constraint gives the \emph{hard} stability that standard
+architectures lack.
 
 \paragraph{Poisoned replay stress test.}
 With $20\%$ of replay buffer entries replaced by adversarially corrupted
@@ -829,29 +826,28 @@ App.~\ref{app:repro}; an anonymized code archive accompanies the submission.
 % =========================================================================
 
 \paragraph{Stable Q-learning and contractive value parameterizations.}
-TD-learning instability under function approximation has been studied
-extensively~\citep{baird1995residual,tsitsiklis1997analysis};
-Gradient TD~\citep{sutton2009fast,maei2010toward} guarantees convergence for
-linear approximators, while target networks~\citep{mnih2015human} and fitted
-Q-iteration~\citep{ernst2005tree} address instability empirically.
-Most directly, \citet{vincent2024projected} learn a \emph{projected} Bellman
-operator end-to-end without spectral constraint or closed-form fixed point;
-\citet{vincent2025iqn} jointly learn $K$ iterated Bellman updates, also
-without structural contraction.
-We instead enforce contraction by construction and read off $\zstar$ in
-$\mathcal{O}(1)$.
+TD-learning instability under function approximation is a long-standing
+problem~\citep{baird1995residual,tsitsiklis1997analysis}.
+Gradient TD~\citep{sutton2009fast,maei2010toward} converges for linear
+approximators; target networks~\citep{mnih2015human} and fitted
+Q-iteration~\citep{ernst2005tree} keep things stable empirically.
+The closest neighbours are \citet{vincent2024projected}, who learn a
+\emph{projected} Bellman operator end-to-end without a spectral constraint or
+closed-form fixed point, and \citet{vincent2025iqn}, who jointly learn $K$
+iterated Bellman updates, again without structural contraction.
+Our parameterization differs from both in that contraction is built into the
+architecture and the fixed point is available in $\mathcal{O}(1)$.
 
 \paragraph{Actor-critic and value regularization.}
-Soft Actor-Critic~\citep{haarnoja2018soft} adds an entropy bonus that implicitly
-regularizes the critic through a modified Bellman target; TD3~\citep{fujimoto2018addressing}
-clips the critic to reduce overestimation bias.
-Conservative Q-Learning~\citep{kumar2020conservative} adds a conservatism penalty
-for offline RL.
-\citet{nikishin2022primacy} study catastrophic interference in online RL.
-Our approach is orthogonal to all of these: we constrain the value
-\emph{parameterization} itself---fixing its functional form to be the closed-form
-fixed point of an affine contraction---rather than regularizing the function's
-range or modifying the target distribution.
+Soft Actor-Critic~\citep{haarnoja2018soft} adds an entropy bonus that
+implicitly regularizes the critic through a modified Bellman target;
+TD3~\citep{fujimoto2018addressing} clips the critic to reduce overestimation
+bias; Conservative Q-Learning~\citep{kumar2020conservative} adds a
+conservatism penalty for offline RL; \citet{nikishin2022primacy} study
+catastrophic interference in online RL.
+These methods regularize the function's range or modify the target;
+we instead fix the functional form of $V$ (or $Q$) itself to be the closed-form
+fixed point of an affine contraction, which is orthogonal to all of them.
 
 \paragraph{Koopman operator theory and successor representations.}
 Koopman-based representations lift nonlinear dynamics to linear operators in a
@@ -882,23 +878,22 @@ contraction.
 Our Contractive Linearizer is a general-purpose architecture without inductive
 bias for grid topology; as noted in \S\ref{sec:exp_planning}, VIN's advantage
 on grid tasks is precisely this architectural match.
-Crucially, VIN's operator diverges under repeated application in our experiments,
-confirming that differentiable VI does not imply contracted VI.
+VIN's operator diverges under repeated application in our experiments
+(Exp~A), so differentiable VI is not the same as contracted VI.
 
 \paragraph{Lipschitz constraints and equilibrium architectures.}
 Lipschitz-bounded layers
 \citep{miyato2018spectral,anil2019sorting,wang2023direct} and spectral-norm
 constraints in deep RL~\citep{bjorck2021towards} stabilize training by bounding
-weight matrices.
-Deep equilibrium models~\citep{bai2019deq} define a layer's output as the
-fixed point of a learned implicit operator;
-\citet{winston2020monotone} enforce equilibrium uniqueness via monotone-operator
-theory.
-We combine both ideas: the Contractive Linearizer is a DEQ whose contraction
-is simple enough ($\spb\tanh$ diagonal) to admit a \emph{closed-form} fixed
-point, and the spectral constraint acts on the \emph{composed} operator
-rather than on individual weight matrices.
-We are unaware of prior work combining a DEQ-style equilibrium layer with a
+the weight matrices themselves.
+Deep equilibrium models~\citep{bai2019deq} define a layer as the fixed point
+of a learned implicit operator, and \citet{winston2020monotone} get
+equilibrium uniqueness from monotone-operator theory.
+The Contractive Linearizer combines both lines: the contractive map is simple
+enough ($\spb\tanh$ diagonal) for a closed-form fixed point, and the spectral
+constraint sits on the composed operator rather than on individual weight
+matrices.
+To our knowledge, no prior work pairs a DEQ-style equilibrium layer with a
 structural spectral constraint for value-function parameterization.
 
 \paragraph{Conclusion.}

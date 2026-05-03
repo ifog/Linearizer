@@ -23,12 +23,12 @@
 \citation{bellman1957dynamic}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \newlabel{sec:intro}{{1}{1}{Introduction}{section.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Contributions.}{1}{section*.2}\protected@file@percent }
 \citation{bellman1957dynamic}
 \citation{baird1995residual}
 \citation{mnih2015human}
 \citation{tsitsiklis1997analysis}
 \citation{koopman1931hamiltonian,budisic2012applied}
-\@writefile{toc}{\contentsline {paragraph}{Contributions.}{2}{section*.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Background}{2}{section.2}\protected@file@percent }
 \newlabel{sec:background}{{2}{2}{Background}{section.2}{}}
 \@writefile{toc}{\contentsline {paragraph}{MDPs and Bellman operators.}{2}{section*.3}\protected@file@percent }
@@ -54,16 +54,17 @@
 \newlabel{eq:affine_collapse}{{6}{3}{Affine extension and infinite-step collapse}{equation.3.6}{}}
 \@writefile{toc}{\contentsline {paragraph}{The role of $g$ and the two regimes of our experiments.}{3}{section*.8}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{What we use, and what we do not.}{3}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Parameterization}{3}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:param}{{3.3}{3}{Parameterization}{subsection.3.3}{}}
+\newlabel{eq:operator}{{7}{3}{Parameterization}{equation.3.7}{}}
 \citation{hornik1989multilayer}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Parameterization}{4}{subsection.3.3}\protected@file@percent }
-\newlabel{sec:param}{{3.3}{4}{Parameterization}{subsection.3.3}{}}
-\newlabel{eq:operator}{{7}{4}{Parameterization}{equation.3.7}{}}
 \@writefile{toc}{\contentsline {paragraph}{Relationship between $\alpha $ and $\gamma $.}{4}{section*.10}\protected@file@percent }
 \newlabel{thm:fp}{{1}{4}{Fixed-point convergence}{theorem.1}{}}
 \newlabel{eq:fixedpoint}{{8}{4}{Fixed-point convergence}{equation.3.8}{}}
 \newlabel{rem:zspace}{{1}{4}{}{remark.1}{}}
 \newlabel{cor:bounded}{{1}{4}{Bounded values, structurally}{corollary.1}{}}
 \newlabel{prop:universal}{{1}{4}{Universality of the parameterization}{proposition.1}{}}
+\citation{tamar2016value}
 \@writefile{toc}{\contentsline {paragraph}{Consequence: the diagonal restriction is not an expressiveness bottleneck.}{5}{section*.11}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Closed-Form Inference}{5}{subsection.3.4}\protected@file@percent }
 \newlabel{sec:closedform}{{3.4}{5}{Closed-Form Inference}{subsection.3.4}{}}
@@ -75,19 +76,18 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Training}{5}{subsection.3.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{5}{section.4}\protected@file@percent }
 \newlabel{sec:experiments}{{4}{5}{Experiments}{section.4}{}}
-\citation{tamar2016value}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Planning: Convergence and Efficiency}{5}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:exp_planning}{{4.1}{5}{Planning: Convergence and Efficiency}{subsection.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Setup.}{5}{section*.15}\protected@file@percent }
 \citation{tamar2016value}
 \citation{tamar2016value}
 \citation{tamar2016value}
 \citation{tamar2016value}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Planning experiment summary. $\uparrow $ = higher is better.\relax }}{6}{table.caption.18}\protected@file@percent }
 \newlabel{tab:planning}{{1}{6}{Planning experiment summary. $\uparrow $ = higher is better.\relax }{table.caption.18}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Planning: Convergence and Efficiency}{6}{subsection.4.1}\protected@file@percent }
-\newlabel{sec:exp_planning}{{4.1}{6}{Planning: Convergence and Efficiency}{subsection.4.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{Setup.}{6}{section*.15}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {Exp A: Bellman convergence on $10\!\times \!10$ stochastic-obstacle grid worlds.} Mean RMSE of the predicted value $V_k$ against the true $V^*$ (computed by exact value iteration) under $K$ repeated applications of each model's learned operator, starting from a fixed random latent initialization $z_0$ ($\qopname  \relax o{log}_{10}$ y-axis). \leavevmode {\color  {blue}Contractive (ours)}: bounded convergence to a stable fixed point ($-38.3\%$ RMSE; small early non-monotonicity is expected---the guarantee is on the latent $z_k$, not on decoded RMSE; cf.\ Remark\nobreakspace  {}\ref  {rem:zspace}). \leavevmode {\color  {red}Unconstrained} (same architecture without the $\alpha \qopname  \relax o{tanh}$ spectral clamp) and \leavevmode {\color  {orange}VIN}\nobreakspace  {}\citep  {tamar2016value} \emph  {diverge}. \leavevmode {\color  {green!50!black}Iterative MLP} stays bounded but lacks a convergence guarantee.\relax }}{6}{figure.caption.16}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {Exp A: Bellman convergence on $10\!\times \!10$ stochastic-obstacle grid worlds.} Mean RMSE of the predicted value $V_k$ against the true $V^*$ (from exact value iteration) under $K$ repeated applications of each model's learned operator, started from a fixed random latent $z_0$ ($\qopname  \relax o{log}_{10}$ y-axis). \leavevmode {\color  {blue}Contractive} (ours) converges to a stable fixed point ($-38.3\%$ RMSE; the small early bump is expected -- Theorem\nobreakspace  {}1 guarantees convergence in $z_k$, not in decoded RMSE, see Remark\nobreakspace  {}\ref  {rem:zspace}). \leavevmode {\color  {red}Unconstrained} (same architecture, no $\alpha \qopname  \relax o{tanh}$ clamp) and \leavevmode {\color  {orange}VIN}\nobreakspace  {}\citep  {tamar2016value} both diverge. \leavevmode {\color  {green!50!black}Iterative MLP} stays bounded but has no convergence guarantee.\relax }}{6}{figure.caption.16}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:convergence}{{1}{6}{\textbf {Exp A: Bellman convergence on $10\!\times \!10$ stochastic-obstacle grid worlds.} Mean RMSE of the predicted value $V_k$ against the true $V^*$ (computed by exact value iteration) under $K$ repeated applications of each model's learned operator, starting from a fixed random latent initialization $z_0$ ($\log _{10}$ y-axis). \textcolor {blue}{Contractive (ours)}: bounded convergence to a stable fixed point ($-38.3\%$ RMSE; small early non-monotonicity is expected---the guarantee is on the latent $z_k$, not on decoded RMSE; cf.\ Remark~\ref {rem:zspace}). \textcolor {red}{Unconstrained} (same architecture without the $\spb \tanh $ spectral clamp) and \textcolor {orange}{VIN}~\citep {tamar2016value} \emph {diverge}. \textcolor {green!50!black}{Iterative MLP} stays bounded but lacks a convergence guarantee.\relax }{figure.caption.16}{}}
+\newlabel{fig:convergence}{{1}{6}{\textbf {Exp A: Bellman convergence on $10\!\times \!10$ stochastic-obstacle grid worlds.} Mean RMSE of the predicted value $V_k$ against the true $V^*$ (from exact value iteration) under $K$ repeated applications of each model's learned operator, started from a fixed random latent $z_0$ ($\log _{10}$ y-axis). \textcolor {blue}{Contractive} (ours) converges to a stable fixed point ($-38.3\%$ RMSE; the small early bump is expected -- Theorem~1 guarantees convergence in $z_k$, not in decoded RMSE, see Remark~\ref {rem:zspace}). \textcolor {red}{Unconstrained} (same architecture, no $\spb \tanh $ clamp) and \textcolor {orange}{VIN}~\citep {tamar2016value} both diverge. \textcolor {green!50!black}{Iterative MLP} stays bounded but has no convergence guarantee.\relax }{figure.caption.16}{}}
 \@writefile{toc}{\contentsline {paragraph}{Exp A: Convergence under repeated application.}{6}{section*.17}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Exp B: Closed-form vs.\ iterative inference.}{6}{section*.19}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Closed-form vs.\ iterative fixed-point computation.\relax }}{6}{table.caption.20}\protected@file@percent }
@@ -97,6 +97,7 @@
 \citation{van2016deep}
 \citation{mnih2015human,brockman2016openai}
 \citation{mnih2015human}
+\citation{van2016deep}
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces DQN benchmark results (mean $\pm $ std across 5 seeds). $\uparrow $ = higher is better.\relax }}{7}{table.caption.25}\protected@file@percent }
 \newlabel{tab:dqn}{{3}{7}{DQN benchmark results (mean $\pm $ std across 5 seeds). $\uparrow $ = higher is better.\relax }{table.caption.25}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Atari DQN results (mean $\pm $ std across 3 seeds, 2M steps). $\uparrow $ = higher is better.\relax }}{7}{table.caption.26}\protected@file@percent }
@@ -108,7 +109,6 @@
 \@writefile{toc}{\contentsline {paragraph}{Setup.}{7}{section*.24}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Q-value stability.}{7}{section*.27}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Poisoned replay stress test.}{7}{section*.28}\protected@file@percent }
-\citation{van2016deep}
 \citation{schulman2017proximal}
 \citation{todorov2012mujoco,brockman2016openai}
 \citation{fujimoto2018addressing}
