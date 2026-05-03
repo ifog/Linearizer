@@ -39,6 +39,7 @@ from models import (
     VINBaseline,
     UnconstrainedLinearizer,
     IterativeMLPBaseline,
+    FullContractiveLinearizer,
     make_contractive,
 )
 
@@ -287,6 +288,10 @@ def main():
         "contractive_05": make_contractive(state_dim=state_dim, spectral_bound=0.5),
         "contractive_09": make_contractive(state_dim=state_dim, spectral_bound=0.9),
         "contractive_099": make_contractive(state_dim=state_dim, spectral_bound=0.99),
+        "contractive_full": FullContractiveLinearizer(state_dim=state_dim,
+                                                      spectral_bound=0.9,
+                                                      n_coupling_layers=args.n_coupling_layers,
+                                                      hidden_dim=args.hidden_dim),
     }
 
     for name in args.models:

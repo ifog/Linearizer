@@ -21,6 +21,7 @@ import time
 
 import numpy as np
 import torch
+torch.set_num_threads(1)
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib
@@ -62,17 +63,17 @@ SPECTRAL_BOUND = 0.9
 def make_env(env_id, seed):
     env = gym.make(env_id, frameskip=1)
     env = AtariPreprocessing(env, frame_skip=4, grayscale_obs=True,
-                             scale_obs=True, screen_size=84)
+                             scale_obs=False, screen_size=84)
     env = FrameStack(env, num_stack=4)
     return env
 
 
 class ReplayBuffer:
     def __init__(self, capacity):
-        self.states = np.zeros((capacity, 4, 84, 84), dtype=np.float32)
+        self.states = np.zeros((capacity, 4, 84, 84), dtype=np.uint8)
         self.actions = np.zeros(capacity, dtype=np.int64)
         self.rewards = np.zeros(capacity, dtype=np.float32)
-        self.next_states = np.zeros((capacity, 4, 84, 84), dtype=np.float32)
+        self.next_states = np.zeros((capacity, 4, 84, 84), dtype=np.uint8)
         self.dones = np.zeros(capacity, dtype=np.float32)
         self.capacity = capacity
         self.pos = 0
@@ -90,10 +91,10 @@ class ReplayBuffer:
     def sample(self, batch_size):
         idx = np.random.randint(0, self.size, batch_size)
         return (
-            torch.tensor(self.states[idx], device=DEVICE),
+            torch.tensor(self.states[idx], device=DEVICE).float() / 255.0,
             torch.tensor(self.actions[idx], device=DEVICE),
             torch.tensor(self.rewards[idx], device=DEVICE),
-            torch.tensor(self.next_states[idx], device=DEVICE),
+            torch.tensor(self.next_states[idx], device=DEVICE).float() / 255.0,
             torch.tensor(self.dones[idx], device=DEVICE),
         )
 
@@ -154,7 +155,7 @@ def train_one_seed(env_id, n_actions, variant, seed):
 
     env = make_env(env_id, seed)
     obs, _ = env.reset(seed=seed)
-    obs = np.array(obs, dtype=np.float32)
+    obs = np.array(obs, dtype=np.uint8)
 
     if variant == "standard":
         q_net = StandardQNet(n_actions).to(DEVICE)
@@ -176,12 +177,12 @@ def train_one_seed(env_id, n_actions, variant, seed):
         if random.random() < eps_fn(step):
             action = env.action_space.sample()
         else:
-            s_t = torch.tensor(obs[None], device=DEVICE)
+            s_t = torch.tensor(obs[None], device=DEVICE).float() / 255.0
             with torch.no_grad():
                 action = int(q_net(s_t).argmax(dim=1).item())
 
         next_obs, reward, terminated, truncated, _ = env.step(action)
-        next_obs = np.array(next_obs, dtype=np.float32)
+        next_obs = np.array(next_obs, dtype=np.uint8)
         done = terminated or truncated
         buf.push(obs, action, reward, next_obs, float(done))
         ep_return += reward
@@ -192,7 +193,7 @@ def train_one_seed(env_id, n_actions, variant, seed):
             episode_returns.append(ep_return)
             ep_return = 0.0
             obs, _ = env.reset()
-            obs = np.array(obs, dtype=np.float32)
+            obs = np.array(obs, dtype=np.uint8)
 
         if len(buf) >= MIN_REPLAY:
             s_b, a_b, r_b, sn_b, d_b = buf.sample(BATCH_SIZE)

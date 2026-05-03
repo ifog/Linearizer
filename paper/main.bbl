@@ -1,9 +1,28 @@
-\begin{thebibliography}{23}
+\begin{thebibliography}{39}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Anil et~al.(2019)Anil, Lucas, and Grosse]{anil2019sorting}
+Cem Anil, James Lucas, and Roger Grosse.
+\newblock Sorting out {Lipschitz} function approximation.
+\newblock In \emph{Proceedings of the 36th International Conference on Machine
+  Learning (ICML)}, 2019.
+
+\bibitem[Anonymous(2026)]{anonymous2026linearizer}
+Anonymous.
+\newblock Who said neural networks aren't linear?
+\newblock In \emph{Submitted to the International Conference on Learning
+  Representations (ICLR)}, 2026.
+\newblock Under double-blind review.
+
+\bibitem[Bai et~al.(2019)Bai, Kolter, and Koltun]{bai2019deq}
+Shaojie Bai, J.~Zico Kolter, and Vladlen Koltun.
+\newblock Deep equilibrium models.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2019.
 
 \bibitem[Baird(1995)]{baird1995residual}
 Leemon Baird.
@@ -11,6 +30,14 @@ Leemon Baird.
   approximation.
 \newblock In \emph{Proceedings of the 12th International Conference on Machine
   Learning (ICML)}, 1995.
+
+\bibitem[Barreto et~al.(2017)Barreto, Dabney, Munos, Hunt, Schaul, van Hasselt,
+  and Silver]{barreto2017successor}
+Andr{\'e} Barreto, Will Dabney, R{\'e}mi Munos, Jonathan~J. Hunt, Tom Schaul,
+  Hado van Hasselt, and David Silver.
+\newblock Successor features for transfer in reinforcement learning.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2017.
 
 \bibitem[Bellemare et~al.(2017)Bellemare, Dabney, and
   Munos]{bellemare2017distributional}
@@ -32,12 +59,39 @@ Nils Bjorck, Carla~P Gomes, Bart Selman, and Kilian~Q Weinberger.
 \newblock In \emph{Advances in Neural Information Processing Systems
   (NeurIPS)}, 2021.
 
+\bibitem[Brockman et~al.(2016)Brockman, Cheung, Pettersson, Schneider,
+  Schulman, Tang, and Zaremba]{brockman2016openai}
+Greg Brockman, Vicki Cheung, Ludwig Pettersson, Jonas Schneider, John Schulman,
+  Jie Tang, and Wojciech Zaremba.
+\newblock {OpenAI Gym}.
+\newblock \emph{arXiv preprint arXiv:1606.01540}, 2016.
+
 \bibitem[Budiši{\'c} et~al.(2012)Budiši{\'c}, Mohr, and
   Mezi{\'c}]{budisic2012applied}
 Marko Budiši{\'c}, Ryan Mohr, and Igor Mezi{\'c}.
 \newblock Applied {K}oopmanism.
 \newblock \emph{Chaos: An Interdisciplinary Journal of Nonlinear Science},
   22\penalty0 (4):\penalty0 047510, 2012.
+
+\bibitem[Dayan(1993)]{dayan1993successor}
+Peter Dayan.
+\newblock Improving generalization for temporal difference learning: The
+  successor representation.
+\newblock \emph{Neural Computation}, 5\penalty0 (4):\penalty0 613--624, 1993.
+
+\bibitem[Deac et~al.(2023)Deac, Weber, Papamakarios, and
+  Battaglia]{deac2023scaling}
+Andreea Deac, Theophane Weber, George Papamakarios, and Peter Battaglia.
+\newblock Scaling up and stabilizing differentiable planning with implicit
+  differentiation.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
+
+\bibitem[Dinh et~al.(2017)Dinh, Sohl-Dickstein, and Bengio]{dinh2017density}
+Laurent Dinh, Jascha Sohl-Dickstein, and Samy Bengio.
+\newblock Density estimation using {Real NVP}.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2017.
 
 \bibitem[Ernst et~al.(2005)Ernst, Geurts, and Wehenkel]{ernst2005tree}
 Damien Ernst, Pierre Geurts, and Louis Wehenkel.
@@ -59,6 +113,12 @@ Tuomas Haarnoja, Aurick Zhou, Pieter Abbeel, and Sergey Levine.
   learning with a stochastic actor.
 \newblock In \emph{Proceedings of the 35th International Conference on Machine
   Learning (ICML)}, 2018.
+
+\bibitem[Hornik et~al.(1989)Hornik, Stinchcombe, and
+  White]{hornik1989multilayer}
+Kurt Hornik, Maxwell Stinchcombe, and Halbert White.
+\newblock Multilayer feedforward networks are universal approximators.
+\newblock \emph{Neural Networks}, 2\penalty0 (5):\penalty0 359--366, 1989.
 
 \bibitem[Koopman(1931)]{koopman1931hamiltonian}
 Bernard~O Koopman.
@@ -148,6 +208,18 @@ Aviv Tamar, Yi~Wu, Garrett Thomas, Sergey Levine, and Pieter Abbeel.
 \newblock In \emph{Advances in Neural Information Processing Systems
   (NeurIPS)}, 2016.
 
+\bibitem[Todorov et~al.(2012)Todorov, Erez, and Tassa]{todorov2012mujoco}
+Emanuel Todorov, Tom Erez, and Yuval Tassa.
+\newblock {MuJoCo}: A physics engine for model-based control.
+\newblock In \emph{Proceedings of the 2012 IEEE/RSJ International Conference on
+  Intelligent Robots and Systems}, pages 5026--5033, 2012.
+
+\bibitem[Touati et~al.(2023)Touati, Rapin, and Ollivier]{touati2023fb}
+Ahmed Touati, J{\'e}r{\'e}my Rapin, and Yann Ollivier.
+\newblock Does zero-shot reinforcement learning exist?
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
+
 \bibitem[Tsitsiklis and Van~Roy(1997)]{tsitsiklis1997analysis}
 John~N Tsitsiklis and Benjamin Van~Roy.
 \newblock An analysis of temporal-difference learning with function
@@ -160,5 +232,41 @@ Hado Van~Hasselt, Arthur Guez, and David Silver.
 \newblock Deep reinforcement learning with double q-learning.
 \newblock In \emph{Proceedings of the 30th AAAI Conference on Artificial
   Intelligence}, 2016.
+
+\bibitem[Vincent et~al.(2024)Vincent, Belousov, D'Eramo, and
+  Peters]{vincent2024projected}
+Th{\'e}o Vincent, Boris Belousov, Carlo D'Eramo, and Jan Peters.
+\newblock Parameterized projected {Bellman} operator.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial
+  Intelligence}, 2024.
+\newblock arXiv:2312.12869.
+
+\bibitem[Vincent et~al.(2025)Vincent, Palenicek, Belousov, Peters, and
+  D'Eramo]{vincent2025iqn}
+Th{\'e}o Vincent, Daniel Palenicek, Boris Belousov, Jan Peters, and Carlo
+  D'Eramo.
+\newblock Iterated $q$-network: Beyond one-step {Bellman} updates in deep
+  reinforcement learning.
+\newblock \emph{Transactions on Machine Learning Research}, 2025.
+\newblock arXiv:2403.02107.
+
+\bibitem[Wang and Manchester(2023)]{wang2023direct}
+Ruigang Wang and Ian~R. Manchester.
+\newblock Direct parameterization of {Lipschitz}-bounded deep networks.
+\newblock In \emph{Proceedings of the 40th International Conference on Machine
+  Learning (ICML)}, 2023.
+
+\bibitem[Wang et~al.(2024)Wang, Vasan, and Schmidhuber]{wang2024scaling}
+Yuhui Wang, Rishabh~Madan Vasan, and J{\"u}rgen Schmidhuber.
+\newblock Scaling value iteration networks to 5000 layers for extreme long-term
+  planning.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2024.
+
+\bibitem[Winston and Kolter(2020)]{winston2020monotone}
+Ezra Winston and J.~Zico Kolter.
+\newblock Monotone operator equilibrium networks.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2020.
 
 \end{thebibliography}

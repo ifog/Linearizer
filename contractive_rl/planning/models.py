@@ -25,7 +25,7 @@ if _parent_dir not in sys.path:
     sys.path.insert(0, _parent_dir)
 
 from shared.invertible_net import AffineCouplingNet
-from shared.contractive_operator import DiagonalContractiveOp
+from shared.contractive_operator import DiagonalContractiveOp, FullMatrixContractiveOp
 
 GRID_SIZE = 10
 STATE_DIM = GRID_SIZE * GRID_SIZE   # 100
@@ -341,3 +341,82 @@ class IterativeMLPBaseline(nn.Module):
 def make_contractive(spectral_bound: float = 0.99, **kwargs) -> ContractiveLinearizer:
     """Create a ContractiveLinearizer with the given spectral bound."""
     return ContractiveLinearizer(spectral_bound=spectral_bound, **kwargs)
+
+
+# ---------------------------------------------------------------------------
+# 5. FullContractiveLinearizer — Ablation: full A(c) instead of diagonal
+# ---------------------------------------------------------------------------
+
+class FullContractiveLinearizer(nn.Module):
+    """
+    Same as ContractiveLinearizer but with a full (non-diagonal) operator A(c).
+
+    A(c) ∈ R^{d×d} with ‖A(c)‖_2 < spectral_bound, parameterized via spectral
+    normalization (FullMatrixContractiveOp). This isolates the effect of the
+    diagonal restriction — Proposition 1 implies the parameterization is already
+    universal with diagonal Λ, so this ablation tests whether the *inductive
+    bias* of full A helps in practice.
+
+    Cost: closed-form fixed point requires solving a d×d linear system per
+    state instead of element-wise division — O(d^3) per state vs O(d).
+    """
+
+    def __init__(
+        self,
+        state_dim: int = STATE_DIM,
+        map_channels: int = MAP_CHANNELS,
+        spectral_bound: float = 0.9,
+        n_coupling_layers: int = 4,
+        hidden_dim: int = 64,
+    ):
+        super().__init__()
+        self.state_dim = state_dim
+        self.spectral_bound = spectral_bound
+
+        self.map_encoder = MapEncoder(map_channels, out_dim=CONTEXT_DIM)
+        self.g = AffineCouplingNet(dim=state_dim, n_coupling_layers=n_coupling_layers,
+                                   hidden_dim=hidden_dim)
+        self.A = FullMatrixContractiveOp(context_dim=CONTEXT_DIM, latent_dim=state_dim,
+                                         spectral_bound=spectral_bound)
+        self.b_net = nn.Sequential(
+            nn.Linear(CONTEXT_DIM, 256),
+            nn.ReLU(),
+            nn.Linear(256, state_dim),
+        )
+
+    def forward(self, V: torch.Tensor, maps: torch.Tensor) -> torch.Tensor:
+        """One step: V_{k+1} = g^{-1}(A(c) g(V) + b(c))."""
+        c = self.map_encoder(maps)
+        z = self.g.encode(V)
+        b = self.b_net(c)
+        z_next = self.A.apply(z, c) + b
+        return self.g.decode(z_next)
+
+    def iterate_loop(self, V0: torch.Tensor, maps: torch.Tensor, K: int) -> torch.Tensor:
+        V = V0
+        for _ in range(K):
+            V = self.forward(V, maps)
+        return V
+
+    def iterate_fast(self, V0: torch.Tensor, maps: torch.Tensor, K: int) -> torch.Tensor:
+        """
+        For affine T(z) = Az + b with ‖A‖_2 < 1, the K-step iterate is:
+          z_K = A^K (z_0 - z*) + z*,  z* = (I - A)^{-1} b.
+
+        We compute z* via linear solve (closed form for K = ∞) and then add
+        a residual A^K (z_0 - z*) for finite K. For K large or unspecified,
+        we just return z*.
+        """
+        c = self.map_encoder(maps)
+        z0 = self.g.encode(V0)
+        b = self.b_net(c)
+        z_star = self.A.fixed_point(b, c)        # (B, d)
+        if K is None or K >= 200:
+            return self.g.decode(z_star)
+        # Compute A^K (z0 - z*) via repeated multiplication
+        A = self.A.get_matrix(c)                 # (B, d, d)
+        delta = (z0 - z_star).unsqueeze(-1)      # (B, d, 1)
+        for _ in range(K):
+            delta = A @ delta
+        z_K = z_star + delta.squeeze(-1)
+        return self.g.decode(z_K)

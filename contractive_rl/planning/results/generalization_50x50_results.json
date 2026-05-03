@@ -1,14 +1,14 @@
 {
   "contractive_50x50": {
-    "mean_mse_50x50": 335.85363037109374,
-    "std_mse_50x50": 29.749852576979038,
+    "mean_mse_50x50": 163.18970489501953,
+    "std_mse_50x50": 36.17723809502831,
     "n_valid": 50,
     "note": "Native 50x50 model trained and evaluated on 50x50 maps."
   },
   "vin_50x50": {
-    "mean_mse_50x50": NaN,
-    "std_mse_50x50": NaN,
-    "n_valid": 0,
-    "note": "Checkpoint missing \u2014 run train.py --grid_size 50 first."
+    "mean_mse_50x50": 19.62093120574951,
+    "std_mse_50x50": 3.8847158293851867,
+    "n_valid": 50,
+    "note": "Native 50x50 model trained and evaluated on 50x50 maps."
   }
 }
