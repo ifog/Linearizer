@@ -1,0 +1,59 @@
+
+=======================================================
+  Pendulum-v0  (300k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=-1136.5 ± 39.8  value_var=7219.5
+  [contractive]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=-951.7 ± 138.0  value_var=4910.3
+  Saved: contractive_rl/ppo/../../contractive_rl/ppo/../results/pendulum_v0_ppo_results.png
+  Saved: contractive_rl/ppo/../../contractive_rl/ppo/../results/pendulum_v0_ppo_results.json
+
+=======================================================
+  PENDULUM-v0 PPO RESULTS
+=======================================================
+  StandardPPO         : -1136.5 ± 39.8  value_var=7219.5
+  ContractivePPO      :    seed=1
+    seed=2
+    final 20-ep mean=-220.3 ± 197.8  value_var=174.9
+  Saved: contractive_rl/ppo/../results/acrobot_v1_ppo_results.png
+  Saved: contractive_rl/ppo/../results/acrobot_v1_ppo_results.json
+
+=======================================================
+  Pendulum-v0  (300k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=-1061.6 ± 70.5  value_var=7472.7
+  [contractive]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=-1147.4 ± 57.4  value_var=4885.5
+  Saved: contractive_rl/ppo/../results/pendulum_v0_ppo_results.png
+  Saved: contractive_rl/ppo/../results/pendulum_v0_ppo_results.json
+
+=======================================================
+  PPO BENCHMARK SUMMARY
+=======================================================
+
+  CartPole-v1:
+    StandardPPO         : 465.3 ± 10.8  value_var=512.7
+    ContractivePPO      : 465.0 ± 26.4  value_var=233.2
+
+  Acrobot-v1:
+    StandardPPO         : -217.9 ± 199.5  value_var=180.4
+    ContractivePPO      : -220.3 ± 197.8  value_var=174.9
+
+  Pendulum-v0:
+    StandardPPO         : -1061.6 ± 70.5  value_var=7472.7
+    ContractivePPO      : -1147.4 ± 57.4  value_var=4885.5
+

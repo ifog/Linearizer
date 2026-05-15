@@ -1,0 +1,23 @@
+Device: cuda  |  HalfCheetah-v4  |  1000k steps  |  hidden=256
+============================================================
+
+[standard]
+  seed=0
+  seed=1
+  seed=2
+  -> final 20-ep mean=405.8 ± 390.0  value_var=351.0
+
+[contractive]
+  seed=0
+  seed=1
+  seed=2
+  -> final 20-ep mean=437.4 ± 154.8  value_var=346.2
+
+Saved: contractive_rl/ppo/../results/halfcheetah_v4_ppo_results.json
+Saved: contractive_rl/ppo/../results/halfcheetah_v4_ppo_results.png
+
+============================================================
+HALFCHEETAH-V4 PPO RESULTS
+============================================================
+  StandardPPO         : 405.8 ± 390.0  value_var=351
+  ContractivePPO      : 437.4 ± 154.8  value_var=346  (+7.8%)

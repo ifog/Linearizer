@@ -1,0 +1,53 @@
+Device: cpu
+Training 4000 steps, batch_size=32, grid=20x20, state_dim=400
+
+=== Generating dataset ===
+  Pre-generating 1000 maps (grid=20x20)...
+  Done: 1000 maps in 142.8s. maps=torch.Size([1000, 3, 20, 20]), V_star=torch.Size([1000, 400])
+
+=== Training vin_20x20 ===
+  [vin_20x20] step 200/4000 | loss=35.7632 bel=17.2224 fp=33.3560 multi=18.6278 t=141s
+  [vin_20x20] step 400/4000 | loss=17.9112 bel=10.7085 fp=12.0463 multi=11.7954 t=296s
+  [vin_20x20] step 600/4000 | loss=14.2778 bel=8.8437 fp=7.7117 multi=15.7824 t=440s
+  [vin_20x20] step 800/4000 | loss=11.0980 bel=7.1751 fp=4.5261 multi=16.5990 t=583s
+  [vin_20x20] step 1000/4000 | loss=10.4141 bel=6.9762 fp=3.7924 multi=15.4174 t=727s
+  [vin_20x20] step 1200/4000 | loss=10.1979 bel=6.5594 fp=3.8189 multi=17.2904 t=869s
+  [vin_20x20] step 1400/4000 | loss=9.5678 bel=6.5421 fp=3.1212 multi=14.6512 t=1040s
+  [vin_20x20] step 1600/4000 | loss=10.1389 bel=6.9180 fp=3.2628 multi=15.8955 t=1195s
+  [vin_20x20] step 1800/4000 | loss=9.8357 bel=6.4862 fp=3.5358 multi=15.8165 t=1360s
+  [vin_20x20] step 2000/4000 | loss=9.7008 bel=6.3871 fp=3.4939 multi=15.6672 t=1531s
+  [vin_20x20] step 2200/4000 | loss=9.2522 bel=6.0889 fp=3.2744 multi=15.2608 t=1699s
+  [vin_20x20] step 2400/4000 | loss=9.9584 bel=6.7414 fp=3.2964 multi=15.6877 t=1869s
+  [vin_20x20] step 2600/4000 | loss=9.1035 bel=6.3866 fp=2.8618 multi=12.8604 t=2035s
+  [vin_20x20] step 2800/4000 | loss=8.8339 bel=6.0188 fp=2.8137 multi=14.0824 t=2200s
+  [vin_20x20] step 3000/4000 | loss=9.3893 bel=6.2701 fp=3.2055 multi=15.1638 t=2367s
+  [vin_20x20] step 3200/4000 | loss=9.1368 bel=6.2276 fp=2.9408 multi=14.3881 t=2548s
+  [vin_20x20] step 3400/4000 | loss=8.9731 bel=6.1855 fp=2.8002 multi=13.8751 t=2708s
+  [vin_20x20] step 3600/4000 | loss=9.5612 bel=6.3945 fp=3.2481 multi=15.4256 t=2886s
+  [vin_20x20] step 3800/4000 | loss=9.1776 bel=6.1569 fp=3.0116 multi=15.1485 t=3045s
+  [vin_20x20] step 4000/4000 | loss=9.4040 bel=6.1605 fp=3.2549 multi=16.1605 t=3194s
+  [vin_20x20] DONE in 3194.5s | final loss=9.4040 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/vin_20x20.pt
+
+=== All training complete ===
+
+  [vin_20x20] step 4600/8000 | loss=8.1268 bel=5.7254 fp=2.3974 multi=12.0268 t=3613s
+  [vin_20x20] step 4800/8000 | loss=7.5579 bel=5.1313 fp=2.2838 multi=12.8460 t=3778s
+  [vin_20x20] step 5000/8000 | loss=7.7180 bel=5.2542 fp=2.3425 multi=12.9254 t=3933s
+  [vin_20x20] step 5200/8000 | loss=7.8472 bel=5.3522 fp=2.5117 multi=12.3916 t=4078s
+  [vin_20x20] step 5400/8000 | loss=7.2882 bel=5.1112 fp=2.1354 multi=11.0929 t=4215s
+  [vin_20x20] step 5600/8000 | loss=7.3948 bel=5.2510 fp=2.1130 multi=10.8721 t=4354s
+  [vin_20x20] step 5800/8000 | loss=7.5788 bel=5.2835 fp=2.2537 multi=11.6851 t=4481s
+  [vin_20x20] step 6000/8000 | loss=7.8169 bel=5.2463 fp=2.4175 multi=13.6191 t=4617s
+  [vin_20x20] step 6200/8000 | loss=7.8266 bel=5.1769 fp=2.5054 multi=13.9702 t=4755s
+  [vin_20x20] step 6400/8000 | loss=7.5754 bel=5.1296 fp=2.3159 multi=12.8794 t=4887s
+  [vin_20x20] step 6600/8000 | loss=7.9320 bel=5.3814 fp=2.4653 multi=13.1803 t=5017s
+  [vin_20x20] step 6800/8000 | loss=7.4108 bel=5.1410 fp=2.1454 multi=11.9702 t=5146s
+  [vin_20x20] step 7000/8000 | loss=8.5365 bel=5.6613 fp=2.8620 multi=14.4423 t=5276s
+  [vin_20x20] step 7200/8000 | loss=7.6308 bel=5.3968 fp=2.1876 multi=11.4013 t=5411s
+  [vin_20x20] step 7400/8000 | loss=7.4401 bel=4.9716 fp=2.3400 multi=12.9844 t=5547s
+  [vin_20x20] step 7600/8000 | loss=7.9335 bel=5.4179 fp=2.4029 multi=13.1422 t=5682s
+  [vin_20x20] step 7800/8000 | loss=7.5143 bel=5.1251 fp=2.4117 multi=11.8340 t=5818s
+  [vin_20x20] step 8000/8000 | loss=8.3519 bel=5.5976 fp=2.6263 multi=14.4110 t=5945s
+  [vin_20x20] DONE in 5944.9s | final loss=8.3519 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/vin_20x20.pt
+
+=== All training complete ===

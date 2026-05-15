@@ -1,0 +1,95 @@
+Device: cpu
+Training 4000 steps, batch_size=32, grid=50x50, state_dim=2500
+
+=== Generating dataset ===
+  Pre-generating 500 maps (grid=50x50)...
+   Done: 5000 maps in 4770.7s. maps=torch.Size([5000, 3, 50, 50]), V_star=torch.Size([5000, 2500])
+
+=== Training contractive_50x50 ===
+  [contractive_50x50] step 200/8000 | loss=14.9389 bel=10.4424 fp=0.8350 multi=40.7904 t=449s
+  [contractive_50x50] step 400/8000 | loss=14.3177 bel=10.2486 fp=0.3704 multi=38.8389 t=879s
+  [contractive_50x50] step 600/8000 | loss=13.6860 bel=9.9151 fp=0.2565 multi=36.4272 t=1326s
+  [contractive_50x50] step 800/8000 | loss=13.1224 bel=9.6981 fp=0.1541 multi=33.4727 t=1770s
+  [contractive_50x50] step 1000/8000 | loss=13.1019 bel=9.7657 fp=0.0867 multi=32.9279 t=2197s
+  [contractive_50x50] step 1200/8000 | loss=12.8735 bel=9.6229 fp=0.0660 multi=32.1768 t=2575s
+  [contractive_50x50] step 1400/8000 | loss=13.3782 bel=9.8611 fp=0.0797 multi=34.7729 t=2963s
+  [contractive_50x50] step 1600/8000 | loss=12.8414 bel=9.6780 fp=0.0482 multi=31.3939 t=3346s
+  [contractive_50x50] step 1800/8000 | loss=12.8571 bel=9.5896 fp=0.0458 multi=32.4465 t=3731s
+  [contractive_50x50] step 2000/8000 | loss=13.0097 bel=9.8184 fp=0.0434 multi=31.6963 t=4115s
+  [contractive_50x50] step 2200/8000 | loss=12.8114 bel=9.6704 fp=0.0533 multi=31.1431 t=4506s
+  [contractive_50x50] step 2400/8000 | loss=12.7614 bel=9.6838 fp=0.0403 multi=30.5746 t=4887s
+  [contractive_50x50] step 2600/8000 | loss=12.6632 bel=9.6801 fp=0.0400 multi=29.6308 t=5277s
+  [contractive_50x50] step 2800/8000 | loss=12.4709 bel=9.5001 fp=0.0393 multi=29.5108 t=5653s
+  [contractive_50x50] step 3000/8000 | loss=12.5675 bel=9.5732 fp=0.0388 multi=29.7500 t=6037s
+  [contractive_50x50] step 3200/8000 | loss=12.4824 bel=9.6084 fp=0.0442 multi=28.5193 t=6412s
+  [contractive_50x50] step 3400/8000 | loss=13.0589 bel=10.4078 fp=0.0508 multi=26.2568 t=6799s
+  [contractive_50x50] step 3600/8000 | loss=11.9952 bel=9.4668 fp=0.0569 multi=24.9990 t=7180s
+  [contractive_50x50] step 3800/8000 | loss=11.9272 bel=9.4663 fp=0.0628 multi=24.2947 t=7558s
+  [contractive_50x50] step 4000/8000 | loss=12.2567 bel=9.7381 fp=0.0494 multi=24.9392 t=7955s
+  [contractive_50x50] step 4200/8000 | loss=11.8601 bel=9.5129 fp=0.0435 multi=23.2540 t=8343s
+  [contractive_50x50] step 4400/8000 | loss=11.8006 bel=9.5149 fp=0.0427 multi=22.6439 t=8738s
+  [contractive_50x50] step 4600/8000 | loss=12.0026 bel=9.6893 fp=0.0387 multi=22.9394 t=9127s
+  [contractive_50x50] step 4800/8000 | loss=11.9132 bel=9.5241 fp=0.0980 multi=23.4017 t=9522s
+  [contractive_50x50] step 5000/8000 | loss=11.6928 bel=9.4456 fp=0.0405 multi=22.2689 t=9915s
+  [contractive_50x50] step 5200/8000 | loss=11.6422 bel=9.3841 fp=0.0432 multi=22.3651 t=10308s
+  [contractive_50x50] step 5400/8000 | loss=11.9930 bel=9.5892 fp=0.0410 multi=23.8337 t=10708s
+  [contractive_50x50] step 5600/8000 | loss=11.6732 bel=9.3479 fp=0.0387 multi=23.0593 t=11088s
+  [contractive_50x50] step 5800/8000 | loss=11.7355 bel=9.4762 fp=0.0390 multi=22.3983 t=11463s  [vin_50x50] step 1800/4000 | loss=15.5251 bel=9.7982 fp=5.0312 multi=32.1122 t=6831s
+  [vin_50x50] step 2000/4000 | loss=15.4409 bel=10.0300 fp=4.8331 multi=29.9432 t=7573s
+  [vin_50x50] step 2200/4000 | loss=15.6116 bel=9.8703 fp=5.0202 multi=32.3116 t=8305s
+  [vin_50x50] step 2400/4000 | loss=14.8282 bel=9.7333 fp=4.5441 multi=28.2287 t=9057s
+  [vin_50x50] step 2600/4000 | loss=15.0326 bel=9.7288 fp=4.5589 multi=30.2432 t=9867s
+  [vin_50x50] step 2800/4000 | loss=14.8486 bel=9.6114 fp=4.5308 multi=29.7177 t=10662s
+  [vin_50x50] step 3000/4000 | loss=14.9150 bel=9.7864 fp=4.5677 multi=28.4478 t=11535s
+  [vin_50x50] step 3200/4000 | loss=14.9823 bel=9.6930 fp=4.6343 multi=29.7212 t=12344s
+  [vin_50x50] step 3400/4000 | loss=14.8057 bel=9.7143 fp=4.4722 multi=28.5529 t=13089s
+  [vin_50x50] step 3600/4000 | loss=14.8795 bel=9.7091 fp=4.4491 multi=29.4588 t=13851s
+  [vin_50x50] step 3800/4000 | loss=15.0234 bel=9.6374 fp=4.5992 multi=30.8632 t=14587s
+  [vin_50x50] step 4000/4000 | loss=15.2436 bel=9.7471 fp=4.7344 multi=31.2928 t=15327s
+  [vin_50x50] DONE in 15326.9s | final loss=15.2436 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/vin_50x50.pt
+
+=== All training complete ===
+ing vin_50x50 ===
+  [vin_50x50] step 200/8000 | loss=124.2424 bel=49.7453 fp=141.2941 multi=38.5001 t=819s
+  [vin_50x50] step 400/8000 | loss=76.8339 bel=32.0997 fp=82.5534 multi=34.5758 t=1573s
+  [vin_50x50] step 600/8000 | loss=51.9511 bel=22.0528 fp=51.8113 multi=39.9262 t=2273s
+  [vin_50x50] step 800/8000 | loss=30.9989 bel=16.0604 fp=21.6868 multi=40.9512 t=2969s
+  [vin_50x50] step 1000/8000 | loss=22.7432 bel=14.2375 fp=7.4467 multi=47.8234 t=3669s
+  [vin_50x50] step 1200/8000 | loss=19.7834 bel=12.9822 fp=5.4410 multi=40.8073 t=4358s
+  [vin_50x50] step 1400/8000 | loss=18.8965 bel=12.3075 fp=5.0955 multi=40.4124 t=5032s
+  [vin_50x50] step 1600/8000 | loss=17.0433 bel=11.3726 fp=4.2745 multi=35.3340 t=5682s
+  [vin_50x50] step 1800/8000 | loss=16.4781 bel=10.5583 fp=4.3585 multi=37.4056 t=6309s
+  [vin_50x50] step 2000/8000 | loss=15.9571 bel=10.3543 fp=4.2686 multi=34.6845 t=6906s
+  [vin_50x50] step 2200/8000 | loss=15.5034 bel=9.9859 fp=4.2909 multi=33.7199 t=7508s
+  [vin_50x50] step 2400/8000 | loss=15.6230 bel=10.2188 fp=4.4297 multi=31.8928 t=8105s
+  [vin_50x50] step 2600/8000 | loss=15.3344 bel=9.9179 fp=4.3767 multi=32.2816 t=8706s
+  [vin_50x50] step 2800/8000 | loss=15.2342 bel=10.0876 fp=4.2779 multi=30.0770 t=9316s
+  [vin_50x50] step 3000/8000 | loss=15.2206 bel=10.0007 fp=4.3291 multi=30.5537 t=9921s
+  [vin_50x50] step 3200/8000 | loss=15.4046 bel=10.0682 fp=4.4886 multi=30.9212 t=10532s
+  [vin_50x50] step 3400/8000 | loss=14.8987 bel=9.6539 fp=4.3037 multi=30.9303 t=11135s
+  [vin_50x50] step 3600/8000 | loss=15.1467 bel=9.9196 fp=4.4319 multi=30.1119 t=11738s
+  [vin_50x50] step 3800/8000 | loss=15.1411 bel=9.5787 fp=4.6141 multi=32.5534 t=12335s
+  [vin_50x50] step 4000/8000 | loss=15.4463 bel=9.5483 fp=4.8905 multi=34.5271 t=12939s
+  [vin_50x50] step 4200/8000 | loss=14.8930 bel=9.8049 fp=4.2996 multi=29.3835 t=13543s
+  [vin_50x50] step 4400/8000 | loss=14.6149 bel=9.6265 fp=4.2011 multi=28.8781 t=14144s
+  [vin_50x50] step 4600/8000 | loss=14.6595 bel=9.6263 fp=4.2814 multi=28.9249 t=14735s
+  [vin_50x50] step 4800/8000 | loss=15.0498 bel=9.6963 fp=4.5149 multi=30.9602 t=15323s
+  [vin_50x50] step 5000/8000 | loss=14.4400 bel=9.5814 fp=4.1145 multi=28.0139 t=15917s
+  [vin_50x50] step 5200/8000 | loss=14.4200 bel=9.4841 fp=4.2486 multi=28.1155 t=16511s
+  [vin_50x50] step 5400/8000 | loss=15.1190 bel=9.4300 fp=4.6764 multi=33.5077 t=17111s
+  [vin_50x50] step 5600/8000 | loss=14.6965 bel=9.4968 fp=4.3834 multi=30.0793 t=17706s
+  [vin_50x50] step 5800/8000 | loss=14.3893 bel=9.2199 fp=4.3914 multi=29.7364 t=18306s
+  [vin_50x50] step 6000/8000 | loss=14.3868 bel=9.3034 fp=4.3062 multi=29.3024 t=18904s
+  [vin_50x50] step 6200/8000 | loss=14.9352 bel=9.4003 fp=4.6201 multi=32.2484 t=19512s
+  [vin_50x50] step 6400/8000 | loss=14.2942 bel=9.4668 fp=4.0828 multi=27.8596 t=20107s
+  [vin_50x50] step 6600/8000 | loss=14.8529 bel=9.3568 fp=4.5831 multi=32.0457 t=20709s
+  [vin_50x50] step 6800/8000 | loss=14.2955 bel=9.3756 fp=4.1907 multi=28.2453 t=21310s
+  [vin_50x50] step 7000/8000 | loss=14.7910 bel=9.3881 fp=4.5632 multi=31.2131 t=21917s
+  [vin_50x50] step 7200/8000 | loss=14.5601 bel=9.3127 fp=4.4323 multi=30.3120 t=22525s
+  [vin_50x50] step 7400/8000 | loss=14.8006 bel=9.4505 fp=4.5331 multi=30.8358 t=23129s
+  [vin_50x50] step 7600/8000 | loss=14.4214 bel=9.3400 fp=4.3292 multi=29.1683 t=23732s
+  [vin_50x50] step 7800/8000 | loss=14.6289 bel=9.3263 fp=4.4354 multi=30.8488 t=24343s
+  [vin_50x50] step 8000/8000 | loss=14.6677 bel=9.3768 fp=4.5058 multi=30.3791 t=24948s
+  [vin_50x50] DONE in 24948.0s | final loss=14.6677 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/vin_50x50.pt
+
+=== All training complete ===

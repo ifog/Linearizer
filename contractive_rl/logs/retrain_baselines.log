@@ -1,0 +1,137 @@
+Device: cpu
+Training 8000 steps, batch_size=32, grid=10x10, state_dim=100
+
+=== Generating dataset ===
+  Pre-generating 5000 maps (grid=10x10)...
+  Done: 5000 maps in 195.9s. maps=torch.Size([5000, 3, 10, 10]), V_star=torch.Size([5000, 100])
+
+=== Training vin ===
+  [vin] step 200/8000 | loss=8.9161 bel=5.2011 fp=5.8611 multi=7.8443 t=37s
+  [vin] step 400/8000 | loss=8.6122 bel=4.6580 fp=5.1986 multi=13.5484 t=70s
+  [vin] step 600/8000 | loss=6.0648 bel=3.9903 fp=2.5818 multi=7.8360 t=106s
+  [vin] step 800/8000 | loss=5.3567 bel=3.7030 fp=1.9743 multi=6.6656 t=143s
+  [vin] step 1000/8000 | loss=4.8933 bel=3.2767 fp=1.7990 multi=7.1716 t=189s
+  [vin] step 1200/8000 | loss=4.6122 bel=3.2636 fp=1.6468 multi=5.2522 t=230s
+  [vin] step 1400/8000 | loss=6.5205 bel=3.7308 fp=3.1736 multi=12.0296 t=269s
+  [vin] step 1600/8000 | loss=4.7790 bel=3.2925 fp=1.7281 multi=6.2239 t=308s
+  [vin] step 1800/8000 | loss=4.9873 bel=3.6633 fp=1.6179 multi=5.1498 t=340s
+  [vin] step 2000/8000 | loss=5.6263 bel=4.1369 fp=1.9149 multi=5.3187 t=380s
+  [vin] step 2200/8000 | loss=3.6604 bel=2.4043 fp=1.3468 multi=5.8279 t=416s
+  [vin] step 2400/8000 | loss=5.4863 bel=3.7969 fp=2.0165 multi=6.8126 t=451s
+  [vin] step 2600/8000 | loss=4.9322 bel=3.4022 fp=1.7590 multi=6.5049 t=491s
+  [vin] step 2800/8000 | loss=4.6521 bel=3.2262 fp=1.7219 multi=5.6497 t=527s
+  [vin] step 3000/8000 | loss=4.2151 bel=3.0609 fp=1.2755 multi=5.1653 t=567s
+  [vin] step 3200/8000 | loss=6.4048 bel=3.7763 fp=2.7873 multi=12.3481 t=602s
+  [vin] step 3400/8000 | loss=3.6365 bel=2.6750 fp=1.0708 multi=4.2610 t=638s
+  [vin] step 3600/8000 | loss=5.3719 bel=3.1711 fp=2.3225 multi=10.3962 t=680s
+  [vin] step 3800/8000 | loss=4.4491 bel=3.2810 fp=1.3236 multi=5.0634 t=719s
+  [vin] step 4000/8000 | loss=5.0308 bel=3.7779 fp=1.4262 multi=5.3975 t=754s
+  [vin] step 4200/8000 | loss=3.4056 bel=2.5442 fp=0.9100 multi=4.0646 t=797s
+  [vin] step 4400/8000 | loss=3.7932 bel=2.6288 fp=1.2933 multi=5.1781 t=836s
+  [vin] step 4600/8000 | loss=3.6939 bel=2.7300 fp=1.0836 multi=4.2207 t=883s
+  [vin] step 4800/8000 | loss=3.5400 bel=2.4808 fp=1.1408 multi=4.8885 t=928s
+  [vin] step 5000/8000 | loss=4.8238 bel=3.5805 fp=1.4982 multi=4.9425 t=966s
+  [vin] step 5200/8000 | loss=3.8052 bel=2.8053 fp=1.0709 multi=4.6448 t=1010s
+  [vin] step 5400/8000 | loss=4.3657 bel=3.1542 fp=1.3206 multi=5.5124 t=1050s
+  [vin] step 5600/8000 | loss=4.4740 bel=3.3365 fp=1.3158 multi=4.7959 t=1090s
+  [vin] step 5800/8000 | loss=5.0926 bel=3.0799 fp=2.1428 multi=9.4132 t=1132s
+  [vin] step 6000/8000 | loss=5.6220 bel=3.3900 fp=2.4273 multi=10.1831 t=1175s
+  [vin] step 6200/8000 | loss=4.7256 bel=3.3730 fp=1.6280 multi=5.3861 t=1214s
+  [vin] step 6400/8000 | loss=5.7787 bel=3.4465 fp=2.4934 multi=10.8556 t=1253s
+  [vin] step 6600/8000 | loss=4.3949 bel=3.2694 fp=1.3178 multi=4.6658 t=1289s
+  [vin] step 6800/8000 | loss=4.1240 bel=3.0964 fp=1.1275 multi=4.6388 t=1323s
+  [vin] step 7000/8000 | loss=4.5659 bel=3.4710 fp=1.3334 multi=4.2824 t=1360s
+  [vin] step 7200/8000 | loss=4.0243 bel=2.9765 fp=1.1150 multi=4.9034 t=1405s
+  [vin] step 7400/8000 | loss=3.4832 bel=2.5113 fp=1.0851 multi=4.2929 t=1440s
+  [vin] step 7600/8000 | loss=4.1992 bel=3.1333 fp=1.2593 multi=4.3625 t=1478s
+  [vin] step 7800/8000 | loss=3.6728 bel=2.8476 fp=0.8945 multi=3.7795 t=1516s
+  [vin] step 8000/8000 | loss=3.5248 bel=2.6290 fp=0.9968 multi=3.9739 t=1557s
+  [vin] DONE in 1557.3s | final loss=3.5248 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/vin.pt
+
+=== Training unconstrained ===
+  [unconstrained] step 200/8000 | loss=7.8603 bel=5.2929 fp=3.0106 multi=10.6209 t=43s
+  [unconstrained] step 400/8000 | loss=9.6985 bel=5.4381 fp=5.3891 multi=15.6582 t=85s
+  [unconstrained] step 600/8000 | loss=6.7338 bel=4.9584 fp=1.4016 multi=10.7462 t=136s
+  [unconstrained] step 800/8000 | loss=6.2963 bel=4.7723 fp=0.9656 multi=10.4122 t=182s
+  [unconstrained] step 1000/8000 | loss=5.8584 bel=4.3679 fp=1.0613 multi=9.5983 t=228s
+  [unconstrained] step 1200/8000 | loss=5.4526 bel=3.9746 fp=0.8768 multi=10.3963 t=269s
+  [unconstrained] step 1400/8000 | loss=7.8073 bel=5.6222 fp=1.4217 multi=14.7428 t=324s
+  [unconstrained] step 1600/8000 | loss=5.9807 bel=4.6932 fp=0.6634 multi=9.5585 t=369s
+  [unconstrained] step 1800/8000 | loss=6.3641 bel=5.0597 fp=0.7539 multi=9.2741 t=420s
+  [unconstrained] step 2000/8000 | loss=7.0903 bel=5.7120 fp=0.7163 multi=10.2011 t=466s
+  [unconstrained] step 2200/8000 | loss=4.7373 bel=3.6311 fp=0.6931 multi=7.5964 t=515s
+  [unconstrained] step 2400/8000 | loss=6.7150 bel=5.4443 fp=0.8103 multi=8.6562 t=566s
+  [unconstrained] step 2600/8000 | loss=6.0940 bel=5.0471 fp=0.5669 multi=7.6354 t=616s
+  [unconstrained] step 2800/8000 | loss=5.6520 bel=4.6074 fp=0.6015 multi=7.4396 t=671s
+  [unconstrained] step 3000/8000 | loss=5.4977 bel=4.5451 fp=0.5720 multi=6.6656 t=720s
+  [unconstrained] step 3200/8000 | loss=7.3321 bel=5.7587 fp=0.9604 multi=10.9319 t=780s
+  [unconstrained] step 3400/8000 | loss=4.8573 bel=4.0514 fp=0.4592 multi=5.7634 t=820s
+  [unconstrained] step 3600/8000 | loss=6.2920 bel=4.5950 fp=1.4570 multi=9.6849 t=871s
+  [unconstrained] step 3800/8000 | loss=5.2646 bel=4.4591 fp=0.4268 multi=5.9211 t=916s
+  [unconstrained] step 4000/8000 | loss=5.8098 bel=4.9222 fp=0.4831 multi=6.4609 t=965s
+  [unconstrained] step 4200/8000 | loss=4.1650 bel=3.3853 fp=0.4575 multi=5.5095 t=1014s
+  [unconstrained] step 4400/8000 | loss=4.7155 bel=3.9196 fp=0.4133 multi=5.8925 t=1069s
+  [unconstrained] step 4600/8000 | loss=5.0462 bel=4.2038 fp=0.5031 multi=5.9091 t=1117s
+  [unconstrained] step 4800/8000 | loss=4.3574 bel=3.6152 fp=0.3923 multi=5.4611 t=1161s
+  [unconstrained] step 5000/8000 | loss=6.3670 bel=5.4816 fp=0.4534 multi=6.5870 t=1217s
+  [unconstrained] step 5200/8000 | loss=5.2786 bel=4.4916 fp=0.4442 multi=5.6490 t=1265s
+  [unconstrained] step 5400/8000 | loss=5.7302 bel=4.8919 fp=0.4541 multi=6.1126 t=1320s
+  [unconstrained] step 5600/8000 | loss=5.8746 bel=5.0995 fp=0.4364 multi=5.5685 t=1380s
+  [unconstrained] step 5800/8000 | loss=5.8602 bel=4.5341 fp=0.7735 multi=9.3935 t=1435s
+  [unconstrained] step 6000/8000 | loss=5.7303 bel=4.5993 fp=0.4055 multi=9.2830 t=1489s
+  [unconstrained] step 6200/8000 | loss=5.9791 bel=5.1381 fp=0.4085 multi=6.3682 t=1546s
+  [unconstrained] step 6400/8000 | loss=6.1075 bel=4.9010 fp=0.4566 multi=9.7820 t=1603s
+  [unconstrained] step 6600/8000 | loss=5.1009 bel=4.2766 fp=0.3343 multi=6.5707 t=1658s
+  [unconstrained] step 6800/8000 | loss=4.9952 bel=4.2710 fp=0.3448 multi=5.5176 t=1711s
+  [unconstrained] step 7000/8000 | loss=5.5610 bel=4.6889 fp=0.4796 multi=6.3229 t=1765s
+  [unconstrained] step 7200/8000 | loss=5.0566 bel=4.2257 fp=0.4712 multi=5.9532 t=1816s
+  [unconstrained] step 7400/8000 | loss=4.4760 bel=3.6944 fp=0.4174 multi=5.7291 t=1868s
+  [unconstrained] step 7600/8000 | loss=5.1693 bel=4.4197 fp=0.3739 multi=5.6268 t=1917s
+  [unconstrained] step 7800/8000 | loss=4.6220 bel=3.9424 fp=0.3625 multi=4.9836 t=1968s
+  [unconstrained] step 8000/8000 | loss=4.5286 bel=3.8291 fp=0.3728 multi=5.1308 t=2024s
+  [unconstrained] DONE in 2024.0s | final loss=4.5286 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/unconstrained.pt
+
+=== Training iterative_mlp ===
+  [iterative_mlp] step 200/8000 | loss=14.5921 bel=12.4481 fp=0.8305 multi=17.2879 t=32s
+  [iterative_mlp] step 400/8000 | loss=16.7705 bel=13.4729 fp=2.2334 multi=21.8081 t=69s
+  [iterative_mlp] step 600/8000 | loss=13.4934 bel=11.5836 fp=0.5887 multi=16.1555 t=105s
+  [iterative_mlp] step 800/8000 | loss=11.9724 bel=10.2281 fp=0.6331 multi=14.2776 t=138s
+  [iterative_mlp] step 1000/8000 | loss=10.0151 bel=8.4996 fp=0.3911 multi=13.1995 t=174s
+  [iterative_mlp] step 1200/8000 | loss=8.2269 bel=6.7539 fp=0.3301 multi=13.0788 t=210s
+  [iterative_mlp] step 1400/8000 | loss=11.6370 bel=8.7932 fp=2.1798 multi=17.5390 t=239s
+  [iterative_mlp] step 1600/8000 | loss=8.2376 bel=6.9046 fp=0.3653 multi=11.5033 t=267s
+  [iterative_mlp] step 1800/8000 | loss=8.6414 bel=7.2979 fp=0.2564 multi=12.1520 t=294s
+  [iterative_mlp] step 2000/8000 | loss=9.3218 bel=7.9490 fp=0.1542 multi=12.9574 t=322s
+  [iterative_mlp] step 2200/8000 | loss=5.8130 bel=4.6116 fp=0.3211 multi=10.4086 t=352s
+  [iterative_mlp] step 2400/8000 | loss=8.3256 bel=7.0410 fp=0.1382 multi=12.1547 t=386s
+  [iterative_mlp] step 2600/8000 | loss=7.3987 bel=6.2566 fp=0.3298 multi=9.7718 t=422s
+  [iterative_mlp] step 2800/8000 | loss=6.8735 bel=5.8254 fp=0.0836 multi=10.0622 t=453s
+  [iterative_mlp] step 3000/8000 | loss=5.9974 bel=5.0702 fp=0.1595 multi=8.4742 t=489s
+  [iterative_mlp] step 3200/8000 | loss=8.5074 bel=6.8382 fp=0.5182 multi=14.1007 t=522s
+  [iterative_mlp] step 3400/8000 | loss=5.1869 bel=4.4472 fp=0.0559 multi=7.1180 t=553s
+  [iterative_mlp] step 3600/8000 | loss=7.0053 bel=4.9560 fp=1.5950 multi=12.5190 t=590s
+  [iterative_mlp] step 3800/8000 | loss=5.8086 bel=5.0232 fp=0.0298 multi=7.7047 t=620s
+  [iterative_mlp] step 4000/8000 | loss=6.4203 bel=5.5754 fp=0.0753 multi=8.0719 t=651s
+  [iterative_mlp] step 4200/8000 | loss=4.5197 bel=3.8160 fp=0.0810 multi=6.6313 t=678s
+  [iterative_mlp] step 4400/8000 | loss=4.8996 bel=4.1567 fp=0.0309 multi=7.2743 t=707s
+  [iterative_mlp] step 4600/8000 | loss=4.5508 bel=3.8687 fp=0.0296 multi=6.6735 t=737s
+  [iterative_mlp] step 4800/8000 | loss=4.3868 bel=3.6931 fp=0.0673 multi=6.6008 t=765s
+  [iterative_mlp] step 5000/8000 | loss=6.3185 bel=5.4638 fp=0.0720 multi=8.1867 t=791s
+  [iterative_mlp] step 5200/8000 | loss=5.0574 bel=4.3344 fp=0.0887 multi=6.7869 t=823s
+  [iterative_mlp] step 5400/8000 | loss=5.4815 bel=4.6867 fp=0.0690 multi=7.6033 t=848s
+  [iterative_mlp] step 5600/8000 | loss=6.1023 bel=5.3820 fp=0.0192 multi=7.1072 t=878s
+  [iterative_mlp] step 5800/8000 | loss=6.4247 bel=4.5192 fp=1.5352 multi=11.3789 t=904s
+  [iterative_mlp] step 6000/8000 | loss=6.6178 bel=4.7359 fp=1.3665 multi=11.9858 t=932s
+  [iterative_mlp] step 6200/8000 | loss=5.7100 bel=4.8957 fp=0.0181 multi=8.0526 t=958s
+  [iterative_mlp] step 6400/8000 | loss=6.4116 bel=4.5999 fp=1.1801 multi=12.2165 t=986s
+  [iterative_mlp] step 6600/8000 | loss=5.0659 bel=4.2704 fp=0.0469 multi=7.7201 t=1018s
+  [iterative_mlp] step 6800/8000 | loss=4.9476 bel=4.2651 fp=0.0269 multi=6.6909 t=1046s
+  [iterative_mlp] step 7000/8000 | loss=5.3844 bel=4.6544 fp=0.0289 multi=7.1556 t=1073s
+  [iterative_mlp] step 7200/8000 | loss=4.9560 bel=4.1832 fp=0.1496 multi=6.9806 t=1102s
+  [iterative_mlp] step 7400/8000 | loss=4.3273 bel=3.6589 fp=0.0341 multi=6.5131 t=1131s
+  [iterative_mlp] step 7600/8000 | loss=4.9620 bel=4.2571 fp=0.0867 multi=6.6154 t=1162s
+  [iterative_mlp] step 7800/8000 | loss=4.6279 bel=4.0221 fp=0.0217 multi=5.9497 t=1196s
+  [iterative_mlp] step 8000/8000 | loss=4.2308 bel=3.5961 fp=0.0328 multi=6.1830 t=1225s
+  [iterative_mlp] DONE in 1224.7s | final loss=4.2308 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/iterative_mlp.pt
+
+=== All training complete ===

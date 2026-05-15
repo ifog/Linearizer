@@ -1,0 +1,4 @@
+[gpu0_queue] start at Sun May  3 09:29:49 AM IDT 2026 — waiting for HalfCheetah PID 2020966
+[gpu0_queue] HalfCheetah finished at Sun May  3 05:19:50 PM IDT 2026 — launching Pong
+[gpu0_queue] Pong finished at Wed May  6 01:09:00 PM IDT 2026 — launching SpaceInvaders
+[gpu0_queue] SpaceInvaders finished at Wed May  6 10:01:25 PM IDT 2026 — queue done

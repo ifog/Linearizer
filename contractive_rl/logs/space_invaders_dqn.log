@@ -1,0 +1,45 @@
+Device: cuda  |  ALE/SpaceInvaders-v5 (pixel, 4-frame stack)  |  2000k steps  |  3 seeds
+============================================================
+
+[standard]
+  seed=0
+A.L.E: Arcade Learning Environment (version 0.8.1+53f58b7)
+[Powered by Stella]
+    step=200k  recent_return=207.50  eps=0.604  t=1205s
+    step=400k  recent_return=246.75  eps=0.208  t=2024s
+    step=600k  recent_return=297.25  eps=0.010  t=2905s
+    step=800k  recent_return=236.50  eps=0.010  t=3762s
+    step=1000k  recent_return=226.75  eps=0.010  t=4645s
+    step=1200k  recent_return=265.25  eps=0.010  t=5522s
+    step=1400k  recent_return=217.50  eps=0.010  t=6631s
+    step=1600k  recent_return=284.50  eps=0.010  t=7594s
+    step=1800k  recent_return=268.50  eps=0.010  t=8513s
+    step=2000k  recent_return=280.75  eps=0.010  t=9405s
+  seed=1
+    step=200k  recent_return=219.25  eps=0.604  t=837s
+    step=400k  recent_return=239.50  eps=0.208  t=1732s
+    step=600k  recent_return=247.75  eps=0.010  t=2632s
+    step=800k  recent_return=372.50  eps=0.010  t=3513s
+    step=1000k  recent_return=319.50  eps=0.010  t=4381s
+    step=1200k  recent_return=325.25  eps=0.010  t=5237s
+    step=1400k  recent_return=242.75  eps=0.010  t=6124s
+    step=1600k  recent_return=312.25  eps=0.010  t=7254s
+    step=1800k  recent_return=337.00  eps=0.010  t=8657s
+    step=2000k  recent_return=263.00  eps=0.010  t=9605s
+  seed=2
+    step=200k  recent_return=158.25  eps=0.604  t=785s
+    step=400k  recent_return=229.00  eps=0.208  t=1670s
+    step=600k  recent_return=273.50  eps=0.010  t=2634s
+    step=800k  recent_return=293.75  eps=0.010  t=3612s
+    step=1000k  recent_return=221.75  eps=0.010  t=4600s
+    step=1200k  recent_return=307.25  eps=0.010  t=5600s
+    step=1400k  recent_return=339.25  eps=0.010  t=6599s
+    step=1600k  recent_return=256.50  eps=0.010  t=7599s
+    step=1800k  recent_return=255.50  eps=0.010  t=8612s
+    step=2000k  recent_return=323.25  eps=0.010  t=9646s
+  -> final 20-ep mean=289.00 ± 25.28
+
+[contractive]
+  seed=0
+    step=200k  recent_return=222.75  eps=0.604  t=1020s
+    step=400k  recent_return=233.25  eps=0.208  t=2195s

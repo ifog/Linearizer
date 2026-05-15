@@ -1,0 +1,29 @@
+Device: cpu
+Training 25000 steps, batch_size=32, grid=10x10, state_dim=100
+
+=== Generating dataset ===
+  Pre-generating 5000 maps (grid=10x10)...
+  Done: 5000 maps in 116.7s. maps=torch.Size([5000, 3, 10, 10]), V_star=torch.Size([5000, 100])
+
+=== Training contractive ===
+  [contractive] step 200/25000 | loss=7.0927 bel=4.8692 fp=1.3263 multi=8.9725 t=3745s
+  [contractive] step 400/25000 | loss=10.8716 bel=5.2077 fp=4.1617 multi=15.0215 t=7614s
+  [contractive] step 600/25000 | loss=6.6375 bel=4.9369 fp=0.7506 multi=9.4997 t=11143s
+  [contractive] step 800/25000 | loss=6.1392 bel=4.7756 fp=0.4494 multi=9.1412 t=15159s
+  [contractive] step 1000/25000 | loss=5.7805 bel=4.4638 fp=0.4410 multi=8.7578 t=19452s
+  [contractive] step 1200/25000 | loss=5.2696 bel=3.9109 fp=0.4072 multi=9.5155 t=23693s
+  [contractive] step 1400/25000 | loss=7.7765 bel=5.4471 fp=0.9849 multi=13.4451 t=28106s
+  [contractive] step 1600/25000 | loss=5.6390 bel=4.4177 fp=0.3605 multi=8.6078 t=32670s
+  [contractive] step 1800/25000 | loss=6.2722 bel=5.0824 fp=0.3463 multi=8.4356 t=36843s
+  [contractive] step 2000/25000 | loss=6.9042 bel=5.6168 fp=0.3462 multi=9.4118 t=41823s
+  [contractive] step 2200/25000 | loss=4.7204 bel=3.5034 fp=0.3588 multi=8.5823 t=47026s
+  [contractive] step 2400/25000 | loss=6.7298 bel=5.3226 fp=0.3513 multi=10.5578 t=51252s
+  [contractive] step 2600/25000 | loss=6.1368 bel=4.9399 fp=0.2838 multi=9.1309 t=55422s
+  [contractive] step 2800/25000 | loss=5.6961 bel=4.5266 fp=0.3224 multi=8.4712 t=59748s
+  [contractive] step 3000/25000 | loss=5.3587 bel=4.3938 fp=0.2794 multi=6.8551 t=64037s
+  [contractive] step 3200/25000 | loss=7.4831 bel=5.6294 fp=0.6434 multi=12.1036 t=67700s
+  [contractive] step 3400/25000 | loss=4.8293 bel=4.0135 fp=0.2491 multi=5.6673 t=71228s
+  [contractive] step 3600/25000 | loss=6.1972 bel=4.3260 fp=1.0480 multi=8.2308 t=74784s
+  [contractive] step 3800/25000 | loss=5.0874 bel=4.2390 fp=0.2436 multi=6.0482 t=78328s
+  [contractive] step 4000/25000 | loss=5.5588 bel=4.7038 fp=0.2330 multi=6.2195 t=81869s
+  [contractive] step 4200/25000 | loss=4.0722 bel=3.3483 fp=0.2209 multi=5.0301 t=85360s

@@ -1,0 +1,45 @@
+
+=======================================================
+  CartPole-v1  (200k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=446.6 ± 21.7  value_var=532.1
+  [contractive]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=457.6 ± 51.8  value_var=331.2
+  Saved: contractive_rl/ppo/../results/cartpole_v1_ppo_results.png
+  Saved: contractive_rl/ppo/../results/cartpole_v1_ppo_results.json
+
+=======================================================
+  Acrobot-v1  (500k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=-85.7 ± 3.0  value_var=212.6
+  [contractive]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=-80.1 ± 3.8  value_var=217.9
+  Saved: contractive_rl/ppo/../results/acrobot_v1_ppo_results.png
+  Saved: contractive_rl/ppo/../results/acrobot_v1_ppo_results.json
+
+=======================================================
+  PPO BENCHMARK SUMMARY
+=======================================================
+
+  CartPole-v1:
+    StandardPPO         : 446.6 ± 21.7  value_var=532.1
+    ContractivePPO      : 457.6 ± 51.8  value_var=331.2
+
+  Acrobot-v1:
+    StandardPPO         : -85.7 ± 3.0  value_var=212.6
+    ContractivePPO      : -80.1 ± 3.8  value_var=217.9
+

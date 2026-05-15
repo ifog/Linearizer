@@ -1,0 +1,22 @@
+Device: cpu
+Training 4000 steps, batch_size=32, grid=20x20, state_dim=400
+
+=== Generating dataset ===
+  Pre-generating 1000 maps (grid=20x20)...
+  Done: 1000 maps in 160.4s. maps=torch.Size([1000, 3, 20, 20]), V_star=torch.Size([1000, 400])
+
+=== Training vin_20x20 ===
+  [vin_20x20] step 200/4000 | loss=30.7010 bel=14.0744 fp=29.8106 multi=17.2133 t=174s
+  [vin_20x20] step 400/4000 | loss=17.9267 bel=10.0752 fp=13.1185 multi=12.9231 t=332s
+  [vin_20x20] step 600/4000 | loss=13.9993 bel=8.2807 fp=7.8927 multi=17.7229 t=486s
+  [vin_20x20] step 800/4000 | loss=10.4959 bel=6.5095 fp=4.1532 multi=19.0985 t=655s
+  [vin_20x20] step 1000/4000 | loss=9.6063 bel=6.3894 fp=3.1436 multi=16.4508 t=818s
+  [vin_20x20] step 1200/4000 | loss=9.6499 bel=6.3846 fp=3.1423 multi=16.9413 t=984s
+  [vin_20x20] step 1400/4000 | loss=9.0779 bel=6.2718 fp=2.6492 multi=14.8157 t=1153s
+  [vin_20x20] step 1600/4000 | loss=9.5754 bel=6.5784 fp=2.8256 multi=15.8419 t=1303s
+  [vin_20x20] step 1800/4000 | loss=9.2778 bel=6.2049 fp=3.0223 multi=15.6173 t=1470s
+  [vin_20x20] step 2000/4000 | loss=9.2164 bel=6.2121 fp=2.9602 multi=15.2419 t=1636s
+  [vin_20x20] step 2200/4000 | loss=8.7928 bel=5.9408 fp=2.7816 multi=14.6117 t=1815s
+  [vin_20x20] step 2400/4000 | loss=9.3453 bel=6.4210 fp=2.8544 multi=14.9708 t=1974s
+  [vin_20x20] step 2600/4000 | loss=8.6145 bel=6.0945 fp=2.5191 multi=12.6053 t=2144s
+  [vin_20x20] step 2800/4000 | loss=8.4053 bel=5.7975 fp=2.4395 multi=13.8802 t=2316s

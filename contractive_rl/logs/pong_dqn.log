@@ -1,0 +1,61 @@
+Device: cuda  |  ALE/Pong-v5 (pixel, 4-frame stack)  |  2000k steps  |  3 seeds
+============================================================
+
+[standard]
+  seed=0
+A.L.E: Arcade Learning Environment (version 0.8.1+53f58b7)
+[Powered by Stella]
+    step=200k  recent_return=-17.65  eps=0.604  t=4647s
+    step=400k  recent_return=-13.55  eps=0.208  t=6325s
+    step=600k  recent_return=-0.70  eps=0.010  t=10880s
+    step=800k  recent_return=11.50  eps=0.010  t=18223s
+    step=1000k  recent_return=9.65  eps=0.010  t=25669s
+    step=1200k  recent_return=12.15  eps=0.010  t=33122s
+    step=1400k  recent_return=12.35  eps=0.010  t=40564s
+    step=1600k  recent_return=12.50  eps=0.010  t=48010s
+    step=1800k  recent_return=13.00  eps=0.010  t=51627s
+    step=2000k  recent_return=12.25  eps=0.010  t=55369s
+  seed=1
+    step=200k  recent_return=-20.20  eps=0.604  t=2108s
+    step=400k  recent_return=-20.65  eps=0.208  t=3924s
+    step=600k  recent_return=-20.80  eps=0.010  t=5951s
+    step=800k  recent_return=-20.95  eps=0.010  t=8435s
+    step=1000k  recent_return=-20.90  eps=0.010  t=12249s
+    step=1200k  recent_return=-20.95  eps=0.010  t=17867s
+    step=1400k  recent_return=-20.95  eps=0.010  t=22541s
+    step=1600k  recent_return=-20.85  eps=0.010  t=28629s
+    step=1800k  recent_return=-20.90  eps=0.010  t=36177s
+    step=2000k  recent_return=-20.85  eps=0.010  t=42621s
+  seed=2
+    step=200k  recent_return=-18.35  eps=0.604  t=1784s
+    step=400k  recent_return=-15.40  eps=0.208  t=5944s
+    step=600k  recent_return=-3.30  eps=0.010  t=12839s
+    step=800k  recent_return=9.50  eps=0.010  t=20368s
+    step=1000k  recent_return=7.80  eps=0.010  t=27870s
+    step=1200k  recent_return=11.35  eps=0.010  t=35478s
+    step=1400k  recent_return=11.45  eps=0.010  t=42870s
+    step=1600k  recent_return=9.75  eps=0.010  t=49850s
+    step=1800k  recent_return=13.75  eps=0.010  t=52150s
+    step=2000k  recent_return=9.90  eps=0.010  t=53992s
+  -> final 20-ep mean=0.43 ± 15.08
+
+[contractive]
+  seed=0
+    step=200k  recent_return=-17.60  eps=0.604  t=1832s
+    step=400k  recent_return=-13.05  eps=0.208  t=3893s
+    step=600k  recent_return=9.15  eps=0.010  t=12818s
+    step=800k  recent_return=11.90  eps=0.010  t=20522s
+    step=1000k  recent_return=10.10  eps=0.010  t=22268s
+    step=1200k  recent_return=11.60  eps=0.010  t=24354s
+    step=1400k  recent_return=11.75  eps=0.010  t=31945s
+    step=1600k  recent_return=9.20  eps=0.010  t=37821s
+    step=1800k  recent_return=11.15  eps=0.010  t=39531s
+    step=2000k  recent_return=12.25  eps=0.010  t=47099s
+  seed=1
+    step=200k  recent_return=-18.60  eps=0.604  t=10275s
+    step=400k  recent_return=-13.20  eps=0.208  t=21461s
+    step=600k  recent_return=-4.25  eps=0.010  t=30619s
+    step=800k  recent_return=-0.75  eps=0.010  t=32760s
+    step=1000k  recent_return=8.25  eps=0.010  t=34926s
+    step=1200k  recent_return=11.65  eps=0.010  t=37129s
+    step=1400k  recent_return=9.70  eps=0.010  t=40206s

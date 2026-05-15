@@ -1,0 +1,17 @@
+============================================================
+Instability Stress Test (poisoned buffer, 50000 steps)
+  Poison ratio: 20% bad-policy transitions
+============================================================
+  Collecting bad-policy transitions...
+  Collected 3000 bad transitions
+
+  Variant: standard
+    seed=0
+    seed=1
+    seed=2
+    seed=3
+    seed=4
+
+  Variant: contractive
+    seed=0
+    seed=1

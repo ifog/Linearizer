@@ -1,0 +1,27 @@
+============================================================
+Instability Stress Test (poisoned buffer, 50000 steps)
+  Poison ratio: 20% bad-policy transitions
+============================================================
+  Collecting bad-policy transitions...
+  Collected 3000 bad transitions
+
+  Variant: standard
+    seed=0
+    seed=1
+    seed=2
+    seed=3
+    seed=4
+
+  Variant: contractive
+    seed=0
+    seed=1
+    seed=2
+    seed=3
+    seed=4
+
+  standard: mean=397.4±70.7, collapses=0/5, variance=5000.4
+
+  contractive: mean=357.9±133.6, collapses=0/5, variance=17843.1
+
+  Saved: /home/nvidia/Linearizer/contractive_rl/results/stress_test_plot.png
+  Saved: /home/nvidia/Linearizer/contractive_rl/results/stress_test_results.json

@@ -1,0 +1,23 @@
+Device: cuda  |  Hopper-v4  |  1000k steps  |  hidden=256
+============================================================
+
+[standard]
+  seed=0
+  seed=1
+  seed=2
+  -> final 20-ep mean=1440.7 ± 213.7  value_var=6890.8
+
+[contractive]
+  seed=0
+  seed=1
+  seed=2
+  -> final 20-ep mean=1480.8 ± 309.0  value_var=6499.0
+
+Saved: contractive_rl/ppo/../results/hopper_v4_ppo_results.json
+Saved: contractive_rl/ppo/../results/hopper_v4_ppo_results.png
+
+============================================================
+HOPPER-V4 PPO RESULTS
+============================================================
+  StandardPPO         : 1440.7 ± 213.7  value_var=6891
+  ContractivePPO      : 1480.8 ± 309.0  value_var=6499  (+2.8%)

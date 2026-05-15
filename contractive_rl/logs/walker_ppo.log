@@ -1,0 +1,23 @@
+Device: cuda  |  Walker2d-v4  |  1000k steps  |  hidden=256
+============================================================
+
+[standard]
+  seed=0
+  seed=1
+  seed=2
+  -> final 20-ep mean=853.4 ± 63.4  value_var=5721.9
+
+[contractive]
+  seed=0
+  seed=1
+  seed=2
+  -> final 20-ep mean=580.2 ± 113.3  value_var=4145.9
+
+Saved: contractive_rl/ppo/../results/walker2d_v4_ppo_results.json
+Saved: contractive_rl/ppo/../results/walker2d_v4_ppo_results.png
+
+============================================================
+WALKER2D-V4 PPO RESULTS
+============================================================
+  StandardPPO         : 853.4 ± 63.4  value_var=5722
+  ContractivePPO      : 580.2 ± 113.3  value_var=4146  (-32.0%)

@@ -1,0 +1,22 @@
+Device: cpu
+Training 20000 steps, batch_size=32, grid=20x20, state_dim=400
+
+=== Generating dataset ===
+  Pre-generating 5000 maps (grid=20x20)...
+  Done: 5000 maps in 451.4s. maps=torch.Size([5000, 3, 20, 20]), V_star=torch.Size([5000, 400])
+
+=== Training contractive_20x20 ===
+  [contractive_20x20] step 200/20000 | loss=9.5284 bel=7.3620 fp=0.0928 multi=20.7364 t=5972s
+  [contractive_20x20] step 400/20000 | loss=9.7287 bel=7.7415 fp=0.0298 multi=19.5741 t=11336s
+  [contractive_20x20] step 600/20000 | loss=9.2400 bel=7.3506 fp=0.0169 multi=18.7246 t=17606s
+  [contractive_20x20] step 800/20000 | loss=8.0814 bel=6.2869 fp=0.0133 multi=17.8122 t=24019s
+  [contractive_20x20] step 1000/20000 | loss=9.0723 bel=7.2792 fp=0.0084 multi=17.8462 t=30844s
+  [contractive_20x20] step 1200/20000 | loss=8.9356 bel=7.1504 fp=0.0082 multi=17.7704 t=37258s
+  [contractive_20x20] step 1400/20000 | loss=8.7068 bel=7.4708 fp=0.0101 multi=12.2588 t=45368s
+  [contractive_20x20] step 1600/20000 | loss=8.4310 bel=7.1246 fp=0.0104 multi=12.9596 t=51800s
+  [contractive_20x20] step 1800/20000 | loss=7.6055 bel=6.4629 fp=0.0121 multi=11.3058 t=58037s
+  [contractive_20x20] step 2000/20000 | loss=8.9088 bel=7.6622 fp=0.0105 multi=12.3610 t=64604s
+  [contractive_20x20] step 2200/20000 | loss=7.9716 bel=6.8027 fp=0.0119 multi=11.5695 t=69960s
+  [contractive_20x20] step 2400/20000 | loss=8.0491 bel=6.8589 fp=0.0108 multi=11.7940 t=75317s
+  [contractive_20x20] step 2600/20000 | loss=7.6543 bel=6.4352 fp=0.0098 multi=12.0923 t=80675s
+  [contractive_20x20] step 2800/20000 | loss=7.1606 bel=6.0203 fp=0.0107 multi=11.2955 t=85923s

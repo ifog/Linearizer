@@ -1,0 +1,23 @@
+
+=======================================================
+  Pendulum-v0  (300k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=-1127.3 ± 50.1  value_var=8880.1
+  [contractive]
+    seed=0
+    seed=1
+    seed=2
+    final 20-ep mean=-983.7 ± 116.5  value_var=5220.1
+  Saved: contractive_rl/ppo/../../contractive_rl/ppo/../results/pendulum_v0_ppo_results.png
+  Saved: contractive_rl/ppo/../../contractive_rl/ppo/../results/pendulum_v0_ppo_results.json
+
+=======================================================
+  PENDULUM-v0 PPO RESULTS
+=======================================================
+  StandardPPO         : -1127.3 ± 50.1  value_var=8880.1
+  ContractivePPO      : -983.7 ± 116.5  value_var=5220.1
+

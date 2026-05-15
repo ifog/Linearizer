@@ -1,0 +1,57 @@
+
+=======================================================
+  CartPole-v1  (50k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=383.8 ± 91.5
+  [double]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=331.2 ± 129.1
+  [contractive]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=251.3 ± 64.2
+  Saved: contractive_rl/dqn/../results/cartpole_v1_learning_curves.png
+  Saved: contractive_rl/dqn/../results/cartpole_v1_dqn_results.json
+
+=======================================================
+  Acrobot-v1  (100k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=-84.2 ± 7.4
+  [double]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=-84.7 ± 6.5
+  [contractive]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=-141.1 ± 40.1
+  Saved: contractive_rl/dqn/../results/acrobot_v1_learning_curves.png
+  Saved: contractive_rl/dqn/../results/acrobot_v1_dqn_results.json
+
+=======================================================
+  DQN BENCHMARK SUMMARY
+=======================================================
+
+  CartPole-v1:
+    StandardDQN         : 383.8 ± 91.5
+    DoubleDQN           : 331.2 ± 129.1
+    ContractiveDQN      : 251.3 ± 64.2
+
+  Acrobot-v1:
+    StandardDQN         : -84.2 ± 7.4
+    DoubleDQN           : -84.7 ± 6.5
+    ContractiveDQN      : -141.1 ± 40.1
+

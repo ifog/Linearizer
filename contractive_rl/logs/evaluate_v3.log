@@ -1,0 +1,94 @@
+Device: cpu
+Loading models from: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints
+  Loaded: contractive
+  Loaded: unconstrained
+  Loaded: iterative_mlp
+  Loaded: vin
+
+=== Exp A: Convergence Curves ===
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/convergence_curves.png
+  [ContractiveLinearizer] initial=4.5249, final=2.7908, non-monotone steps=43 (should be 0 by theory)
+  contractive: init=4.5249 -> k=50: 2.7908 (+38.3%)
+  unconstrained: init=4.5249 -> k=50: 629.2694 (-13806.9%)
+  iterative_mlp: init=4.5249 -> k=50: 2.8144 (+37.8%)
+  vin: init=4.5249 -> k=50: 36.4039 (-704.5%)
+
+=== Exp B: Fast Iteration vs Loop ===
+  K= 1: MSE=1.15e-13 MaxErr=2.86e-06 loop=3.82ms fast=3.00ms speedup=1.3x
+  K= 5: MSE=3.72e-13 MaxErr=3.81e-06 loop=15.63ms fast=2.42ms speedup=6.5x
+  K=10: MSE=2.84e-13 MaxErr=3.81e-06 loop=57.64ms fast=5.00ms speedup=11.5x
+  K=20: MSE=3.02e-13 MaxErr=3.34e-06 loop=63.09ms fast=2.28ms speedup=27.7x
+  K=50: MSE=3.00e-13 MaxErr=3.81e-06 loop=145.20ms fast=2.18ms speedup=66.7x
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/fast_iteration_results.json
+
+=== Exp C: Planning Quality ===
+  contractive: success_rate=0.100, avg_steps=4.5 (n=200)
+  unconstrained: success_rate=0.005, avg_steps=3.0 (n=200)
+  iterative_mlp: success_rate=0.150, avg_steps=3.2 (n=200)
+  vin: success_rate=0.520, avg_steps=5.3 (n=200)
+  oracle_V*: success_rate=0.985, avg_steps=7.1
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/planning_quality.json
+
+=== Exp D: Generalization (native 20x20 models) ===
+  contractive_20x20: mean_MSE=16.8869 ± 9.1151 (n=100)
+  vin_20x20: mean_MSE=10.5388 ± 10.9710 (n=100)
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/generalization_results.json
+
+=== Exp E: Ablation — Spectral Bound ===
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/ablation_spectral_bound.png
+  contractive_05: init=4.3085 k=10=2.6172 final=2.6189
+  contractive_09: init=4.3085 k=10=2.6362 final=2.6388
+  contractive_099: init=4.3085 k=10=2.6217 final=2.6244
+
+=== Exp F: Generalization (native 50x50 models) ===
+  Skipping contractive_50x50: checkpoint not found
+  Skipping vin_50x50: checkpoint not found
+  No 50x50 checkpoints found. Run: python train.py --grid_size 50 --models contractive vin
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/generalization_50x50_results.json
+
+Saved summary: /home/nvidia/Linearizer/contractive_rl/planning/results/summary_table.txt
+===========================================================================
+CONTRACTIVE LINEARIZER — PLANNING EXPERIMENT SUMMARY
+===========================================================================
+
+--- Exp A: Convergence (RMSE at K=0 and K=50) ---
+Model                        Init RMSE    K=50 RMSE   Reduction%
+-----------------------------------------------------------------
+contractive                     4.5249       2.7908        38.3%
+unconstrained                   4.5249     629.2694    -13806.9%
+iterative_mlp                   4.5249       2.8144        37.8%
+vin                             4.5249      36.4039      -704.5%
+
+--- Exp B: Fast Iteration vs Loop ---
+    K    MSE(loop vs fast)    MaxAbsErr    Loop ms    Fast ms   Speedup
+----------------------------------------------------------------------
+    1             1.15e-13     2.86e-06      3.819      3.000      1.27x
+    5             3.72e-13     3.81e-06     15.628      2.421      6.46x
+   10             2.84e-13     3.81e-06     57.641      5.004     11.52x
+   20             3.02e-13     3.34e-06     63.089      2.281     27.66x
+   50             3.00e-13     3.81e-06    145.203      2.176     66.72x
+
+--- Exp C: Planning Quality (success rate at K=30) ---
+Model                       Success Rate    Avg Steps
+-------------------------------------------------------
+contractive                        0.100          4.5
+unconstrained                      0.005          3.0
+iterative_mlp                      0.150          3.2
+vin                                0.520          5.3
+oracle_V*                          0.985          7.1
+
+--- Exp D: Generalization (native 20x20 models) ---
+Model                         Mean MSE      Std MSE
+---------------------------------------------------
+contractive_20x20              16.8869       9.1151
+vin_20x20                      10.5388      10.9710
+
+--- Exp F: Generalization (native 50x50 models) ---
+Model                         Mean MSE      Std MSE
+---------------------------------------------------
+contractive_50x50                  nan          nan
+vin_50x50                          nan          nan
+
+===========================================================================
+
+=== Evaluation complete ===

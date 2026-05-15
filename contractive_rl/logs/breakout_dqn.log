@@ -1,0 +1,85 @@
+Device: cuda  |  ALE/Breakout-v5 (pixel, 4-frame stack)  |  2000k steps  |  3 seeds
+============================================================
+
+[standard]
+  seed=0
+A.L.E: Arcade Learning Environment (version 0.8.1+53f58b7)
+[Powered by Stella]
+    step=200k  recent_return=5.15  eps=0.604  t=895s
+    step=400k  recent_return=10.20  eps=0.208  t=1852s
+    step=600k  recent_return=16.10  eps=0.010  t=2884s
+    step=800k  recent_return=17.05  eps=0.010  t=3889s
+    step=1000k  recent_return=17.40  eps=0.010  t=4766s
+    step=1200k  recent_return=18.25  eps=0.010  t=5633s
+    step=1400k  recent_return=21.30  eps=0.010  t=6523s
+    step=1600k  recent_return=23.35  eps=0.010  t=7431s
+    step=1800k  recent_return=17.70  eps=0.010  t=8394s
+    step=2000k  recent_return=20.00  eps=0.010  t=9412s
+  seed=1
+    step=200k  recent_return=6.20  eps=0.604  t=1047s
+    step=400k  recent_return=9.05  eps=0.208  t=2167s
+    step=600k  recent_return=14.00  eps=0.010  t=3095s
+    step=800k  recent_return=20.30  eps=0.010  t=4063s
+    step=1000k  recent_return=20.80  eps=0.010  t=5107s
+    step=1200k  recent_return=22.25  eps=0.010  t=6146s
+    step=1400k  recent_return=16.25  eps=0.010  t=7136s
+    step=1600k  recent_return=22.95  eps=0.010  t=7993s
+    step=1800k  recent_return=25.20  eps=0.010  t=8906s
+    step=2000k  recent_return=21.50  eps=0.010  t=9763s
+  seed=2
+    step=200k  recent_return=5.25  eps=0.604  t=745s
+    step=400k  recent_return=8.05  eps=0.208  t=1557s
+    step=600k  recent_return=15.80  eps=0.010  t=2407s
+    step=800k  recent_return=18.50  eps=0.010  t=3307s
+    step=1000k  recent_return=17.50  eps=0.010  t=4262s
+    step=1200k  recent_return=17.70  eps=0.010  t=5275s
+    step=1400k  recent_return=15.55  eps=0.010  t=6165s
+    step=1600k  recent_return=20.90  eps=0.010  t=7009s
+    step=1800k  recent_return=16.50  eps=0.010  t=7854s
+    step=2000k  recent_return=22.70  eps=0.010  t=8699s
+  -> final 20-ep mean=21.40 ± 1.10
+
+[contractive]
+  seed=0
+    step=200k  recent_return=5.60  eps=0.604  t=909s
+    step=400k  recent_return=8.35  eps=0.208  t=1912s
+    step=600k  recent_return=9.00  eps=0.010  t=2976s
+    step=800k  recent_return=8.80  eps=0.010  t=4049s
+    step=1000k  recent_return=8.30  eps=0.010  t=5158s
+    step=1200k  recent_return=10.05  eps=0.010  t=6258s
+    step=1400k  recent_return=8.25  eps=0.010  t=7360s
+    step=1600k  recent_return=8.80  eps=0.010  t=8464s
+    step=1800k  recent_return=7.65  eps=0.010  t=9562s
+    step=2000k  recent_return=7.55  eps=0.010  t=10655s
+  seed=1
+    step=200k  recent_return=4.75  eps=0.604  t=910s
+    step=400k  recent_return=7.25  eps=0.208  t=1916s
+    step=600k  recent_return=7.30  eps=0.010  t=2991s
+    step=800k  recent_return=7.25  eps=0.010  t=4091s
+    step=1000k  recent_return=7.75  eps=0.010  t=5184s
+    step=1200k  recent_return=8.85  eps=0.010  t=6278s
+    step=1400k  recent_return=9.70  eps=0.010  t=7371s
+    step=1600k  recent_return=9.75  eps=0.010  t=8466s
+    step=1800k  recent_return=9.15  eps=0.010  t=9639s
+    step=2000k  recent_return=9.40  eps=0.010  t=10788s
+  seed=2
+    step=200k  recent_return=5.80  eps=0.604  t=986s
+    step=400k  recent_return=7.00  eps=0.208  t=2032s
+    step=600k  recent_return=8.85  eps=0.010  t=3130s
+    step=800k  recent_return=8.80  eps=0.010  t=4285s
+    step=1000k  recent_return=9.15  eps=0.010  t=5389s
+    step=1200k  recent_return=8.50  eps=0.010  t=6493s
+    step=1400k  recent_return=9.35  eps=0.010  t=7597s
+    step=1600k  recent_return=10.00  eps=0.010  t=8700s
+    step=1800k  recent_return=9.15  eps=0.010  t=9871s
+    step=2000k  recent_return=10.75  eps=0.010  t=10994s
+  -> final 20-ep mean=9.23 ± 1.31
+
+Saved: contractive_rl/dqn/../results/ale_breakout_v5_dqn_results.json
+Saved: contractive_rl/dqn/../results/ale_breakout_v5_dqn_results.png
+
+============================================================
+ALE/Breakout-v5 DQN RESULTS (final 20-ep mean ± std, 3 seeds)
+============================================================
+  StandardDQN         : 21.40 ± 1.10
+  ContractiveDQN      : 9.23 ± 1.31  (-56.9%)

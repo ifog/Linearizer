@@ -1,0 +1,51 @@
+Device: cpu
+Training 8000 steps, batch_size=32, grid=10x10, state_dim=100
+
+=== Generating dataset ===
+  Pre-generating 5000 maps (grid=10x10)...
+  Done: 5000 maps in 150.4s. maps=torch.Size([5000, 3, 10, 10]), V_star=torch.Size([5000, 100])
+
+=== Training contractive ===
+  [contractive] step 200/8000 | loss=7.1095 bel=4.8636 fp=2.4410 multi=10.2542 t=32s
+  [contractive] step 400/8000 | loss=9.1122 bel=5.2754 fp=4.6386 multi=15.1749 t=71s
+  [contractive] step 600/8000 | loss=6.5883 bel=4.9796 fp=1.1173 multi=10.5006 t=108s
+  [contractive] step 800/8000 | loss=6.4280 bel=4.9929 fp=0.8664 multi=10.0191 t=144s
+  [contractive] step 1000/8000 | loss=5.9611 bel=4.5311 fp=0.9109 multi=9.7455 t=181s
+  [contractive] step 1200/8000 | loss=5.3714 bel=4.0087 fp=0.6771 multi=10.2407 t=218s
+  [contractive] step 1400/8000 | loss=8.5848 bel=5.4915 fp=3.1668 multi=15.0983 t=253s
+  [contractive] step 1600/8000 | loss=5.8872 bel=4.5432 fp=0.7134 multi=9.8734 t=288s
+  [contractive] step 1800/8000 | loss=6.5078 bel=5.2285 fp=0.6018 multi=9.7831 t=322s
+  [contractive] step 2000/8000 | loss=7.2476 bel=5.8352 fp=0.7153 multi=10.5471 t=356s
+  [contractive] step 2200/8000 | loss=5.0157 bel=3.6048 fp=0.8623 multi=9.7979 t=391s
+  [contractive] step 2400/8000 | loss=7.1753 bel=5.5848 fp=0.8377 multi=11.7159 t=422s
+  [contractive] step 2600/8000 | loss=6.4511 bel=5.1327 fp=0.5068 multi=10.6492 t=456s
+  [contractive] step 2800/8000 | loss=6.1676 bel=4.8110 fp=0.5953 multi=10.5904 t=493s
+  [contractive] step 3000/8000 | loss=5.8217 bel=4.6174 fp=0.5545 multi=9.2706 t=526s
+  [contractive] step 3200/8000 | loss=7.7401 bel=6.0528 fp=0.7416 multi=13.1652 t=557s
+  [contractive] step 3400/8000 | loss=5.1383 bel=4.2097 fp=0.4513 multi=7.0296 t=593s
+  [contractive] step 3600/8000 | loss=6.3658 bel=4.7226 fp=1.3831 multi=9.5166 t=628s
+  [contractive] step 3800/8000 | loss=5.6003 bel=4.7174 fp=0.3967 multi=6.8456 t=661s
+  [contractive] step 4000/8000 | loss=6.1738 bel=5.1362 fp=0.5498 multi=7.6274 t=692s
+  [contractive] step 4200/8000 | loss=4.4005 bel=3.5520 fp=0.4450 multi=6.2600 t=726s
+  [contractive] step 4400/8000 | loss=5.0246 bel=4.0705 fp=0.5504 multi=6.7893 t=763s
+  [contractive] step 4600/8000 | loss=5.2453 bel=4.3459 fp=0.4880 multi=6.5539 t=798s
+  [contractive] step 4800/8000 | loss=4.5067 bel=3.6959 fp=0.4086 multi=6.0647 t=833s
+  [contractive] step 5000/8000 | loss=6.7537 bel=5.7757 fp=0.4746 multi=7.4070 t=864s
+  [contractive] step 5200/8000 | loss=5.5433 bel=4.6519 fp=0.4531 multi=6.6486 t=898s
+  [contractive] step 5400/8000 | loss=6.1163 bel=5.2180 fp=0.4050 multi=6.9584 t=931s
+  [contractive] step 5600/8000 | loss=6.3154 bel=5.4792 fp=0.3824 multi=6.4504 t=965s
+  [contractive] step 5800/8000 | loss=6.2158 bel=4.7701 fp=1.2362 multi=8.2756 t=998s
+  [contractive] step 6000/8000 | loss=6.2978 bel=4.9110 fp=1.1146 multi=8.2946 t=1035s
+  [contractive] step 6200/8000 | loss=6.3487 bel=5.4068 fp=0.4765 multi=7.0365 t=1075s
+  [contractive] step 6400/8000 | loss=6.6098 bel=5.0600 fp=1.0028 multi=10.4840 t=1108s
+  [contractive] step 6600/8000 | loss=5.5150 bel=4.5587 fp=0.4290 multi=7.4177 t=1138s
+  [contractive] step 6800/8000 | loss=5.2323 bel=4.4085 fp=0.4067 multi=6.2049 t=1173s
+  [contractive] step 7000/8000 | loss=6.0311 bel=5.1100 fp=0.4581 multi=6.9213 t=1206s
+  [contractive] step 7200/8000 | loss=5.2889 bel=4.4000 fp=0.4256 multi=6.7616 t=1238s
+  [contractive] step 7400/8000 | loss=4.7176 bel=3.8585 fp=0.4512 multi=6.3352 t=1276s
+  [contractive] step 7600/8000 | loss=5.5005 bel=4.6724 fp=0.4096 multi=6.2325 t=1311s
+  [contractive] step 7800/8000 | loss=5.0771 bel=4.3169 fp=0.3810 multi=5.6979 t=1347s
+  [contractive] step 8000/8000 | loss=4.8740 bel=4.1088 fp=0.3671 multi=5.8160 t=1380s
+  [contractive] DONE in 1380.2s | final loss=4.8740 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/contractive.pt
+
+=== All training complete ===

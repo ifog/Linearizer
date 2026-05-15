@@ -1,0 +1,17 @@
+
+=======================================================
+  CartPole-v1  (50k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=275.9 ± 33.6
+  [double]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=239.7 ± 104.1
+  [contractive]
+    seed=0
+    seed=1

@@ -77,14 +77,13 @@ This removes the iteration step at inference, giving a $43\times$
 wall-clock speedup over $K$-step unrolling.
 The construction extends the \emph{Linearizer} framework of
 \citet{anonymous2026linearizer} from pure-linear to affine maps in induced
-space; we use its closed-form-collapse property and not the compositional or
-SVD machinery.
+space.
 We test the Contractive Linearizer in three settings: a \emph{planning}
 model that approximates value iteration on grid-world maps;
 \emph{DQN}, where the contractive head replaces the final Q-network layers;
 and \emph{PPO}, where the critic MLP is swapped for a contractive value
 approximator.
-Only the planning model converges under repeated application of its learned
+Only our planning model converges under repeated application of its learned
 operator; the unconstrained baselines all diverge.
 On DQN the contractive variant prevents Q-value explosion in adversarial
 training, and mean return improves by $39\%$ on CartPole and $17\%$ on Acrobot.
@@ -112,17 +111,14 @@ What's missing is structure. In tabular MDPs the Bellman optimality operator
 $\mathcal{T}$ is a $\gamma$-contraction in the sup-norm~\citep{bellman1957dynamic},
 so iteration converges to a unique fixed point. With a neural-network value
 estimator, no such property holds: the implicit Bellman backup is unconstrained
-and targets can drift or explode.
-
-This raises the question we take up here: can we parameterize a neural value
+and targets can drift or explode. This raises the question: can we parameterize a neural value
 function so that its computation is provably stable, has a closed form, and
 remains expressive enough to fit value targets of interest?
 
 \paragraph{Contributions.}
 \begin{enumerate}
   \item \textbf{Contractive Linearizer} (\S\ref{sec:method}): a learned affine
-  operator $\cT(z; s) = \Lambda(s)\,z + b(s)$, where $\Lambda(s)$ is a state-
-  conditioned diagonal matrix with spectral radius strictly below $\spb < 1$.
+  operator $\cT(z; s) = \Lambda(s)\,z + b(s)$, where $\Lambda(s)$ is a state-conditioned diagonal matrix with spectral radius strictly below $\spb < 1$.
   Iterated application $z_{k+1} = \cT(z_k; s)$ converges geometrically to a
   unique fixed point $\zstar(s) = b(s) \oslash (\mathbf{1} - \eigs(s))$, which
   is computable in $\mathcal{O}(1)$ without iteration.
@@ -163,7 +159,7 @@ The \emph{Bellman expectation operator} for a deterministic policy $\pi$ is:
 where $r^\pi(s) := r(s, \pi(s))$ is the policy-induced reward.
 $\mathcal{T}^\pi$ is a $\gamma$-contraction under the $\ell_\infty$-norm~\citep{bellman1957dynamic},
 with unique fixed point $V^\pi$.
-Value iteration $V_{k+1} = \mathcal{T}^\pi V_k$ converges geometrically at rate $\gamma^k$.
+Value iteration $V_{k+1} = \mathcal{T}^\pi V_k$ converges geometrically at rate $\gamma$.
 Throughout we write $V^*$ for the \emph{target value function} our methods aim
 to recover---$V^\pi$ in the policy-evaluation/planning setting or the optimal
 $V$ in the control setting.
@@ -222,8 +218,7 @@ which is a contraction in $\R^d$ whenever $\rho(\Lambda(s)) < 1$
 we evaluate $b(s)$ and $\eigs(s)$ in a single forward pass and apply
 Eq.~\eqref{eq:pipeline} directly.
 
-\paragraph{Reading $\cT$ honestly.}
-$\cT(\cdot;s)$ is a per-state contraction in latent space, not a Bellman
+Note that $\cT(\cdot;s)$ is a per-state contraction in latent space, not a Bellman
 operator on value functions. $\Lambda(s)$ and $b(s)$ depend only on $s$ and
 make no reference to the value at other states, so iterating $\cT$ at a
 fixed $s$ refines $z$ toward $\zstar(s)$ without doing any across-state
@@ -237,7 +232,7 @@ framework.
 \subsection{Connection to the Linearizer Framework}
 \label{sec:linearizer_connection}
 
-Our parameterization is an instance---and an extension---of the
+Our parameterization is an instance and an extension of the
 \emph{Linearizer} framework of \citet{anonymous2026linearizer}, which constructs
 neural maps that are exactly linear with respect to a learned coordinate system.
 A Linearizer is a function

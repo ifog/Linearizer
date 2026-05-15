@@ -1,0 +1,23 @@
+
+=======================================================
+  Acrobot-v1  (100k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=-93.1 ± 5.3
+  [double]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=-88.2 ± 4.4
+  [contractive]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=-139.8 ± 34.1
+  Saved: contractive_rl/dqn/../../contractive_rl/dqn/../results/acrobot_v1_learning_curves.png
+  Saved: contractive_rl/dqn/../../contractive_rl/dqn/../results/acrobot_v1_dqn_results.json
+
+Final: {'standard': {'final_mean': -93.13333333333333, 'final_std': 5.28288641642889}, 'double': {'final_mean': -88.16666666666667, 'final_std': 4.3759443425264095}, 'contractive': {'final_mean': -139.76666666666668, 'final_std': 34.11649975533181}}

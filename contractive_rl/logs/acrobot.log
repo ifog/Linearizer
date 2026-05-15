@@ -1,0 +1,19 @@
+Starting Acrobot benchmark...
+
+=======================================================
+  Acrobot-v1  (100k steps, 3 seeds)
+=======================================================
+  [standard]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=-98.4 ± 12.7
+  [double]
+    seed=0
+    seed=1
+    seed=2
+    final 10-ep mean=-94.5 ± 3.8
+  [contractive]
+    seed=0
+    seed=1
+    seed=2

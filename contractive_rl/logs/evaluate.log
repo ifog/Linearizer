@@ -1,0 +1,82 @@
+Device: cpu
+Loading models from: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints
+  Loaded: contractive
+  Loaded: unconstrained
+  Loaded: iterative_mlp
+  Loaded: vin
+
+=== Exp A: Convergence Curves ===
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/convergence_curves.png
+  [ContractiveLinearizer] initial=4.5249, final=4.2146, non-monotone steps=20 (should be 0 by theory)
+  contractive: init=4.5249 -> k=50: 4.2146 (+6.9%)
+  unconstrained: init=4.5249 -> k=50: 4.3564 (+3.7%)
+  iterative_mlp: init=4.5249 -> k=50: 3.9633 (+12.4%)
+  vin: init=4.5249 -> k=50: 10.5672 (-133.5%)
+
+=== Exp B: Fast Iteration vs Loop ===
+  K= 1: MSE=1.34e-13 MaxErr=2.86e-06 loop=277.98ms fast=286.81ms speedup=1.0x
+  K= 5: MSE=1.25e-13 MaxErr=4.77e-06 loop=1361.45ms fast=271.28ms speedup=5.0x
+  K=10: MSE=1.09e-13 MaxErr=6.68e-06 loop=2754.33ms fast=269.40ms speedup=10.2x
+  K=20: MSE=1.07e-13 MaxErr=4.77e-06 loop=5490.68ms fast=268.32ms speedup=20.5x
+  K=50: MSE=1.22e-13 MaxErr=4.77e-06 loop=15040.47ms fast=299.11ms speedup=50.3x
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/fast_iteration_results.json
+
+=== Exp C: Planning Quality ===
+  contractive: success_rate=0.020, avg_steps=1.5 (n=200)
+  unconstrained: success_rate=0.020, avg_steps=2.0 (n=200)
+  iterative_mlp: success_rate=0.035, avg_steps=2.3 (n=200)
+  vin: success_rate=0.200, avg_steps=4.1 (n=200)
+  oracle_V*: success_rate=0.985, avg_steps=7.1
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/planning_quality.json
+
+=== Exp D: Generalization (native 20x20 models) ===
+  contractive_20x20: mean_MSE=32.9400 ± 10.9007 (n=100)
+  vin_20x20: mean_MSE=761.9777 ± 77.1113 (n=100)
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/generalization_results.json
+
+=== Exp E: Ablation — Spectral Bound ===
+  Saved: /home/nvidia/Linearizer/contractive_rl/planning/results/ablation_spectral_bound.png
+  contractive_05: init=4.3085 k=10=4.4352 final=4.4377
+  contractive_09: init=4.3085 k=10=4.2890 final=4.2913
+  contractive_099: init=4.3085 k=10=4.3509 final=4.3578
+
+Saved summary: /home/nvidia/Linearizer/contractive_rl/planning/results/summary_table.txt
+===========================================================================
+CONTRACTIVE LINEARIZER — PLANNING EXPERIMENT SUMMARY
+===========================================================================
+
+--- Exp A: Convergence (RMSE at K=0 and K=50) ---
+Model                        Init RMSE    K=50 RMSE   Reduction%
+-----------------------------------------------------------------
+contractive                     4.5249       4.2146         6.9%
+unconstrained                   4.5249       4.3564         3.7%
+iterative_mlp                   4.5249       3.9633        12.4%
+vin                             4.5249      10.5672      -133.5%
+
+--- Exp B: Fast Iteration vs Loop ---
+    K    MSE(loop vs fast)    MaxAbsErr    Loop ms    Fast ms   Speedup
+----------------------------------------------------------------------
+    1             1.34e-13     2.86e-06    277.977    286.812      0.97x
+    5             1.25e-13     4.77e-06   1361.455    271.277      5.02x
+   10             1.09e-13     6.68e-06   2754.327    269.404     10.22x
+   20             1.07e-13     4.77e-06   5490.677    268.324     20.46x
+   50             1.22e-13     4.77e-06  15040.474    299.105     50.28x
+
+--- Exp C: Planning Quality (success rate at K=30) ---
+Model                       Success Rate    Avg Steps
+-------------------------------------------------------
+contractive                        0.020          1.5
+unconstrained                      0.020          2.0
+iterative_mlp                      0.035          2.3
+vin                                0.200          4.1
+oracle_V*                          0.985          7.1
+
+--- Exp D: Generalization (native 20x20 models) ---
+Model                         Mean MSE      Std MSE
+---------------------------------------------------
+contractive_20x20              32.9400      10.9007
+vin_20x20                     761.9777      77.1113
+
+===========================================================================
+
+=== Evaluation complete ===

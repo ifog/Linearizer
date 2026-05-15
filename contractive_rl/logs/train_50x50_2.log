@@ -1,0 +1,54 @@
+Device: cpu
+Training 4000 steps, batch_size=32, grid=50x50, state_dim=2500
+
+=== Generating dataset ===
+  Pre-generating 500 maps (grid=50x50)...
+  Done: 500 maps in 508.3s. maps=torch.Size([500, 3, 50, 50]), V_star=torch.Size([500, 2500])
+
+=== Training contractive_50x50 ===
+  [contractive_50x50] step 200/4000 | loss=14.4006 bel=10.2859 fp=0.6513 multi=37.8898 t=560s
+  [contractive_50x50] step 400/4000 | loss=13.2083 bel=9.7749 fp=0.1322 multi=33.6733 t=1108s
+  [contractive_50x50] step 600/4000 | loss=12.5635 bel=9.4310 fp=0.1009 multi=30.8201 t=1657s
+  [contractive_50x50] step 800/4000 | loss=12.0530 bel=9.1982 fp=0.0811 multi=28.1423 t=2177s
+  [contractive_50x50] step 1000/4000 | loss=11.6987 bel=8.8301 fp=0.0839 multi=28.2659 t=2681s
+  [contractive_50x50] step 1200/4000 | loss=11.0442 bel=8.3999 fp=0.0818 multi=26.0337 t=3146s
+  [contractive_50x50] step 1400/4000 | loss=10.8157 bel=8.2590 fp=0.0806 multi=25.1642 t=3598s
+  [contractive_50x50] step 1600/4000 | loss=10.4306 bel=8.0064 fp=0.0802 multi=23.8415 t=4030s
+  [contractive_50x50] step 1800/4000 | loss=10.1905 bel=7.7673 fp=0.0837 multi=23.8136 t=4455s
+  [contractive_50x50] step 2000/4000 | loss=9.9485 bel=7.5485 fp=0.0840 multi=23.5797 t=4837s
+  [contractive_50x50] step 2200/4000 | loss=9.8038 bel=7.3372 fp=0.0881 multi=24.2258 t=5210s
+  [contractive_50x50] step 2400/4000 | loss=9.1681 bel=6.8630 fp=0.0868 multi=22.6162 t=5592s
+  [contractive_50x50] step 2600/4000 | loss=9.0594 bel=6.7384 fp=0.0838 multi=22.7917 t=5961s
+  [contractive_50x50] step 2800/4000 | loss=9.1787 bel=6.8596 fp=0.0796 multi=22.7932 t=6345s
+  [contractive_50x50] step 3000/4000 | loss=8.8406 bel=6.5197 fp=0.0829 multi=22.7944 t=6744s
+  [contractive_50x50] step 3200/4000 | loss=8.7828 bel=6.4670 fp=0.0899 multi=22.7090 t=7131s
+  [contractive_50x50] step 3400/4000 | loss=8.7768 bel=6.4892 fp=0.0827 multi=22.4634 t=7516s
+  [contractive_50x50] step 3600/4000 | loss=8.8352 bel=6.5144 fp=0.0861 multi=22.7769 t=7909s
+  [contractive_50x50] step 3800/4000 | loss=8.7979 bel=6.4596 fp=0.0885 multi=22.9406 t=8288s
+  [contractive_50x50] step 4000/4000 | loss=9.0742 bel=6.7002 fp=0.0905 multi=23.2875 t=8669s
+  [contractive_50x50] DONE in 8668.9s | final loss=9.0742 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/contractive_50x50.pt
+
+=== Training vin_50x50 ===
+  [vin_50x50] step 200/4000 | loss=42.6784 bel=19.6711 fp=37.7994 multi=41.0759 t=747s
+  [vin_50x50] step 400/4000 | loss=25.3452 bel=13.8082 fp=14.1378 multi=44.6808 t=1498s
+  [vin_50x50] step 600/4000 | loss=20.1126 bel=13.0323 fp=5.8454 multi=41.5758 t=2271s
+  [vin_50x50] step 800/4000 | loss=18.1409 bel=11.7057 fp=4.9630 multi=39.5362 t=3045s
+  [vin_50x50] step 1000/4000 | loss=17.3533 bel=11.4864 fp=4.4224 multi=36.5569 t=3812s
+  [vin_50x50] step 1200/4000 | loss=17.0738 bel=11.3404 fp=4.2843 multi=35.9131 t=4573s
+  [vin_50x50] step 1400/4000 | loss=17.1062 bel=10.8170 fp=4.7516 multi=39.1333 t=5308s
+  [vin_50x50] step 1600/4000 | loss=16.6838 bel=11.0344 fp=4.4296 multi=34.3463 t=6050s
+  [vin_50x50] step 1800/4000 | loss=16.6467 bel=10.8525 fp=4.4555 multi=35.6646 t=6783s
+  [vin_50x50] step 2000/4000 | loss=16.5500 bel=10.8743 fp=4.4551 multi=34.4819 t=7532s
+  [vin_50x50] step 2200/4000 | loss=16.7588 bel=10.9242 fp=4.5805 multi=35.4433 t=8327s
+  [vin_50x50] step 2400/4000 | loss=15.7791 bel=10.5514 fp=4.1425 multi=31.5648 t=9103s
+  [vin_50x50] step 2600/4000 | loss=15.7820 bel=10.3374 fp=4.1843 multi=33.5250 t=9989s
+  [vin_50x50] step 2800/4000 | loss=15.3963 bel=10.1500 fp=4.0272 multi=32.3269 t=10821s
+  [vin_50x50] step 3000/4000 | loss=15.3512 bel=10.1880 fp=4.0598 multi=31.3321 t=11565s
+  [vin_50x50] step 3200/4000 | loss=15.1987 bel=9.8872 fp=4.1070 multi=32.5797 t=12322s
+  [vin_50x50] step 3400/4000 | loss=15.0996 bel=9.9689 fp=3.9824 multi=31.3953 t=13075s
+  [vin_50x50] step 3600/4000 | loss=15.0467 bel=9.8481 fp=3.9588 multi=32.1918 t=13809s
+  [vin_50x50] step 3800/4000 | loss=15.2758 bel=9.8376 fp=4.1342 multi=33.7105 t=14524s
+  [vin_50x50] step 4000/4000 | loss=15.4624 bel=9.9425 fp=4.2173 multi=34.1129 t=15224s
+  [vin_50x50] DONE in 15224.5s | final loss=15.4624 | saved: /home/nvidia/Linearizer/contractive_rl/planning/checkpoints/vin_50x50.pt
+
+=== All training complete ===
