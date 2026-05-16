@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(nvidia-smi *)"
+      "Bash(nvidia-smi *)",
+      "Bash(conda info *)",
+      "Bash(conda list *)",
+      "Bash(conda env list *)",
+      "Bash(ping *)",
+      "WebFetch"
     ]
   },
   "sandbox": {
