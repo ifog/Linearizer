@@ -47,22 +47,70 @@ class ActNorm1d(nn.Module):
 
 
 class InvLinear(nn.Module):
-    """Invertible full-rank linear mix (Glow's 1x1 conv, but for vectors)."""
+    """Invertible full-rank linear mix via PLU parameterization (Glow's 1x1 conv).
+
+    W = P @ L @ U where
+        P       fixed random permutation matrix (registered as a buffer)
+        L       lower triangular with 1s on the diagonal
+        U       upper triangular; |U_ii| = exp(log_diag_i) bounded away from 0
+                via softplus on the raw parameter so the matrix is invertible
+                throughout training.
+
+    This is the standard Glow-style guarantee (Kingma-Dhariwal 2018, §3.2):
+    parameterising W via PLU prevents the matrix from drifting to singular,
+    which can otherwise happen with the naive `W = nn.Parameter(...)` form
+    used in early versions of this module.
+    """
 
     def __init__(self, dim: int):
         super().__init__()
-        # Orthogonal init guarantees the linear map starts invertible with
-        # condition number ~1; weights drift during training but stay
-        # well-conditioned in practice.
+        # Random orthogonal initial matrix -> compute its PLU once and freeze
+        # P, then start L and U at that LU.
         W = torch.linalg.qr(torch.randn(dim, dim)).Q
-        self.W = nn.Parameter(W)
+        P, L, U = torch.linalg.lu(W)
+        # P is a permutation matrix; cache it as a buffer.
+        self.register_buffer("P", P)
+        # L has 1s on the diagonal; we parameterise only its strictly-lower part.
+        self.L_lower = nn.Parameter(L.clone())          # full matrix, masked in forward
+        self.register_buffer("eye", torch.eye(dim))
+        self.register_buffer("lower_mask", torch.tril(torch.ones(dim, dim), diagonal=-1))
+        # U: split into diagonal (sign-fixed, magnitude via softplus on raw log) and strictly-upper.
+        diag_U = torch.diagonal(U, 0)
+        sign_U = torch.sign(diag_U)
+        sign_U[sign_U == 0] = 1.0
+        # parameterise |U_ii| = softplus(raw) so it's > 0
+        # softplus(raw) = log(1 + exp(raw)); we invert: raw = log(exp(|d|) - 1).
+        abs_d = diag_U.abs().clamp_min(1e-3)
+        raw_diag = torch.log(torch.expm1(abs_d).clamp_min(1e-6))
+        self.U_log_diag = nn.Parameter(raw_diag)
+        self.register_buffer("U_sign", sign_U)
+        self.U_upper = nn.Parameter(U.clone())          # full matrix, masked in forward
+        self.register_buffer("upper_mask", torch.triu(torch.ones(dim, dim), diagonal=1))
+
+    def _build_L(self) -> torch.Tensor:
+        return self.lower_mask * self.L_lower + self.eye
+
+    def _build_U(self) -> torch.Tensor:
+        # Floor the magnitude at 1e-2 so the triangular solve never explodes.
+        diag = self.U_sign * (torch.nn.functional.softplus(self.U_log_diag) + 1e-2)
+        return self.upper_mask * self.U_upper + torch.diag(diag)
+
+    def _W(self) -> torch.Tensor:
+        return self.P @ self._build_L() @ self._build_U()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return x @ self.W.T
+        return x @ self._W().T
 
     def inverse(self, y: torch.Tensor) -> torch.Tensor:
-        W_inv = torch.linalg.inv(self.W)
-        return y @ W_inv.T
+        # W^-1 y = U^-1 L^-1 P^T y.  Both L and U are triangular -> use solver.
+        # We treat (y) as a batch of right-hand-sides for a triangular solve.
+        L = self._build_L()
+        U = self._build_U()
+        # P^T @ y^T  (shape (dim, B))
+        rhs = (y @ self.P).T
+        x = torch.linalg.solve_triangular(L, rhs, upper=False, unitriangular=True)
+        x = torch.linalg.solve_triangular(U, x, upper=True)
+        return x.T
 
 
 class _CondMLP(nn.Module):
