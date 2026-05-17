@@ -12,6 +12,7 @@ TEST_MODULES = [
     "monotone_linearizer.tests.test_invertibility",
     "monotone_linearizer.tests.test_implicit_diff",
     "monotone_linearizer.tests.test_end_to_end",
+    "monotone_linearizer.tests.test_overfit_one_batch",
 ]
 
 

@@ -134,7 +134,22 @@ def main() -> None:
 
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-    history = {"args": vars(args), "epochs": []}
+    # Group parameters for per-group gradient-norm logging.
+    param_groups = {
+        "encoder": list(model.encoder.parameters()),
+        "core":    list(model.core.parameters()),
+        "flow":    list(model.flow.parameters()),
+        "head":    list(model.head.parameters()),
+    }
+
+    def _group_grad_norm(params) -> float:
+        sq = 0.0
+        for p in params:
+            if p.grad is not None:
+                sq += float(p.grad.detach().pow(2).sum().item())
+        return sq ** 0.5
+
+    history = {"args": vars(args), "epochs": [], "steps": []}
     t0 = time.time()
     step = 0
     for epoch in range(1, args.epochs + 1):
@@ -144,24 +159,61 @@ def main() -> None:
             step += 1
             x = x.to(args.device, non_blocking=True)
             y = y.to(args.device, non_blocking=True)
+
+            # Forward, with intermediate activation hook for the diagnostic log.
+            act_stats: dict | None = None
+            if step % args.log_every == 0:
+                # Recompute forward with intermediate captures.
+                with torch.no_grad():
+                    c = model.encoder(x)
+                    from monotone_linearizer.monotone.solvers import fixed_point_solve
+                    w_star, _ = fixed_point_solve(
+                        model.core, c, method=model.solver,
+                        max_iter=model.solver_max_iter, tol=model.solver_tol, step=model.solver_step,
+                    )
+                    z_star = model.flow.inverse(w_star)
+                    logits_diag = model.head(z_star)
+                    act_stats = {
+                        "c_mean":     float(c.mean().item()),     "c_std":     float(c.std().item()),
+                        "w_star_norm":float(w_star.norm(dim=-1).mean().item()),
+                        "z_star_mean":float(z_star.mean().item()),"z_star_std":float(z_star.std().item()),
+                        "logits_std": float(logits_diag.std().item()),
+                    }
+
             logits = model(x)
             loss_ce = F.cross_entropy(logits, y)
             loss = loss_ce
             if args.jac_reg > 0:
-                # Penalize ||A||_F^2 (Jacobian-norm proxy: ||I - W||_F^2 = ||mI + A^TA||_F^2,
-                # easier knob is just ||A||_F^2).
                 loss = loss + args.jac_reg * model.core.A.pow(2).sum()
             opt.zero_grad()
             loss.backward()
+            # Capture per-group grad norms BEFORE clipping (post-clip norms are
+            # capped at args.grad_clip and tell us nothing about the natural scale).
+            if step % args.log_every == 0:
+                grad_norms = {g: _group_grad_norm(ps) for g, ps in param_groups.items()}
+                total_pre_clip = float(torch.nn.utils.clip_grad_norm_(
+                    model.parameters(), max_norm=float("inf")
+                ).item())
+                step_record = {
+                    "step": step, "epoch": epoch, "loss": float(loss.item()),
+                    "grad_total_pre_clip": total_pre_clip,
+                    "grad_norms": grad_norms,
+                    "act_stats": act_stats,
+                }
+                history["steps"].append(step_record)
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.grad_clip)
             opt.step()
             loss_run += float(loss.item()) * x.shape[0]
             correct_run += int((logits.argmax(-1) == y).sum().item())
             n_run += x.shape[0]
             if step % args.log_every == 0:
+                gn = step_record["grad_norms"]
                 print(
                     f"  step {step:6d}  ep {epoch} batch {batch_i+1}/{len(loaders.train)}  "
-                    f"loss {loss.item():.4f}  acc-running {correct_run / n_run:.4f}",
+                    f"loss {loss.item():.4f}  acc-running {correct_run / n_run:.4f}  "
+                    f"|grad|={step_record['grad_total_pre_clip']:.3f}  "
+                    f"(enc={gn['encoder']:.2f} core={gn['core']:.2f} "
+                    f"flow={gn['flow']:.2f} head={gn['head']:.2f})",
                     flush=True,
                 )
         eval_stats = evaluate(model, loaders.test, args.device)
