@@ -55,6 +55,10 @@ def parse_args():
     p.add_argument("--solver_max_iter", type=int, default=30)
     p.add_argument("--solver_tol", type=float, default=1e-3)
     p.add_argument("--solver_step", type=float, default=0.8)
+    p.add_argument("--jac_reg", type=float, default=1e-3,
+                   help="L2 penalty on the unconstrained core parameter A; "
+                        "controls operator Lipschitz (Bai-Koltun-Kolter ICML 2021).")
+    p.add_argument("--grad_clip", type=float, default=0.5)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     p.add_argument("--num_workers", type=int, default=2)
@@ -141,10 +145,15 @@ def main() -> None:
             x = x.to(args.device, non_blocking=True)
             y = y.to(args.device, non_blocking=True)
             logits = model(x)
-            loss = F.cross_entropy(logits, y)
+            loss_ce = F.cross_entropy(logits, y)
+            loss = loss_ce
+            if args.jac_reg > 0:
+                # Penalize ||A||_F^2 (Jacobian-norm proxy: ||I - W||_F^2 = ||mI + A^TA||_F^2,
+                # easier knob is just ||A||_F^2).
+                loss = loss + args.jac_reg * model.core.A.pow(2).sum()
             opt.zero_grad()
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=2.0)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.grad_clip)
             opt.step()
             loss_run += float(loss.item()) * x.shape[0]
             correct_run += int((logits.argmax(-1) == y).sum().item())

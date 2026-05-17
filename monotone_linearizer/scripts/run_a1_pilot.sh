@@ -25,21 +25,22 @@ run_one () {
   CUDA_VISIBLE_DEVICES=0 $PY -u monotone_linearizer/scripts/train_vision.py \
     --dataset $ds ${subset:+--subset_size $subset} \
     --epochs $epochs --lr $lr --m $m \
+    --weight_decay 1e-3 --jac_reg 1e-3 --grad_clip 0.5 \
     --latent_dim $lat --encoder_base $base \
     --flow_blocks $blocks --flow_hidden $hid \
-    --use_flow $fl --solver forward_backward --solver_max_iter 30 --solver_tol 1e-3 --solver_step 0.8 \
-    --batch_size 256 --num_workers 2 \
+    --use_flow $fl --solver forward_backward --solver_max_iter 40 --solver_tol 1e-3 --solver_step 0.8 \
+    --batch_size 128 --num_workers 2 \
     --device cuda --out $out \
     2>&1 | tee $out/train.log
 }
 
-# Fashion-MNIST: full set, 10 epochs.
-run_one fashion_mnist "" 10 3e-3 0.1 128 32 4 128 1
-run_one fashion_mnist "" 10 3e-3 0.1 128 32 4 128 0
+# Fashion-MNIST: full set, 15 epochs (more headroom under the lower LR).
+run_one fashion_mnist "" 15 5e-4 0.2 128 32 4 128 1
+run_one fashion_mnist "" 15 5e-4 0.2 128 32 4 128 0
 
-# CIFAR-10: full set, 15 epochs.
-run_one cifar10       "" 15 3e-3 0.1 128 32 4 128 1
-run_one cifar10       "" 15 3e-3 0.1 128 32 4 128 0
+# CIFAR-10: full set, 20 epochs.
+run_one cifar10       "" 20 5e-4 0.2 128 32 4 128 1
+run_one cifar10       "" 20 5e-4 0.2 128 32 4 128 0
 
 echo
 echo "=== DONE ==="

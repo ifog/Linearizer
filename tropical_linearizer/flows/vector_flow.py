@@ -136,22 +136,34 @@ class _CondMLP(nn.Module):
 
 class AffineCoupling1d(nn.Module):
     """Affine coupling: split vector into (x1, x2), keep x2 untouched, map
-    x1 -> (x1 + shift(x2)) * exp(clamp(log_scale(x2))).
+    x1 -> (x1 + shift(x2)) * exp(scale_bound * tanh(log_scale(x2))).
     Exactly invertible; no Jacobian computation needed for our purposes.
+
+    We use a TANH-BOUNDED log_scale rather than a hard clamp. A hard clamp at
+    ±5 still allows per-block amplification by exp(5) ≈ 148; stacked K times
+    that's 148^K, and after the float32 cancellations in the round-trip the
+    accumulated error easily exceeds 1.  tanh-bounding to ±scale_bound is
+    smooth (gradients always flow) and lets us pick a tight bound: at
+    scale_bound = 1.5 the per-block factor is at most exp(1.5) ≈ 4.5 and a
+    K = 4 stack has worst-case amplification ≈ 4.5^4 ≈ 410, well within
+    float32's safe range for an invertible round-trip.
     """
 
-    def __init__(self, dim: int, hidden: int, n_hidden: int = 2, clamp: float = 5.0):
+    def __init__(self, dim: int, hidden: int, n_hidden: int = 2, clamp: float = 1.5):
         super().__init__()
         d1 = dim // 2
         d2 = dim - d1
         self.d1 = d1
         self.d2 = d2
+        # Renamed semantically: this is now the tanh saturation bound rather
+        # than a hard clip threshold. Kept the attribute name `clamp` so the
+        # existing call-sites and tests don't break.
         self.clamp = clamp
         self.cond = _CondMLP(in_dim=d2, out_dim=d1, hidden=hidden, n_hidden=n_hidden)
 
     def _params(self, x2: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        shift, log_s = self.cond(x2)
-        log_s = torch.clamp(log_s, -self.clamp, self.clamp)
+        shift, log_s_raw = self.cond(x2)
+        log_s = self.clamp * torch.tanh(log_s_raw)
         return shift, log_s
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
